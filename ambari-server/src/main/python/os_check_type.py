@@ -1,4 +1,4 @@
-#!/usr/bin/ambari-python-wrap
+#!/usr/bin/python
 
 '''
 Licensed to the Apache Software Foundation (ASF) under one

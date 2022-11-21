@@ -29,7 +29,6 @@
   <name>Ambari Service Advisor</name>
   <version>1.0.0.0-SNAPSHOT</version>
   <description>Service Advisor</description>
-
   <dependencies>
     <!-- Log Factory logging
     The main class is expected to write to stdout and stderr appropriately.
@@ -104,8 +103,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.2</version>
         <configuration>
-          <source>${jdk.version}</source>
-          <target>${jdk.version}</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>

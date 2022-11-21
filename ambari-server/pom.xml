@@ -471,30 +471,30 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <artifactId>eclipselink-staticweave-maven-plugin</artifactId>
-        <groupId>au.com.alderaan</groupId>
-        <version>1.0.4</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>weave</goal>
-            </goals>
-            <phase>process-classes</phase>
-            <configuration>
-              <logLevel>${el.log}</logLevel>
-              <includeProjectClasspath>true</includeProjectClasspath>
-            </configuration>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>eclipselink</artifactId>
-            <version>${eclipselink.version}</version>
-          </dependency>
-        </dependencies>
-      </plugin>
+<!--      <plugin>-->
+<!--        <artifactId>eclipselink-staticweave-maven-plugin</artifactId>-->
+<!--        <groupId>au.com.alderaan</groupId>-->
+<!--        <version>1.0.4</version>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <goals>-->
+<!--              <goal>weave</goal>-->
+<!--            </goals>-->
+<!--            <phase>process-classes</phase>-->
+<!--            <configuration>-->
+<!--              <logLevel>${el.log}</logLevel>-->
+<!--              <includeProjectClasspath>true</includeProjectClasspath>-->
+<!--            </configuration>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--        <dependencies>-->
+<!--          <dependency>-->
+<!--            <groupId>org.eclipse.persistence</groupId>-->
+<!--            <artifactId>eclipselink</artifactId>-->
+<!--            <version>${eclipselink.version}</version>-->
+<!--          </dependency>-->
+<!--        </dependencies>-->
+<!--      </plugin>-->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>properties-maven-plugin</artifactId>
@@ -519,7 +519,7 @@
         <executions>
           <execution>
             <!-- unbinds rpm creation from maven lifecycle -->
-            <phase>none</phase>
+            <phase>package</phase>
             <goals>
               <goal>rpm</goal>
             </goals>
@@ -529,7 +529,7 @@
           <license>2012, Apache Software Foundation</license>
           <group>Development</group>
           <description>Maven Recipe: RPM Package.</description>
-          <autoRequires>no</autoRequires>
+          <autoRequires>true</autoRequires>
           <prefix>/</prefix>
           <requires>
             <require>${rpm.dependency.list}</require>

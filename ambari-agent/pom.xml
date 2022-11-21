@@ -304,7 +304,7 @@
         <executions>
           <execution>
             <!-- unbinds rpm creation from maven lifecycle -->
-            <phase>none</phase>
+            <phase>package</phase>
             <goals>
               <goal>rpm</goal>
             </goals>
