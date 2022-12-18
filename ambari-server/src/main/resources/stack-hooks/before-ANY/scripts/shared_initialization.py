@@ -250,7 +250,7 @@ def __setup_java(custom_java_home, custom_jdk_name):
         install_cmd = format("cd {tmp_java_dir} && echo A | {jdk_curl_target} -noregister && {sudo} cp -rp {tmp_java_dir}/* {java_dir}")
       elif params.jdk_name.endswith(".gz"):
         chmod_cmd = ("chmod","a+x", java_dir)
-        install_cmd = format("cd {tmp_java_dir} && tar -xf {jdk_curl_target} && {sudo} cp -rp {tmp_java_dir}/* {java_dir}")
+        install_cmd = format("cd {tmp_java_dir} && tar -xf {jdk_curl_target} && ../{sudo} cp -rp {tmp_java_dir}/* {java_dir}")
 
       Directory(java_dir
                 )

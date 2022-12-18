@@ -1,0 +1,14 @@
+{
+  "NDP": {
+    "stack_selector": [
+      "ndp-select",
+      "/usr/bin/ndp-select",
+      "ndp-select"
+    ],
+    "conf_selector": [
+      "conf-select",
+      "/usr/bin/conf-select",
+      "conf-select"
+    ]
+  }
+}
