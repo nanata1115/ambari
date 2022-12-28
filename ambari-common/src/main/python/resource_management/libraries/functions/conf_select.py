@@ -44,7 +44,7 @@ from resource_management.libraries.functions import StackFeature
 
 def _get_cmd(command, package, version):
   conf_selector_path = stack_tools.get_stack_tool_path(stack_tools.CONF_SELECTOR_NAME)
-  return ('ambari-python-wrap', conf_selector_path, command, '--package', package, '--stack-version', version)
+  return ('ambari-python-wrap', conf_selector_path, command, '--package', package, '--stack-version', version, '--conf-version', '0')
 
 def _valid(stack_name, package, ver):
   return (ver and check_stack_feature(StackFeature.CONFIG_VERSIONING, ver))
@@ -162,8 +162,21 @@ def get_hadoop_conf_dir():
   directory including the component's version is tried first, but if that doesn't exist,
   this will fallback to using "current".
   """
+  stack_root = Script.get_stack_root()
+  stack_version = Script.get_stack_version()
+
   hadoop_conf_dir = os.path.join(os.path.sep, "etc", "hadoop", "conf")
-  Logger.info("Using hadoop conf dir: {0}".format(hadoop_conf_dir))
+  if check_stack_feature(StackFeature.CONFIG_VERSIONING, stack_version):
+    # read the desired version from the component map and use that for building the hadoop home
+    version = component_version.get_component_repository_version()
+    if version is None:
+      version = default("/commandParams/version", None)
+
+    hadoop_conf_dir = os.path.join(stack_root, str(version), "hadoop-3.3.4","etc", "hadoop")
+    if version is None or sudo.path_isdir(hadoop_conf_dir) is False:
+      hadoop_conf_dir = os.path.join(stack_root, "current", "hadoop-client","etc", "hadoop")
+
+    Logger.info("Using hadoop conf dir: {0},version is {1}".format(hadoop_conf_dir,version))
 
   return hadoop_conf_dir
 

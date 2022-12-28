@@ -453,7 +453,7 @@
       "hadoop": [
         {
           "conf_dir": "/etc/hadoop/conf",
-          "current_dir": "{0}/current/hadoop-client/conf",
+          "current_dir": "{0}/current/hadoop-client/etc/hadoop",
           "component": "hadoop-client"
         }
       ],

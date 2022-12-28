@@ -18,14 +18,14 @@
     <schemaVersion>2.0</schemaVersion>
     <services>
         <service>
-            <name>AZKABAN</name>
-            <displayName>Azkaban</displayName>
-            <comment>Azkaban是开源的一个批量工作流任务调度器</comment>
-            <version>3.90.0</version>
+            <name>DOLPHINSCHEDULER</name>
+            <displayName>DOLPHINSCHEDULER</displayName>
+            <comment>DOLPHINSCHEDULER是开源的一个批量工作流任务调度器</comment>
+            <version>3.1.2</version>
             <components>
                 <component>
-                    <name>AZKABAN_WEB</name>
-                    <displayName>Azkaban Web Server</displayName>
+                    <name>DOLPHINSCHEDULER_MASTER</name>
+                    <displayName>DOLPHINSCHEDULER_MASTER</displayName>
                     <category>MASTER</category>
                     <cardinality>1</cardinality>
                     <versionAdvertised>true</versionAdvertised>
@@ -37,7 +37,7 @@
                 </component>
 
                 <component>
-                    <name>AZKABAN_EXECUTOR</name>
+                    <name>DOLPHINSCHEDULER_WORKER</name>
                     <displayName>Azkaban Executor Server</displayName>
                     <category>SLAVE</category>
                     <cardinality>0+</cardinality>

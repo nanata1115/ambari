@@ -323,7 +323,7 @@
           <osFamily>redhat7,amazonlinux2,redhat6,suse11</osFamily>
           <packages>
             <package>
-              <name>hadoop_dist_${stack_version}</name>
+              <name>hadoop-dist</name>
             </package>
 <!--            <package>-->
 <!--              <name>hadoop_${stack_version}-client</name>-->

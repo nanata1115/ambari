@@ -19,14 +19,11 @@
   <schemaVersion>2.0</schemaVersion>
   <services>
     <service>
-      <name>OOZIE</name>
-      <displayName>Oozie</displayName>
-      <comment>System for workflow coordination and execution of Apache Hadoop jobs. This also
-        includes the installation of the optional Oozie Web Console which relies on and will install
-        the &lt;a target="_blank" href="http://www.sencha.com/legal/open-source-faq/"&gt;ExtJS&lt;/a&gt;
-        Library.
+      <name>CRATE</name>
+      <displayName>CRATE</displayName>
+      <comment>S
       </comment>
-      <version>4.4.0</version>
+      <version>5.2.0</version>
       <credential-store>
         <supported>true</supported>
         <enabled>true</enabled>
@@ -39,29 +36,6 @@
           <cardinality>1+</cardinality>
           <versionAdvertised>true</versionAdvertised>
           <reassignAllowed>true</reassignAllowed>
-          <dependencies>
-            <dependency>
-              <name>HDFS/HDFS_CLIENT</name>
-              <scope>host</scope>
-              <auto-deploy>
-                <enabled>true</enabled>
-              </auto-deploy>
-            </dependency>
-            <dependency>
-              <name>MAPREDUCE2/MAPREDUCE2_CLIENT</name>
-              <scope>host</scope>
-              <auto-deploy>
-                <enabled>true</enabled>
-              </auto-deploy>
-            </dependency>
-            <dependency>
-              <name>YARN/YARN_CLIENT</name>
-              <scope>host</scope>
-              <auto-deploy>
-                <enabled>true</enabled>
-              </auto-deploy>
-            </dependency>
-          </dependencies>
           <commandScript>
             <script>scripts/oozie_server.py</script>
             <scriptType>PYTHON</scriptType>
@@ -81,22 +55,6 @@
           <category>CLIENT</category>
           <cardinality>1+</cardinality>
           <versionAdvertised>true</versionAdvertised>
-          <dependencies>
-            <dependency>
-              <name>HDFS/HDFS_CLIENT</name>
-              <scope>host</scope>
-              <auto-deploy>
-                <enabled>true</enabled>
-              </auto-deploy>
-            </dependency>
-            <dependency>
-              <name>MAPREDUCE2/MAPREDUCE2_CLIENT</name>
-              <scope>host</scope>
-              <auto-deploy>
-                <enabled>true</enabled>
-              </auto-deploy>
-            </dependency>
-          </dependencies>
           <commandScript>
             <script>scripts/oozie_client.py</script>
             <scriptType>PYTHON</scriptType>
@@ -126,7 +84,7 @@
           <osFamily>any</osFamily>
           <packages>
             <package>
-              <name>zip</name>
+              <name>rpm</name>
             </package>
           </packages>
         </osSpecific>
@@ -134,15 +92,7 @@
           <osFamily>redhat5,amazonlinux2,redhat6,redhat7,suse11,suse12</osFamily>
           <packages>
             <package>
-              <name>oozie_${stack_version}</name>
-            </package>
-          </packages>
-        </osSpecific>
-        <osSpecific>
-          <osFamily>debian7,debian9,ubuntu12,ubuntu14,ubuntu16,ubuntu18</osFamily>
-          <packages>
-            <package>
-              <name>oozie-${stack_version}</name>
+              <name>crate-5.2.0</name>
             </package>
           </packages>
         </osSpecific>
@@ -154,19 +104,10 @@
         <timeout>300</timeout>
       </commandScript>
 
-      <requiredServices>
-        <service>YARN</service>
-      </requiredServices>
-
       <configuration-dependencies>
         <config-type>oozie-site</config-type>
         <config-type>oozie-env</config-type>
         <config-type>oozie-log4j</config-type>
-        <config-type>yarn-site</config-type>
-        <config-type>hive-site</config-type>
-        <config-type>tez-site</config-type>
-        <config-type>mapred-site</config-type>
-        <config-type>core-site</config-type>
         <config-type>viewfs-mount-table</config-type>
         <config-type>application-properties</config-type>
       </configuration-dependencies>
@@ -189,39 +130,6 @@
           <default>true</default>
         </theme>
       </themes>
-
-      <sso>
-        <supported>true</supported>
-        <kerberosRequired>true</kerberosRequired>
-        <ssoEnabledTest>
-          {
-          "equals": [
-          "oozie-site/oozie.authentication.type",
-          "org.apache.hadoop.security.authentication.server.JWTRedirectAuthenticationHandler"
-          ]
-          }
-        </ssoEnabledTest>
-      </sso>
-
-      <kerberosEnabledTest>
-        {
-        "or": [
-        {
-        "equals": [
-        "oozie-site/oozie.authentication.type",
-        "kerberos"
-        ]
-        },
-        {
-        "equals": [
-        "oozie-site/oozie.authentication.type",
-        "org.apache.hadoop.security.authentication.server.JWTRedirectAuthenticationHandler"
-        ]
-        }
-        ]
-        }
-      </kerberosEnabledTest>
-
       <quickLinksConfigurations>
         <quickLinksConfiguration>
           <fileName>quicklinks.json</fileName>

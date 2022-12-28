@@ -733,7 +733,7 @@
       <envClassifier>linux</envClassifier>
       <dirsep>/</dirsep>
       <pathsep>:</pathsep>
-      <stack.distribution>HDP</stack.distribution>
+      <stack.distribution>NDP</stack.distribution>
       <executable.python>${project.basedir}/../ambari-common/src/main/unix/ambari-python-wrap</executable.python>
       <executable.shell>sh</executable.shell>
       <fileextension.shell>sh</fileextension.shell>
