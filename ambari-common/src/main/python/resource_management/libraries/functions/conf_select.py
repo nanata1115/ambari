@@ -201,38 +201,38 @@ def convert_conf_directories_to_symlinks(package, version, dirs):
   # if the conf_dir doesn't exist, then that indicates that the package's service is not installed
   # on this host and nothing should be done with conf symlinks
   stack_name = Script.get_stack_name()
-  for directory_struct in dirs:
-    if not os.path.exists(directory_struct['conf_dir']):
-      Logger.info("Skipping the conf-select tool on {0} since {1} does not exist.".format(
-        package, directory_struct['conf_dir']))
+  # for directory_struct in dirs:
+  #   if not os.path.exists(directory_struct['conf_dir']):
+  #     Logger.info("Skipping the conf-select tool on {0} since {1} does not exist.".format(
+  #       package, directory_struct['conf_dir']))
+  #
+  #     return
 
-      return
-
-  # determine which directories would be created, if any are needed
-  dry_run_directory = create(stack_name, package, version, dry_run = True)
-
-  # if the dry run reported an error, then we must assume that the package does not exist in
-  # the conf-select tool
-  if len(dry_run_directory) == 0:
-    Logger.info("The conf-select tool reported an error for the package {0}. The configuration linking will be skipped.".format(package))
-    return
-
-
-  need_dirs = []
-  for d in dry_run_directory:
-    if not os.path.exists(d):
-      need_dirs.append(d)
-
-  # log that we'll actually be creating some directories soon
-  if len(need_dirs) > 0:
-    Logger.info("Package {0} will have the following new configuration directories created: {1}".format(
-      package, ", ".join(dry_run_directory)))
-
-  # Create the versioned /etc/[component]/[version]/0 folder (using create-conf-dir) and then
-  # set it for the installed component:
-  # - Creates /etc/<component>/<version>/0
-  # - Links <stack-root>/<version>/<component>/conf -> /etc/<component>/<version>/0
-  select(stack_name, package, version, ignore_errors = True)
+  # # determine which directories would be created, if any are needed
+  # dry_run_directory = create(stack_name, package, version, dry_run = True)
+  #
+  # # if the dry run reported an error, then we must assume that the package does not exist in
+  # # the conf-select tool
+  # if len(dry_run_directory) == 0:
+  #   Logger.info("The conf-select tool reported an error for the package {0}. The configuration linking will be skipped.".format(package))
+  #   return
+  #
+  #
+  # need_dirs = []
+  # for d in dry_run_directory:
+  #   if not os.path.exists(d):
+  #     need_dirs.append(d)
+  #
+  # # log that we'll actually be creating some directories soon
+  # if len(need_dirs) > 0:
+  #   Logger.info("Package {0} will have the following new configuration directories created: {1}".format(
+  #     package, ", ".join(dry_run_directory)))
+  #
+  # # Create the versioned /etc/[component]/[version]/0 folder (using create-conf-dir) and then
+  # # set it for the installed component:
+  # # - Creates /etc/<component>/<version>/0
+  # # - Links <stack-root>/<version>/<component>/conf -> /etc/<component>/<version>/0
+  # select(stack_name, package, version, ignore_errors = True)
 
   # check every existing link to see if it's a link and if it's pointed to the right spot
   for directory_struct in dirs:
@@ -240,29 +240,30 @@ def convert_conf_directories_to_symlinks(package, version, dirs):
       # check if conf is a link already
       old_conf = directory_struct['conf_dir']
       current_dir = directory_struct['current_dir']
-      if os.path.islink(old_conf):
-        # it's already a link; make sure it's a link to where we want it
-        if os.readlink(old_conf) != current_dir:
-          # the link isn't to the right spot; re-link it
-          Logger.info("Re-linking symlink {0} to {1}".format(old_conf, current_dir))
-          Link(old_conf, action = "delete")
+      if os.path.exists(old_conf):
+        if os.path.islink(old_conf):
+          # it's already a link; make sure it's a link to where we want it
+          if os.readlink(old_conf) != current_dir:
+            # the link isn't to the right spot; re-link it
+            Logger.info("Re-linking symlink {0} to {1}".format(old_conf, current_dir))
+            Link(old_conf, action = "delete")
+            Link(old_conf, to = current_dir)
+          else:
+            Logger.info("{0} is already linked to {1}".format(old_conf, current_dir))
+        elif os.path.isdir(old_conf):
+          # the /etc/<component>/conf directory is not a link, so turn it into one
+          Logger.info("{0} is a directory - it must be converted into a symlink".format(old_conf))
+
+          backup_dir = _get_backup_conf_directory(old_conf)
+          Logger.info("Backing up {0} to {1} if destination doesn't exist already.".format(old_conf, backup_dir))
+          Execute(("cp", "-R", "-p", old_conf, backup_dir),
+            not_if = format("test -e {backup_dir}"), sudo = True)
+
+          # delete the old /etc/<component>/conf directory now that it's been backed up
+          Directory(old_conf, action = "delete")
+
+          # link /etc/[component]/conf -> <stack-root>/current/[component]-client/conf
           Link(old_conf, to = current_dir)
-        else:
-          Logger.info("{0} is already linked to {1}".format(old_conf, current_dir))
-      elif os.path.isdir(old_conf):
-        # the /etc/<component>/conf directory is not a link, so turn it into one
-        Logger.info("{0} is a directory - it must be converted into a symlink".format(old_conf))
-
-        backup_dir = _get_backup_conf_directory(old_conf)
-        Logger.info("Backing up {0} to {1} if destination doesn't exist already.".format(old_conf, backup_dir))
-        Execute(("cp", "-R", "-p", old_conf, backup_dir),
-          not_if = format("test -e {backup_dir}"), sudo = True)
-
-        # delete the old /etc/<component>/conf directory now that it's been backed up
-        Directory(old_conf, action = "delete")
-
-        # link /etc/[component]/conf -> <stack-root>/current/[component]-client/conf
-        Link(old_conf, to = current_dir)
       else:
         # missing entirely
         # /etc/<component>/conf -> <stack-root>/current/<component>/conf

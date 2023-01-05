@@ -57,7 +57,8 @@
         "DATANODE": {
           "STACK-SELECT-PACKAGE": "hadoop-hdfs-datanode",
           "INSTALL": [
-            "hadoop-hdfs-datanode"
+            "hadoop-hdfs-datanode",
+            "hadoop-client"
           ],
           "PATCH": [
             "hadoop-hdfs-datanode"
@@ -69,7 +70,8 @@
         "HDFS_CLIENT": {
           "STACK-SELECT-PACKAGE": "hadoop-hdfs-client",
           "INSTALL": [
-            "hadoop-hdfs-client"
+            "hadoop-hdfs-client",
+            "hadoop-client"
           ],
           "PATCH": [
             "hadoop-hdfs-client"
@@ -81,7 +83,8 @@
         "NAMENODE": {
           "STACK-SELECT-PACKAGE": "hadoop-hdfs-namenode",
           "INSTALL": [
-            "hadoop-hdfs-namenode"
+            "hadoop-hdfs-namenode",
+            "hadoop-client"
           ],
           "PATCH": [
             "hadoop-hdfs-namenode"
@@ -93,7 +96,8 @@
         "NFS_GATEWAY": {
           "STACK-SELECT-PACKAGE": "hadoop-hdfs-nfs3",
           "INSTALL": [
-            "hadoop-hdfs-nfs3"
+            "hadoop-hdfs-nfs3",
+            "hadoop-client"
           ],
           "PATCH": [
             "hadoop-hdfs-nfs3"
@@ -105,7 +109,8 @@
         "JOURNALNODE": {
           "STACK-SELECT-PACKAGE": "hadoop-hdfs-journalnode",
           "INSTALL": [
-            "hadoop-hdfs-journalnode"
+            "hadoop-hdfs-journalnode",
+            "hadoop-client"
           ],
           "PATCH": [
             "hadoop-hdfs-journalnode"
@@ -117,7 +122,8 @@
         "SECONDARY_NAMENODE": {
           "STACK-SELECT-PACKAGE": "hadoop-hdfs-secondarynamenode",
           "INSTALL": [
-            "hadoop-hdfs-secondarynamenode"
+            "hadoop-hdfs-secondarynamenode",
+            "hadoop-client"
           ],
           "PATCH": [
             "hadoop-hdfs-secondarynamenode"
@@ -129,7 +135,8 @@
         "ZKFC": {
           "STACK-SELECT-PACKAGE": "hadoop-hdfs-zkfc",
           "INSTALL": [
-            "hadoop-hdfs-zkfc"
+            "hadoop-hdfs-zkfc",
+            "hadoop-client"
           ],
           "PATCH": [
             "hadoop-hdfs-zkfc"
