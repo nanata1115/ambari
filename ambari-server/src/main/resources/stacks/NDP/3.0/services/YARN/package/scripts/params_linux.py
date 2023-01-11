@@ -69,7 +69,7 @@ stack_name = status_params.stack_name
 stack_root = Script.get_stack_root()
 tarball_map = default("/configurations/cluster-env/tarball_map", None)
 
-config_path = os.path.join(stack_root, "current/hadoop-client/conf")
+config_path = os.path.join(stack_root, "current/hadoop-client/etc/hadoop")
 config_dir = os.path.realpath(config_path)
 
 # get the correct version to use for checking stack features
@@ -151,24 +151,24 @@ if command_role in YARN_SERVER_ROLE_DIRECTORY_MAP:
   yarn_role_root = YARN_SERVER_ROLE_DIRECTORY_MAP[command_role]
 
 # defaults set to current based on role
-hadoop_mapr_home = format("{stack_root}/{version}/{mapred_role_root}")
-hadoop_yarn_home = format("{stack_root}/{version}/{yarn_role_root}")
+hadoop_mapr_home = format("{stack_root}/current/{mapred_role_root}")
+hadoop_yarn_home = format("{stack_root}/current/{yarn_role_root}")
 
-# try to render the specific version
-version = component_version.get_component_repository_version()
-if version is None:
-  version = default("/commandParams/version", None)
-
-
-if version is not None:
-  hadoop_mapr_versioned_home = format("{stack_root}/{version}/hadoop-mapreduce")
-  hadoop_yarn_versioned_home = format("{stack_root}/{version}/hadoop-yarn")
-
-  if sudo.path_isdir(hadoop_mapr_versioned_home):
-    hadoop_mapr_home = hadoop_mapr_versioned_home
-
-  if sudo.path_isdir(hadoop_yarn_versioned_home):
-    hadoop_yarn_home = hadoop_yarn_versioned_home
+# # try to render the specific version
+# version = component_version.get_component_repository_version()
+# if version is None:
+#   version = default("/commandParams/version", None)
+#
+#
+# if version is not None:
+#   hadoop_mapr_versioned_home = format("{stack_root}/{version}/hadoop-mapreduce")
+#   hadoop_yarn_versioned_home = format("{stack_root}/{version}/hadoop-yarn")
+#
+#   if sudo.path_isdir(hadoop_mapr_versioned_home):
+#     hadoop_mapr_home = hadoop_mapr_versioned_home
+#
+#   if sudo.path_isdir(hadoop_yarn_versioned_home):
+#     hadoop_yarn_home = hadoop_yarn_versioned_home
 
 hadoop_mapred2_jar_location = hadoop_mapr_home
 mapred_bin = format("{hadoop_mapr_home}/bin")
@@ -384,15 +384,15 @@ jobhistory_heapsize = default("/configurations/mapred-env/jobhistory_heapsize", 
 jhs_leveldb_state_store_dir = default('/configurations/mapred-site/mapreduce.jobhistory.recovery.store.leveldb.path', "/hadoop/mapreduce/jhs")
 
 # Tez-related properties
-tez_user = config['configurations']['tez-env']['tez_user']
-
-# Tez jars
-tez_local_api_jars = '/usr/lib/tez/tez*.jar'
-tez_local_lib_jars = '/usr/lib/tez/lib/*.jar'
-app_dir_files = {tez_local_api_jars:None}
+# tez_user = config['configurations']['tez-env']['tez_user']
+#
+# # Tez jars
+# tez_local_api_jars = '/usr/lib/tez/tez*.jar'
+# tez_local_lib_jars = '/usr/lib/tez/lib/*.jar'
+# app_dir_files = {tez_local_api_jars:None}
 
 # Tez libraries
-tez_lib_uris = default("/configurations/tez-site/tez.lib.uris", None)
+# tez_lib_uris = default("/configurations/tez-site/tez.lib.uris", None)
 
 #for create_hdfs_directory
 hdfs_user_keytab = config['configurations']['hadoop-env']['hdfs_user_keytab']

@@ -29,8 +29,8 @@ from resource_management.libraries.script.script import Script
 # a map of the Ambari role to the component name
 # for use with <stack-root>/current/<component>
 SERVER_ROLE_DIRECTORY_MAP = {
-  'ZOOKEEPER_SERVER' : 'zookeeper-server',
-  'ZOOKEEPER_CLIENT' : 'zookeeper-client'
+  'ZOOKEEPER_SERVER' : 'zookeeper',
+  'ZOOKEEPER_CLIENT' : 'zookeeper'
 }
 
 component_directory = Script.get_component_from_role(SERVER_ROLE_DIRECTORY_MAP, "ZOOKEEPER_CLIENT")
@@ -56,5 +56,5 @@ else:
 
   config_dir = "/etc/zookeeper/conf"
   if stack_version_formatted and check_stack_feature(StackFeature.ROLLING_UPGRADE, stack_version_formatted):
-    config_dir = format("{stack_root}/current/{component_directory}/conf")
+    config_dir = format("{stack_root}/{stack_version_unformatted}/{component_directory}/conf")
 stack_name = default("/clusterLevelParams/stack_name", None)

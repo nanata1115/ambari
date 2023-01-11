@@ -23,7 +23,7 @@
       <name>YARN</name>
       <displayName>YARN</displayName>
       <comment>Apache Hadoop NextGen MapReduce (YARN)</comment>
-      <version>3.1.0</version>
+      <version>3.3.4</version>
       <components>
 
         <component>
@@ -240,14 +240,14 @@
           <osFamily>amazonlinux2,redhat6,redhat7,suse11,suse12</osFamily>
           <packages>
             <package>
-              <name>hadoop_${stack_version}-yarn</name>
+              <name>hadoop-dist</name>
             </package>
-            <package>
-              <name>hadoop_${stack_version}-mapreduce</name>
-            </package>
-            <package>
-              <name>hadoop_${stack_version}-hdfs</name>
-            </package>
+<!--            <package>-->
+<!--              <name>hadoop_${stack_version}-mapreduce</name>-->
+<!--            </package>-->
+<!--            <package>-->
+<!--              <name>hadoop_${stack_version}-hdfs</name>-->
+<!--            </package>-->
           </packages>
         </osSpecific>
       </osSpecifics>
@@ -348,7 +348,7 @@
       <name>MAPREDUCE2</name>
       <displayName>MapReduce2</displayName>
       <comment>Apache Hadoop NextGen MapReduce (YARN)</comment>
-      <version>3.0.0.3.0</version>
+      <version>3.3.4</version>
 
       <components>
         <component>
@@ -371,13 +371,13 @@
                 <enabled>true</enabled>
               </auto-deploy>
             </dependency>
-            <dependency>
-              <name>TEZ/TEZ_CLIENT</name>
-              <scope>host</scope>
-              <auto-deploy>
-                <enabled>true</enabled>
-              </auto-deploy>
-            </dependency>
+<!--            <dependency>-->
+<!--              <name>TEZ/TEZ_CLIENT</name>-->
+<!--              <scope>host</scope>-->
+<!--              <auto-deploy>-->
+<!--                <enabled>true</enabled>-->
+<!--              </auto-deploy>-->
+<!--            </dependency>-->
           </dependencies>
 
           <commandScript>
@@ -429,7 +429,7 @@
           <osFamily>amazonlinux2,redhat6,redhat7,suse11,suse12</osFamily>
           <packages>
             <package>
-              <name>hadoop_${stack_version}-mapreduce</name>
+              <name>hadoop-dist</name>
             </package>
           </packages>
         </osSpecific>

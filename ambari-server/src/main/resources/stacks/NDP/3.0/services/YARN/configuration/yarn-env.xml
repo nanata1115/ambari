@@ -249,7 +249,7 @@ export YARN_RESOURCEMANAGER_HEAPSIZE={{resourcemanager_heapsize}}
 # These options will be appended to the options specified as HADOOP_OPTS
 # and therefore may override any similar flags set in HADOOP_OPTS
 {% if security_enabled %}
-export YARN_RESOURCEMANAGER_OPTS="-Djava.security.auth.login.config={{yarn_jaas_file}}"
+export YARN_RESOURCEMANAGER_OPTS="-Djava.security.auth.login.config={{yarn_jaas_file}} --add-opens java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions"
 {% endif %}
 
 # Node Manager specific parameters
