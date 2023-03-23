@@ -65,23 +65,23 @@
           "subsection-name": "subsection-log-dirs"
         },
         {
-          "config": "spark2-defaults/spark.eventLog.dir",
+          "config": "SPARK3-defaults/spark.eventLog.dir",
           "subsection-name": "subsection-log-dirs"
         },
         {
-          "config": "spark2-defaults/spark.history.fs.logDirectory",
+          "config": "SPARK3-defaults/spark.history.fs.logDirectory",
           "subsection-name": "subsection-log-dirs"
         },
         {
-          "config": "spark2-thrift-sparkconf/spark.eventLog.dir",
+          "config": "SPARK3-thrift-sparkconf/spark.eventLog.dir",
           "subsection-name": "subsection-log-dirs"
         },
         {
-          "config": "spark2-thrift-sparkconf/spark.history.fs.logDirectory",
+          "config": "SPARK3-thrift-sparkconf/spark.history.fs.logDirectory",
           "subsection-name": "subsection-log-dirs"
         },
         {
-          "config": "spark2-env/spark_log_dir",
+          "config": "SPARK3-env/spark_log_dir",
           "subsection-name": "subsection-log-dirs"
         },
         {
@@ -89,7 +89,7 @@
           "subsection-name": "subsection-pid-dirs"
         },
         {
-          "config": "spark2-env/spark_pid_dir",
+          "config": "SPARK3-env/spark_pid_dir",
           "subsection-name": "subsection-pid-dirs"
         }
       ]
@@ -102,31 +102,31 @@
         }
       },
       {
-        "config": "spark2-defaults/spark.eventLog.dir",
+        "config": "SPARK3-defaults/spark.eventLog.dir",
         "widget": {
           "type": "text-field"
         }
       },
       {
-        "config": "spark2-defaults/spark.history.fs.logDirectory",
+        "config": "SPARK3-defaults/spark.history.fs.logDirectory",
         "widget": {
           "type": "text-field"
         }
       },
       {
-        "config": "spark2-thrift-sparkconf/spark.eventLog.dir",
+        "config": "SPARK3-thrift-sparkconf/spark.eventLog.dir",
         "widget": {
           "type": "text-field"
         }
       },
       {
-        "config": "spark2-thrift-sparkconf/spark.history.fs.logDirectory",
+        "config": "SPARK3-thrift-sparkconf/spark.history.fs.logDirectory",
         "widget": {
           "type": "text-field"
         }
       },
       {
-        "config": "spark2-env/spark_log_dir",
+        "config": "SPARK3-env/spark_log_dir",
         "widget": {
           "type": "text-field"
         }
@@ -138,7 +138,7 @@
         }
       },
       {
-        "config": "spark2-env/spark_pid_dir",
+        "config": "SPARK3-env/spark_pid_dir",
         "widget": {
           "type": "text-field"
         }

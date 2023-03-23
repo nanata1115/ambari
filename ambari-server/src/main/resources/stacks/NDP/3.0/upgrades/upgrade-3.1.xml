@@ -499,8 +499,8 @@
             <function>set_pre_start</function>
           </task>
 
-          <task xsi:type="configure" id="hdp_3_1_0_0_ranger_services_heap_size_configuration"/>
-          <task xsi:type="configure" id="hdp_3_1_0_0_ranger_patch_retry_configuration"/>
+          <task xsi:type="configure" id="ndp_3_1_0_0_ranger_services_heap_size_configuration"/>
+          <task xsi:type="configure" id="ndp_3_1_0_0_ranger_patch_retry_configuration"/>
 
           <task xsi:type="execute" hosts="any">
             <summary>Upgrading Ranger database schema</summary>
@@ -513,8 +513,8 @@
           <task xsi:type="manual">
             <summary>Run Ranger JAVA patches</summary>
             <message>Please follow below steps on any Ranger Admin hosts:</message>
-            <message> - Export RANGER_ADMIN_HOME=/usr/hdp/{{version}}/ranger-admin and JAVA_HOME environment variables.</message>
-            <message> - Run JAVA patches command using Ranger service process user: /usr/bin/python /usr/hdp/{{version}}/ranger-admin/db_setup.py -javapatch</message>
+            <message> - Export RANGER_ADMIN_HOME=/usr/ndp/{{version}}/ranger-admin and JAVA_HOME environment variables.</message>
+            <message> - Run JAVA patches command using Ranger service process user: /usr/bin/python /usr/ndp/{{version}}/ranger-admin/db_setup.py -javapatch</message>
           </task>
 
           <task xsi:type="execute" hosts="any">
@@ -541,7 +541,7 @@
 
       <component name="RANGER_TAGSYNC">
         <pre-upgrade>
-          <task xsi:type="configure" id="hdp_3_0_x_tagsync_plaintext_sasl_removal"/>
+          <task xsi:type="configure" id="ndp_3_0_x_tagsync_plaintext_sasl_removal"/>
         </pre-upgrade>
         <pre-downgrade/>
         <upgrade>
@@ -559,7 +559,7 @@
             <function>setup_ranger_kms_database</function>
           </task>
 
-          <task xsi:type="configure" id="hdp_3_1_0_0_ranger_kms_services_heap_size_configuration"/>
+          <task xsi:type="configure" id="ndp_3_1_0_0_ranger_kms_services_heap_size_configuration"/>
         </pre-upgrade>
 
         <pre-downgrade>
@@ -579,7 +579,7 @@
     <service name="KAFKA">
       <component name="KAFKA_BROKER">
         <pre-upgrade>
-          <task xsi:type="configure" id="hdp_3_0_x_kafka_plaintext_sasl_removal"/>
+          <task xsi:type="configure" id="ndp_3_0_x_kafka_plaintext_sasl_removal"/>
         </pre-upgrade>
         <pre-downgrade/>
         <upgrade>
@@ -957,7 +957,7 @@
             <script>scripts/metadata_server.py</script>
             <function>update_atlas_simple_authz</function>
           </task>
-          <task xsi:type="configure" id="hdp_3_0_x_atlas_plaintext_sasl_removal"/>
+          <task xsi:type="configure" id="ndp_3_0_x_atlas_plaintext_sasl_removal"/>
         </pre-upgrade>
         <pre-downgrade/>
         <upgrade>

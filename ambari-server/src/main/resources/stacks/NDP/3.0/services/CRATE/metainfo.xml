@@ -21,7 +21,8 @@
     <service>
       <name>CRATE</name>
       <displayName>CRATE</displayName>
-      <comment>S
+      <comment>
+        CrateDB is a distributed SQL database that makes it simple to store and analyze massive amounts of data in real-time.
       </comment>
       <version>5.2.0</version>
       <credential-store>

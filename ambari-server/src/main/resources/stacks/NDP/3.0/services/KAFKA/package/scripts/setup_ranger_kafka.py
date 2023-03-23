@@ -97,7 +97,7 @@ def setup_ranger_kafka():
            action="delete"
       )
     if params.stack_supports_core_site_for_ranger_plugin and params.enable_ranger_kafka and params.kerberos_security_enabled:
-      # sometimes this is a link for missing /etc/hdp directory, just remove link/file and create regular file.
+      # sometimes this is a link for missing /etc/ndp directory, just remove link/file and create regular file.
       Execute(('rm', '-f', os.path.join(params.conf_dir, "core-site.xml")), sudo=True)
 
       if params.has_namenode and params.stack_supports_kafka_env_include_ranger_script:

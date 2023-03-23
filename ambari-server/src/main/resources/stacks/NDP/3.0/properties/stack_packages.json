@@ -288,7 +288,7 @@
           ]
         }
       },
-      "SPARK2": {
+      "SPARK3": {
         "LIVY2_CLIENT": {
           "STACK-SELECT-PACKAGE": "livy2-client",
           "INSTALL": [
@@ -313,45 +313,45 @@
             "livy2-server"
           ]
         },
-        "SPARK2_CLIENT": {
-          "STACK-SELECT-PACKAGE": "spark2-client",
+        "SPARK3_CLIENT": {
+          "STACK-SELECT-PACKAGE": "spark3-client",
           "INSTALL": [
-            "spark2-client",
+            "spark3-client",
             "livy2-client"
           ],
           "PATCH": [
-            "spark2-client",
+            "spark3-client",
             "livy2-client",
             "hive_warehouse_connector"
           ],
           "STANDARD": [
-            "spark2-client",
+            "spark3-client",
             "livy2-client",
             "hive_warehouse_connector"
           ]
         },
-        "SPARK2_JOBHISTORYSERVER": {
-          "STACK-SELECT-PACKAGE": "spark2-historyserver",
+        "SPARK3_JOBHISTORYSERVER": {
+          "STACK-SELECT-PACKAGE": "spark3-historyserver",
           "INSTALL": [
-            "spark2-historyserver"
+            "spark3-historyserver"
           ],
           "PATCH": [
-            "spark2-historyserver"
+            "spark3-historyserver"
           ],
           "STANDARD": [
-            "spark2-historyserver"
+            "spark3-historyserver"
           ]
         },
-        "SPARK2_THRIFTSERVER": {
-          "STACK-SELECT-PACKAGE": "spark2-thriftserver",
+        "SPARK3_THRIFTSERVER": {
+          "STACK-SELECT-PACKAGE": "spark3-thriftserver",
           "INSTALL": [
-            "spark2-thriftserver"
+            "spark3-thriftserver"
           ],
           "PATCH": [
-            "spark2-thriftserver"
+            "spark3-thriftserver"
           ],
           "STANDARD": [
-            "spark2-thriftserver"
+            "spark3-thriftserver"
           ]
         }
       },
@@ -454,6 +454,68 @@
             "zookeeper-server"
           ]
         }
+      },
+      "DOLPHIN": {
+        "DOLPHIN_ALTER": {
+          "STACK-SELECT-PACKAGE": "dolphin-client",
+          "INSTALL": [
+            "dolphin-client"
+          ],
+          "PATCH": [
+            "dolphin-client"
+          ],
+          "STANDARD": [
+            "dolphin-client"
+          ]
+        },
+        "DOLPHIN_API": {
+          "STACK-SELECT-PACKAGE": "dolphin-client",
+          "INSTALL": [
+            "dolphin-client"
+          ],
+          "PATCH": [
+            "dolphin-client"
+          ],
+          "STANDARD": [
+            "dolphin-client"
+          ]
+        },
+        "DOLPHIN_LOGGER": {
+          "STACK-SELECT-PACKAGE": "dolphin-client",
+          "INSTALL": [
+            "dolphin-client"
+          ],
+          "PATCH": [
+            "dolphin-client"
+          ],
+          "STANDARD": [
+            "dolphin-client"
+          ]
+        },
+        "DOLPHIN_MASTER": {
+          "STACK-SELECT-PACKAGE": "dolphin-client",
+          "INSTALL": [
+            "dolphin-client"
+          ],
+          "PATCH": [
+            "dolphin-client"
+          ],
+          "STANDARD": [
+            "dolphin-client"
+          ]
+        },
+        "DOLPHIN_WORKER": {
+          "STACK-SELECT-PACKAGE": "dolphin-client",
+          "INSTALL": [
+            "dolphin-client"
+          ],
+          "PATCH": [
+            "dolphin-client"
+          ],
+          "STANDARD": [
+            "dolphin-client"
+          ]
+        }
       }
     },
     "conf-select": {
@@ -541,11 +603,11 @@
           "component": "ranger-usersync"
         }
       ],
-      "spark2": [
+      "spark3": [
         {
-          "conf_dir": "/etc/spark2/conf",
-          "current_dir": "{0}/current/spark2-client/conf",
-          "component": "spark2-client"
+          "conf_dir": "/etc/spark3/conf",
+          "current_dir": "{0}/current/spark3-client/conf",
+          "component": "spark3-client"
         }
       ],
       "zookeeper": [
@@ -553,6 +615,13 @@
           "conf_dir": "/etc/zookeeper/conf",
           "current_dir": "{0}/current/zookeeper-client/conf",
           "component": "zookeeper-client"
+        }
+      ],
+      "dolphinscheduler": [
+        {
+          "conf_dir": "/etc/dolphinscheduler/conf",
+          "current_dir": "{0}/current/dolphinscheduler/conf",
+          "component": "dolphinscheduler-worker"
         }
       ]
     },
@@ -581,8 +650,8 @@
       "RANGER_KMS": {
         "packages": ["ranger-kms"]
       },
-      "SPARK2": {
-        "packages": ["spark2", "livy2"]
+      "SPARK3": {
+        "packages": ["spark3", "livy2"]
       },
       "SYSTEMML": {
         "packages": []

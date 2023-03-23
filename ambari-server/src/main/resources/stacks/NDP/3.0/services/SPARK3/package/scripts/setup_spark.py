@@ -54,7 +54,7 @@ def setup_spark(env, type, upgrade_type = None, action = None):
             create_parents = True
   )
   if type == 'server' and action == 'config':
-    Directory(params.spark2_lib_dir,
+    Directory(params.spark3_lib_dir,
               owner=params.spark_user,
               group=params.user_group,
               create_parents = True,
@@ -88,19 +88,19 @@ def setup_spark(env, type, upgrade_type = None, action = None):
 
 
 
-    generate_logfeeder_input_config('spark2', Template("input.config-spark2.json.j2", extra_imports=[default]))
+    generate_logfeeder_input_config('spark3', Template("input.config-spark3.json.j2", extra_imports=[default]))
 
 
 
-  spark2_defaults = dict(params.config['configurations']['spark2-defaults'])
+  spark3_defaults = dict(params.config['configurations']['spark3-defaults'])
 
   if params.security_enabled:
-    spark2_defaults.pop("history.server.spnego.kerberos.principal")
-    spark2_defaults.pop("history.server.spnego.keytab.file")
-    spark2_defaults['spark.history.kerberos.principal'] = spark2_defaults['spark.history.kerberos.principal'].replace('_HOST', socket.getfqdn().lower())
+    spark3_defaults.pop("history.server.spnego.kerberos.principal")
+    spark3_defaults.pop("history.server.spnego.keytab.file")
+    spark3_defaults['spark.history.kerberos.principal'] = spark3_defaults['spark.history.kerberos.principal'].replace('_HOST', socket.getfqdn().lower())
 
   PropertiesFile(format("{spark_conf}/spark-defaults.conf"),
-    properties = spark2_defaults,
+    properties = spark3_defaults,
     key_value_delimiter = " ",
     owner=params.spark_user,
     group=params.spark_group,
@@ -142,13 +142,13 @@ def setup_spark(env, type, upgrade_type = None, action = None):
   create_atlas_configs()
 
   if params.has_spark_thriftserver:
-    spark2_thrift_sparkconf = dict(params.config['configurations']['spark2-thrift-sparkconf'])
+    spark3_thrift_sparkconf = dict(params.config['configurations']['spark3-thrift-sparkconf'])
 
-    if params.security_enabled and 'spark.yarn.principal' in spark2_thrift_sparkconf:
-      spark2_thrift_sparkconf['spark.yarn.principal'] = spark2_thrift_sparkconf['spark.yarn.principal'].replace('_HOST', socket.getfqdn().lower())
+    if params.security_enabled and 'spark.yarn.principal' in spark3_thrift_sparkconf:
+      spark3_thrift_sparkconf['spark.yarn.principal'] = spark3_thrift_sparkconf['spark.yarn.principal'].replace('_HOST', socket.getfqdn().lower())
 
     PropertiesFile(params.spark_thrift_server_conf_file,
-      properties = spark2_thrift_sparkconf,
+      properties = spark3_thrift_sparkconf,
       owner = params.hive_user,
       group = params.user_group,
       key_value_delimiter = " ",

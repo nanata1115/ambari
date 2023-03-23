@@ -242,7 +242,7 @@
   </property>
   <property>
     <name>use_external_hbase</name>
-    <value>false</value>
+    <value>true</value>
     <description>Setting true, doesn't start embedded hbase or system service
       hbase. Note: Admin/User need to take care of pointing right hbase-site.xml
       into RM/NM classpath. If system service hbase is started, then admin must

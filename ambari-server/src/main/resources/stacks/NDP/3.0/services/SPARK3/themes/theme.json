@@ -42,14 +42,14 @@
       "configuration-layout": "default",
       "configs": [
         {
-          "config": "spark2-atlas-application-properties-override/atlas.spark.enabled",
+          "config": "SPARK3-atlas-application-properties-override/atlas.spark.enabled",
           "subsection-name": "subsection-spark-col1"
         }
       ]
     },
     "widgets": [
       {
-        "config": "spark2-atlas-application-properties-override/atlas.spark.enabled",
+        "config": "SPARK3-atlas-application-properties-override/atlas.spark.enabled",
         "widget": {
           "type": "toggle"
 

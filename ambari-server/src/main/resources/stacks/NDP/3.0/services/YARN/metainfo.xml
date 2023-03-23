@@ -70,27 +70,27 @@
           </commandScript>
         </component>
 
-        <component>
-          <name>APP_TIMELINE_SERVER</name>
-          <displayName>Timeline Service V1.5</displayName>
-          <category>MASTER</category>
-          <cardinality>1</cardinality>
-          <versionAdvertised>true</versionAdvertised>
-          <reassignAllowed>true</reassignAllowed>
+<!--        <component>-->
+<!--          <name>APP_TIMELINE_SERVER</name>-->
+<!--          <displayName>Timeline Service V1.5</displayName>-->
+<!--          <category>MASTER</category>-->
+<!--          <cardinality>1</cardinality>-->
+<!--          <versionAdvertised>true</versionAdvertised>-->
+<!--          <reassignAllowed>true</reassignAllowed>-->
 
-          <commandScript>
-            <script>scripts/application_timeline_server.py</script>
-            <scriptType>PYTHON</scriptType>
-            <timeout>1200</timeout>
-          </commandScript>
+<!--          <commandScript>-->
+<!--            <script>scripts/application_timeline_server.py</script>-->
+<!--            <scriptType>PYTHON</scriptType>-->
+<!--            <timeout>1200</timeout>-->
+<!--          </commandScript>-->
 
-          <logs>
-            <log>
-              <logId>yarn_timelineserver</logId>
-            </log>
-          </logs>
+<!--          <logs>-->
+<!--            <log>-->
+<!--              <logId>yarn_timelineserver</logId>-->
+<!--            </log>-->
+<!--          </logs>-->
 
-        </component>
+<!--        </component>-->
 
         <component>
           <name>RESOURCEMANAGER</name>

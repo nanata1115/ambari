@@ -70,7 +70,7 @@ def spark_service(name, upgrade_type=None, action=None):
       effective_version = format_stack_version(effective_version)
 
     if name == 'jobhistoryserver' and effective_version and check_stack_feature(StackFeature.SPARK_16PLUS, effective_version):
-      # create & copy spark2-hdp-yarn-archive.tar.gz to hdfs
+      # create & copy spark3-ndp-yarn-archive.tar.gz to hdfs
       if not params.sysprep_skip_copy_tarballs_hdfs:
         source_dirs = [params.spark_home + "/jars"]
 
@@ -83,19 +83,19 @@ def spark_service(name, upgrade_type=None, action=None):
           source_dirs.append(params.spark_atlas_jar_dir)
 
 
-        tmp_archive_file=get_tarball_paths("spark2")[1]
+        tmp_archive_file=get_tarball_paths("spark3")[1]
         make_tarfile(tmp_archive_file, source_dirs)
-        copy_to_hdfs("spark2", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs, replace_existing_files=True)
+        copy_to_hdfs("spark3", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs, replace_existing_files=True)
 
         if params.sac_enabled and params.security_enabled:
           os.remove(os.path.join(source_dirs[0], os.path.basename(params.atlas_kafka_keytab)))
 
-      # create & copy spark2-hdp-hive-archive.tar.gz to hdfs
-      if not params.sysprep_skip_copy_tarballs_hdfs:
-        source_dirs = [params.spark_home+"/standalone-metastore"]
-        tmp_archive_file=get_tarball_paths("spark2hive")[1]
-        make_tarfile(tmp_archive_file, source_dirs)
-        copy_to_hdfs("spark2hive", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs, replace_existing_files=True)
+      # # create & copy spark3-ndp-hive-archive.tar.gz to hdfs
+      # if not params.sysprep_skip_copy_tarballs_hdfs:
+      #   source_dirs = [params.spark_home+"/standalone-metastore"]
+      #   tmp_archive_file=get_tarball_paths("spark3hive")[1]
+      #   make_tarfile(tmp_archive_file, source_dirs)
+      #   copy_to_hdfs("spark3hive", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs, replace_existing_files=True)
 
       # create spark history directory
       params.HdfsResource(params.spark_history_dir,

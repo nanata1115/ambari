@@ -249,7 +249,7 @@ export YARN_RESOURCEMANAGER_HEAPSIZE={{resourcemanager_heapsize}}
 # These options will be appended to the options specified as HADOOP_OPTS
 # and therefore may override any similar flags set in HADOOP_OPTS
 {% if security_enabled %}
-export YARN_RESOURCEMANAGER_OPTS="-Djava.security.auth.login.config={{yarn_jaas_file}} --add-opens java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions"
+export YARN_RESOURCEMANAGER_OPTS="-Djava.security.auth.login.config={{yarn_jaas_file}}"
 {% endif %}
 
 # Node Manager specific parameters
@@ -273,15 +273,15 @@ export YARN_NODEMANAGER_HEAPSIZE={{nodemanager_heapsize}}
 export YARN_TIMELINESERVER_HEAPSIZE={{apptimelineserver_heapsize}}
 
 {% if security_enabled %}
-export YARN_TIMELINESERVER_OPTS="-Djava.security.auth.login.config={{yarn_ats_jaas_file}}"
+export YARN_TIMELINESERVER_OPTS="-Djava.security.auth.login.config={{yarn_ats_jaas_file}} --add-opens java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions"
 {% endif %}
 
 {% if security_enabled %}
-export YARN_TIMELINEREADER_OPTS="-Djava.security.auth.login.config={{yarn_ats_jaas_file}}"
+export YARN_TIMELINEREADER_OPTS="-Djava.security.auth.login.config={{yarn_ats_jaas_file}} --add-opens java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions"
 {% endif %}
 
 {% if security_enabled %}
-export YARN_REGISTRYDNS_OPTS="-Djava.security.auth.login.config={{yarn_registry_dns_jaas_file}}"
+export YARN_REGISTRYDNS_OPTS="-Djava.security.auth.login.config={{yarn_registry_dns_jaas_file}} --add-opens java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions"
 {% endif %}
 
 # Specify the JVM options to be used when starting the NodeManager.
@@ -326,9 +326,10 @@ HADOOP_OPTS="$HADOOP_OPTS -Djavax.security.auth.useSubjectCredsOnly=false"
 YARN_RESOURCEMANAGER_OPTS="{{rm_security_opts}} $YARN_RESOURCEMANAGER_OPTS"
 {% endif %}
 
-export YARN_NODEMANAGER_OPTS="$YARN_NODEMANAGER_OPTS -Dnm.audit.logger=INFO,NMAUDIT"
-export YARN_RESOURCEMANAGER_OPTS="$YARN_RESOURCEMANAGER_OPTS -Dyarn.server.resourcemanager.appsummary.logger=INFO,RMSUMMARY -Drm.audit.logger=INFO,RMAUDIT"
-
+export YARN_NODEMANAGER_OPTS="$YARN_NODEMANAGER_OPTS -Dnm.audit.logger=INFO,NMAUDIT --add-opens java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions"
+export YARN_RESOURCEMANAGER_OPTS="$YARN_RESOURCEMANAGER_OPTS -Dyarn.server.resourcemanager.appsummary.logger=INFO,RMSUMMARY -Drm.audit.logger=INFO,RMAUDIT --add-opens java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions"
+export YARN_TIMELINESERVER_OPTS="$YARN_TIMELINESERVER_OPTS --add-opens java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions"
+export YARN_TIMELINEREADER_OPTS="$YARN_TIMELINEREADER_OPTS--add-opens java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions"
 {% if registry_dns_needs_privileged_access %}
 # If the DNS server is configured to use the standard privileged port 53,
 # the environment variables YARN_REGISTRYDNS_SECURE_USER and

@@ -78,8 +78,8 @@ class Spark2ServiceAdvisor(service_advisor.ServiceAdvisor):
     Must be overriden in child class.
 
     """
-    self.heap_size_properties = {"SPARK2_JOBHISTORYSERVER":
-                                   [{"config-name": "spark2-env",
+    self.heap_size_properties = {"SPARK3_JOBHISTORYSERVER":
+                                   [{"config-name": "spark3-env",
                                      "property": "spark_daemon_memory",
                                      "default": "2048m"}]}
 
@@ -115,7 +115,7 @@ class Spark2ServiceAdvisor(service_advisor.ServiceAdvisor):
     Must be overriden in child class.
     """
 
-    return self.getServiceComponentCardinalityValidations(services, hosts, "SPARK2")
+    return self.getServiceComponentCardinalityValidations(services, hosts, "SPARK3")
 
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """
@@ -127,8 +127,8 @@ class Spark2ServiceAdvisor(service_advisor.ServiceAdvisor):
 
     recommender = Spark2Recommender()
     recommender.recommendSpark2ConfigurationsFromHDP25(configurations, clusterData, services, hosts)
-    recommender.recommendSPARK2ConfigurationsFromHDP26(configurations, clusterData, services, hosts)
-    recommender.recommendSPARK2ConfigurationsFromHDP30(configurations, clusterData, services, hosts)
+    recommender.recommendSPARK3ConfigurationsFromHDP26(configurations, clusterData, services, hosts)
+    recommender.recommendSPARK3ConfigurationsFromHDP30(configurations, clusterData, services, hosts)
 
 
 
@@ -147,12 +147,12 @@ class Spark2ServiceAdvisor(service_advisor.ServiceAdvisor):
     return validator.validateListOfConfigUsingMethod(configurations, recommendedDefaults, services, hosts, validator.validators)
 
   def isComponentUsingCardinalityForLayout(self, componentName):
-    return componentName in ('SPARK2_THRIFTSERVER', 'LIVY2_SERVER')
+    return componentName in ('SPARK3_THRIFTSERVER', 'LIVY2_SERVER')
 
   @staticmethod
   def isKerberosEnabled(services, configurations):
     """
-    Determines if security is enabled by testing the value of spark2-defaults/spark.history.kerberos.enabled enabled.
+    Determines if security is enabled by testing the value of spark3-defaults/spark.history.kerberos.enabled enabled.
     If the property exists and is equal to "true", then is it enabled; otherwise is it assumed to be
     disabled.
 
@@ -163,12 +163,12 @@ class Spark2ServiceAdvisor(service_advisor.ServiceAdvisor):
     :rtype: bool
     :return: True or False
     """
-    if configurations and "spark2-defaults" in configurations and \
-            "spark.history.kerberos.enabled" in configurations["spark2-defaults"]["properties"]:
-      return configurations["spark2-defaults"]["properties"]["spark.history.kerberos.enabled"].lower() == "true"
-    elif services and "spark2-defaults" in services["configurations"] and \
-            "spark.history.kerberos.enabled" in services["configurations"]["spark2-defaults"]["properties"]:
-      return services["configurations"]["spark2-defaults"]["properties"]["spark.history.kerberos.enabled"].lower() == "true"
+    if configurations and "spark3-defaults" in configurations and \
+            "spark.history.kerberos.enabled" in configurations["spark3-defaults"]["properties"]:
+      return configurations["spark3-defaults"]["properties"]["spark.history.kerberos.enabled"].lower() == "true"
+    elif services and "spark3-defaults" in services["configurations"] and \
+            "spark.history.kerberos.enabled" in services["configurations"]["spark3-defaults"]["properties"]:
+      return services["configurations"]["spark3-defaults"]["properties"]["spark.history.kerberos.enabled"].lower() == "true"
     else:
       return False
 
@@ -189,19 +189,19 @@ class Spark2Recommender(service_advisor.ServiceAdvisor):
     :type services dict
     :type hosts dict
     """
-    putSparkProperty = self.putProperty(configurations, "spark2-defaults", services)
-    putSparkThriftSparkConf = self.putProperty(configurations, "spark2-thrift-sparkconf", services)
+    putSparkProperty = self.putProperty(configurations, "spark3-defaults", services)
+    putSparkThriftSparkConf = self.putProperty(configurations, "spark3-thrift-sparkconf", services)
 
-    spark_queue = self.recommendYarnQueue(services, "spark2-defaults", "spark.yarn.queue")
+    spark_queue = self.recommendYarnQueue(services, "spark3-defaults", "spark.yarn.queue")
     if spark_queue is not None:
       putSparkProperty("spark.yarn.queue", spark_queue)
 
-    spark_thrift_queue = self.recommendYarnQueue(services, "spark2-thrift-sparkconf", "spark.yarn.queue")
+    spark_thrift_queue = self.recommendYarnQueue(services, "spark3-thrift-sparkconf", "spark.yarn.queue")
     if spark_thrift_queue is not None:
       putSparkThriftSparkConf("spark.yarn.queue", spark_thrift_queue)
 
 
-  def recommendSPARK2ConfigurationsFromHDP26(self, configurations, clusterData, services, hosts):
+  def recommendSPARK3ConfigurationsFromHDP26(self, configurations, clusterData, services, hosts):
     """
     :type configurations dict
     :type clusterData dict
@@ -211,10 +211,10 @@ class Spark2Recommender(service_advisor.ServiceAdvisor):
 
     if Spark2ServiceAdvisor.isKerberosEnabled(services, configurations):
 
-      spark2_defaults = self.getServicesSiteProperties(services, "spark2-defaults")
+      spark3_defaults = self.getServicesSiteProperties(services, "spark3-defaults")
 
-      if spark2_defaults:
-        putSpark2DafaultsProperty = self.putProperty(configurations, "spark2-defaults", services)
+      if spark3_defaults:
+        putSpark2DafaultsProperty = self.putProperty(configurations, "spark3-defaults", services)
         putSpark2DafaultsProperty('spark.acls.enable', 'true')
         putSpark2DafaultsProperty('spark.admin.acls', '')
         putSpark2DafaultsProperty('spark.history.ui.acls.enable', 'true')
@@ -224,52 +224,52 @@ class Spark2Recommender(service_advisor.ServiceAdvisor):
     self.__addZeppelinToLivy2SuperUsers(configurations, services)
 
 
-  def recommendSPARK2ConfigurationsFromHDP30(self, configurations, clusterData, services, hosts):
+  def recommendSPARK3ConfigurationsFromHDP30(self, configurations, clusterData, services, hosts):
 
     # SAC
-    if "spark2-atlas-application-properties-override" in services["configurations"]:
-      spark2_atlas_application_properties_override = self.getServicesSiteProperties(services, "spark2-atlas-application-properties-override")
-      spark2_defaults_properties = self.getServicesSiteProperties(services, "spark2-defaults")
-      spark2_thriftspark_conf_properties = self.getServicesSiteProperties(services, "spark2-thrift-sparkconf")
-      putSpark2DefautlsProperty = self.putProperty(configurations, "spark2-defaults", services)
-      putSpark2DefaultsPropertyAttribute = self.putPropertyAttribute(configurations,"spark2-defaults")
-      putSpark2ThriftSparkConfProperty = self.putProperty(configurations, "spark2-thrift-sparkconf", services)
-      putSpark2AtlasHookProperty = self.putProperty(configurations, "spark2-atlas-application-properties-override", services)
-      putSpark2AtlasHookPropertyAttribute = self.putPropertyAttribute(configurations,"spark2-atlas-application-properties-override")
-      spark2_sac_enabled = None
-      if self.checkSiteProperties(spark2_atlas_application_properties_override, "atlas.spark.enabled"):
-        spark2_sac_enabled = spark2_atlas_application_properties_override["atlas.spark.enabled"]
-        spark2_sac_enabled = str(spark2_sac_enabled).upper() == 'TRUE'
+    if "spark3-atlas-application-properties-override" in services["configurations"]:
+      spark3_atlas_application_properties_override = self.getServicesSiteProperties(services, "spark3-atlas-application-properties-override")
+      spark3_defaults_properties = self.getServicesSiteProperties(services, "spark3-defaults")
+      spark3_thriftspark_conf_properties = self.getServicesSiteProperties(services, "spark3-thrift-sparkconf")
+      putSpark2DefautlsProperty = self.putProperty(configurations, "spark3-defaults", services)
+      putSpark2DefaultsPropertyAttribute = self.putPropertyAttribute(configurations,"spark3-defaults")
+      putSpark2ThriftSparkConfProperty = self.putProperty(configurations, "spark3-thrift-sparkconf", services)
+      putSpark2AtlasHookProperty = self.putProperty(configurations, "spark3-atlas-application-properties-override", services)
+      putSpark2AtlasHookPropertyAttribute = self.putPropertyAttribute(configurations,"spark3-atlas-application-properties-override")
+      spark3_sac_enabled = None
+      if self.checkSiteProperties(spark3_atlas_application_properties_override, "atlas.spark.enabled"):
+        spark3_sac_enabled = spark3_atlas_application_properties_override["atlas.spark.enabled"]
+        spark3_sac_enabled = str(spark3_sac_enabled).upper() == 'TRUE'
 
-      if spark2_sac_enabled:
+      if spark3_sac_enabled:
 
-        self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark2_defaults_properties, "spark.driver.extraClassPath", "/usr/hdp/current/spark-atlas-connector/*", ":")
-        self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark2_defaults_properties, "spark.yarn.dist.files", "/etc/spark2/conf/atlas-application.properties.yarn#atlas-application.properties", ",")
-        self.setOrAddValueToProperty(putSpark2ThriftSparkConfProperty, spark2_thriftspark_conf_properties, "spark.driver.extraClassPath", "/usr/hdp/current/spark-atlas-connector/*", ":")
+        self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.driver.extraClassPath", "/usr/ndp/current/spark-atlas-connector/*", ":")
+        self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.yarn.dist.files", "/etc/spark3/conf/atlas-application.properties.yarn#atlas-application.properties", ",")
+        self.setOrAddValueToProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.driver.extraClassPath", "/usr/ndp/current/spark-atlas-connector/*", ":")
 
-        self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark2_defaults_properties, "spark.extraListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
-        self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark2_defaults_properties, "spark.sql.queryExecutionListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
-        self.setOrAddValueToProperty(putSpark2ThriftSparkConfProperty, spark2_thriftspark_conf_properties, "spark.extraListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
-        self.setOrAddValueToProperty(putSpark2ThriftSparkConfProperty, spark2_thriftspark_conf_properties, "spark.sql.queryExecutionListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
+        self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.extraListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
+        self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.sql.queryExecutionListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
+        self.setOrAddValueToProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.extraListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
+        self.setOrAddValueToProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.sql.queryExecutionListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
 
-        self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark2_defaults_properties, "spark.sql.streaming.streamingQueryListeners", "com.hortonworks.spark.atlas.SparkAtlasStreamingQueryEventTracker", ",")
-        self.setOrAddValueToProperty(putSpark2ThriftSparkConfProperty, spark2_thriftspark_conf_properties, "spark.sql.streaming.streamingQueryListeners", "com.hortonworks.spark.atlas.SparkAtlasStreamingQueryEventTracker", ",")
+        self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.sql.streaming.streamingQueryListeners", "com.hortonworks.spark.atlas.SparkAtlasStreamingQueryEventTracker", ",")
+        self.setOrAddValueToProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.sql.streaming.streamingQueryListeners", "com.hortonworks.spark.atlas.SparkAtlasStreamingQueryEventTracker", ",")
 
         putSpark2AtlasHookProperty("atlas.client.checkModelInStart", "false")
 
       else:
 
-        self.removeValueFromProperty(putSpark2DefautlsProperty, spark2_defaults_properties, "spark.driver.extraClassPath", "/usr/hdp/current/spark-atlas-connector/*", ":")
-        self.removeValueFromProperty(putSpark2DefautlsProperty, spark2_defaults_properties, "spark.yarn.dist.files", "/etc/spark2/conf/atlas-application.properties.yarn#atlas-application.properties", ",")
-        self.removeValueFromProperty(putSpark2ThriftSparkConfProperty, spark2_thriftspark_conf_properties, "spark.driver.extraClassPath", "/usr/hdp/current/spark-atlas-connector/*", ":")
+        self.removeValueFromProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.driver.extraClassPath", "/usr/ndp/current/spark-atlas-connector/*", ":")
+        self.removeValueFromProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.yarn.dist.files", "/etc/spark3/conf/atlas-application.properties.yarn#atlas-application.properties", ",")
+        self.removeValueFromProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.driver.extraClassPath", "/usr/ndp/current/spark-atlas-connector/*", ":")
 
-        self.removeValueFromProperty(putSpark2DefautlsProperty, spark2_defaults_properties, "spark.extraListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
-        self.removeValueFromProperty(putSpark2DefautlsProperty, spark2_defaults_properties, "spark.sql.queryExecutionListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
-        self.removeValueFromProperty(putSpark2ThriftSparkConfProperty, spark2_thriftspark_conf_properties, "spark.extraListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
-        self.removeValueFromProperty(putSpark2ThriftSparkConfProperty, spark2_thriftspark_conf_properties, "spark.sql.queryExecutionListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
+        self.removeValueFromProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.extraListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
+        self.removeValueFromProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.sql.queryExecutionListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
+        self.removeValueFromProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.extraListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
+        self.removeValueFromProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.sql.queryExecutionListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
 
-        self.removeValueFromProperty(putSpark2DefautlsProperty, spark2_defaults_properties, "spark.sql.streaming.streamingQueryListeners", "com.hortonworks.spark.atlas.SparkAtlasStreamingQueryEventTracker", ",")
-        self.removeValueFromProperty(putSpark2ThriftSparkConfProperty, spark2_thriftspark_conf_properties, "spark.sql.streaming.streamingQueryListeners", "com.hortonworks.spark.atlas.SparkAtlasStreamingQueryEventTracker", ",")
+        self.removeValueFromProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.sql.streaming.streamingQueryListeners", "com.hortonworks.spark.atlas.SparkAtlasStreamingQueryEventTracker", ",")
+        self.removeValueFromProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.sql.streaming.streamingQueryListeners", "com.hortonworks.spark.atlas.SparkAtlasStreamingQueryEventTracker", ",")
 
         putSpark2AtlasHookPropertyAttribute("atlas.client.checkModelInStart", "delete", "true")
 
@@ -336,9 +336,9 @@ class Spark2Validator(service_advisor.ServiceAdvisor):
     self.as_super = super(Spark2Validator, self)
     self.as_super.__init__(*args, **kwargs)
 
-    self.validators = [("spark2-defaults", self.validateSpark2DefaultsFromHDP25),
-                       ("spark2-thrift-sparkconf", self.validateSpark2ThriftSparkConfFromHDP25),
-                       ("spark2-atlas-application-properties-override", self.validateSpark2AtlasApplicationPropertiesFromHDP30)]
+    self.validators = [("spark3-defaults", self.validateSpark2DefaultsFromHDP25),
+                       ("spark3-thrift-sparkconf", self.validateSpark2ThriftSparkConfFromHDP25),
+                       ("spark3-atlas-application-properties-override", self.validateSpark2AtlasApplicationPropertiesFromHDP30)]
 
 
   def validateSpark2DefaultsFromHDP25(self, properties, recommendedDefaults, configurations, services, hosts):
@@ -348,7 +348,7 @@ class Spark2Validator(service_advisor.ServiceAdvisor):
         "item": self.validatorYarnQueue(properties, recommendedDefaults, 'spark.yarn.queue', services)
       }
     ]
-    return self.toConfigurationValidationProblems(validationItems, "spark2-defaults")
+    return self.toConfigurationValidationProblems(validationItems, "spark3-defaults")
 
 
   def validateSpark2ThriftSparkConfFromHDP25(self, properties, recommendedDefaults, configurations, services, hosts):
@@ -358,16 +358,16 @@ class Spark2Validator(service_advisor.ServiceAdvisor):
         "item": self.validatorYarnQueue(properties, recommendedDefaults, 'spark.yarn.queue', services)
       }
     ]
-    return self.toConfigurationValidationProblems(validationItems, "spark2-thrift-sparkconf")
+    return self.toConfigurationValidationProblems(validationItems, "spark3-thrift-sparkconf")
 
   def validateSpark2AtlasApplicationPropertiesFromHDP30(self, properties, recommendedDefaults, configurations, services, hosts):
     validationItems = []
     servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
-    if not "ATLAS" in servicesList and 'atlas.spark.enabled' in services['configurations']['spark2-atlas-application-properties-override']['properties'] and \
-            str(services['configurations']['spark2-atlas-application-properties-override']['properties']['atlas.spark.enabled']).upper() == 'TRUE':
-      validationItems.append({"config-name": "spark2-atlas-application-properties-override",
+    if not "ATLAS" in servicesList and 'atlas.spark.enabled' in services['configurations']['spark3-atlas-application-properties-override']['properties'] and \
+            str(services['configurations']['spark3-atlas-application-properties-override']['properties']['atlas.spark.enabled']).upper() == 'TRUE':
+      validationItems.append({"config-name": "spark3-atlas-application-properties-override",
                                  +                              "item": self.getErrorItem("SAC could be enabled only if ATLAS service is available on cluster!")})
-    return self.toConfigurationValidationProblems(validationItems, "spark2-atlas-application-properties-override")
+    return self.toConfigurationValidationProblems(validationItems, "spark3-atlas-application-properties-override")
 
 
 

@@ -531,7 +531,7 @@
 
       <component name="RANGER_TAGSYNC">
         <pre-upgrade>
-          <task xsi:type="configure" id="hdp_3_0_x_tagsync_plaintext_sasl_removal"/>
+          <task xsi:type="configure" id="ndp_3_0_x_tagsync_plaintext_sasl_removal"/>
         </pre-upgrade>
         <pre-downgrade/>
         <upgrade>
@@ -549,7 +549,7 @@
             <function>setup_ranger_kms_database</function>
           </task>
 
-          <task xsi:type="configure" id="hdp_3_0_3_0_ranger_kms_services_heap_size_configuration"/>
+          <task xsi:type="configure" id="ndp_3_0_3_0_ranger_kms_services_heap_size_configuration"/>
         </pre-upgrade>
 
         <pre-downgrade>
@@ -569,7 +569,7 @@
     <service name="KAFKA">
       <component name="KAFKA_BROKER">
         <pre-upgrade>
-          <task xsi:type="configure" id="hdp_3_0_x_kafka_plaintext_sasl_removal"/>
+          <task xsi:type="configure" id="ndp_3_0_x_kafka_plaintext_sasl_removal"/>
         </pre-upgrade>
         <pre-downgrade/>
         <upgrade>
@@ -947,7 +947,7 @@
             <script>scripts/metadata_server.py</script>
             <function>update_atlas_simple_authz</function>
           </task>
-          <task xsi:type="configure" id="hdp_3_0_x_atlas_plaintext_sasl_removal"/>
+          <task xsi:type="configure" id="ndp_3_0_x_atlas_plaintext_sasl_removal"/>
         </pre-upgrade>
         <pre-downgrade/>
         <upgrade>

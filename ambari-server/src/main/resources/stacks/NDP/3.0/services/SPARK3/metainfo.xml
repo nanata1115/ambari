@@ -22,12 +22,12 @@
     <service>
       <name>SPARK3</name>
       <displayName>Spark3</displayName>
-      <comment>Apache Spark 3.4 is a fast and general engine for large-scale data processing.</comment>
-      <version>3.4</version>
+      <comment>Apache Spark 3.5 is a fast and general engine for large-scale data processing.</comment>
+      <version>3.5</version>
       <components>
         <component>
-          <name>SPARK2_JOBHISTORYSERVER</name>
-          <displayName>Spark2 History Server</displayName>
+          <name>SPARK3_JOBHISTORYSERVER</name>
+          <displayName>spark3 History Server</displayName>
           <category>MASTER</category>
           <cardinality>1+</cardinality>
           <versionAdvertised>true</versionAdvertised>
@@ -68,14 +68,14 @@
           </commandScript>
           <logs>
             <log>
-              <logId>spark2_jobhistory_server</logId>
+              <logId>spark3_jobhistory_server</logId>
               <primary>true</primary>
             </log>
           </logs>
         </component>
         <component>
-          <name>SPARK2_THRIFTSERVER</name>
-          <displayName>Spark2 Thrift Server</displayName>
+          <name>SPARK3_THRIFTSERVER</name>
+          <displayName>spark3 Thrift Server</displayName>
           <category>SLAVE</category>
           <cardinality>0+</cardinality>
           <versionAdvertised>true</versionAdvertised>
@@ -116,14 +116,14 @@
           </commandScript>
           <logs>
             <log>
-              <logId>spark2_thriftserver</logId>
+              <logId>spark3_thriftserver</logId>
               <primary>true</primary>
             </log>
           </logs>
         </component>
         <component>
-          <name>SPARK2_CLIENT</name>
-          <displayName>Spark2 Client</displayName>
+          <name>SPARK3_CLIENT</name>
+          <displayName>spark3 Client</displayName>
           <category>CLIENT</category>
           <cardinality>1+</cardinality>
           <versionAdvertised>true</versionAdvertised>
@@ -159,34 +159,34 @@
             <configFile>
               <type>env</type>
               <fileName>spark-log4j.properties</fileName>
-              <dictionaryName>spark2-log4j-properties</dictionaryName>
+              <dictionaryName>spark3-log4j-properties</dictionaryName>
             </configFile>
             <configFile>
               <type>env</type>
               <fileName>spark-env.sh</fileName>
-              <dictionaryName>spark2-env</dictionaryName>
+              <dictionaryName>spark3-env</dictionaryName>
             </configFile>
             <configFile>
               <type>env</type>
               <fileName>spark-metrics.properties</fileName>
-              <dictionaryName>spark2-metrics-properties</dictionaryName>
+              <dictionaryName>spark3-metrics-properties</dictionaryName>
             </configFile>
             <configFile>
               <type>properties</type>
               <fileName>spark-defaults.conf</fileName>
-              <dictionaryName>spark2-defaults</dictionaryName>
+              <dictionaryName>spark3-defaults</dictionaryName>
             </configFile>
           </configFiles>
         </component>
         <component>
           <name>LIVY2_SERVER</name>
-          <displayName>Livy for Spark2 Server</displayName>
+          <displayName>Livy for spark3 Server</displayName>
           <category>SLAVE</category>
           <cardinality>0+</cardinality>
           <versionAdvertised>true</versionAdvertised>
           <dependencies>
             <dependency>
-              <name>SPARK2/SPARK2_CLIENT</name>
+              <name>SPARK3/SPARK3_CLIENT</name>
               <scope>host</scope>
               <auto-deploy>
                 <enabled>true</enabled>
@@ -223,15 +223,15 @@
 
       <configuration-dependencies>
         <config-type>core-site</config-type>
-        <config-type>spark2-defaults</config-type>
-        <config-type>spark2-env</config-type>
-        <config-type>spark2-log4j-properties</config-type>
-        <config-type>spark2-metrics-properties</config-type>
-        <config-type>spark2-thrift-sparkconf</config-type>
-        <config-type>spark2-hive-site-override</config-type>
-        <config-type>spark2-thrift-fairscheduler</config-type>
-        <config-type>spark2-atlas-application-properties-override</config-type>
-        <config-type>spark2-atlas-application-properties-yarn</config-type>
+        <config-type>spark3-defaults</config-type>
+        <config-type>spark3-env</config-type>
+        <config-type>spark3-log4j-properties</config-type>
+        <config-type>spark3-metrics-properties</config-type>
+        <config-type>spark3-thrift-sparkconf</config-type>
+        <config-type>spark3-hive-site-override</config-type>
+        <config-type>spark3-thrift-fairscheduler</config-type>
+        <config-type>spark3-atlas-application-properties-override</config-type>
+        <config-type>spark3-atlas-application-properties-yarn</config-type>
         <config-type>livy2-client-conf</config-type>
         <config-type>livy2-conf</config-type>
         <config-type>livy2-env</config-type>
@@ -248,7 +248,7 @@
       <requiredServices>
         <service>HDFS</service>
         <service>YARN</service>
-        <service>HIVE</service>
+<!--        <service>HIVE</service>-->
       </requiredServices>
 
       <osSpecifics>
@@ -256,16 +256,7 @@
           <osFamily>redhat7,amazonlinux2,redhat6,suse11,suse12</osFamily>
           <packages>
             <package>
-              <name>spark2_${stack_version}</name>
-            </package>
-            <package>
-              <name>spark2_${stack_version}-python</name>
-            </package>
-            <package>
-              <name>livy2_${stack_version}</name>
-            </package>
-            <package>
-              <name>spark-atlas-connector_${stack_version}</name>
+              <name>spark-*</name>
             </package>
           </packages>
         </osSpecific>
@@ -273,10 +264,10 @@
           <osFamily>debian7,debian9,ubuntu12,ubuntu14,ubuntu16,ubuntu18</osFamily>
           <packages>
             <package>
-              <name>spark2-${stack_version}</name>
+              <name>spark3-${stack_version}</name>
             </package>
             <package>
-              <name>spark2-${stack_version}-python</name>
+              <name>spark3-${stack_version}-python</name>
             </package>
             <package>
               <name>livy2-${stack_version}</name>

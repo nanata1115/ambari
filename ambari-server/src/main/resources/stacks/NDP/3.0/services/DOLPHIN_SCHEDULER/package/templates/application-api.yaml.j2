@@ -1,0 +1,172 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+server:
+  port: {{dolphin_app_api_map['server.port']}}
+  servlet:
+    session:
+      timeout: {{dolphin_app_api_map['server.servlet.session.timeout']}}
+    context-path: {{dolphin_app_api_map['server.servlet.context-path']}}
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json,application/xml
+  jetty:
+    max-http-form-post-size: {{dolphin_app_api_map['server.jetty.max-http-post-size']}}
+
+spring:
+  banner:
+    charset: UTF-8
+  jackson:
+    time-zone: UTC
+    date-format: "yyyy-MM-dd HH:mm:ss"
+  servlet:
+    multipart:
+      max-file-size: {{dolphin_app_api_map['spring.servlet.multipart.max-file-size']}}
+      max-request-size: {{dolphin_app_api_map['spring.servlet.multipart.max-request-size']}}
+  messages:
+    basename: {{dolphin_app_api_map['spring.messages.basename']}}
+  datasource:
+      driver-class-name: {{dolphin_database_config['dolphin_database_driver']}}
+      url: {{ dolphin_database_config['spring_datasource_url'] }}
+      username: {{ dolphin_database_config['spring_datasource_username'] }}
+      password: {{ dolphin_database_config['spring_datasource_password'] }}
+      hikari:
+        connection-test-query: select 1
+        minimum-idle: 5
+        auto-commit: true
+        validation-timeout: 3000
+        pool-name: DolphinScheduler
+        maximum-pool-size: 50
+        connection-timeout: 30000
+        idle-timeout: 600000
+        leak-detection-threshold: 0
+        initialization-fail-timeout: 1
+ quartz:
+     job-store-type: jdbc
+     jdbc:
+       initialize-schema: never
+     properties:
+       org.quartz.threadPool.threadPriority: {{dolphin_quartz_map['org.quartz.threadPool.threadPriority']}}
+       org.quartz.jobStore.isClustered: {{dolphin_quartz_map['org.quartz.jobStore.isClustered']}}
+       org.quartz.jobStore.class: {{dolphin_quartz_map['org.quartz.jobStore.class']}}
+       org.quartz.scheduler.instanceId: {{dolphin_quartz_map['org.quartz.scheduler.instanceId']}}
+       org.quartz.jobStore.tablePrefix: {{dolphin_quartz_map['org.quartz.jobStore.tablePrefix']}}
+       org.quartz.jobStore.acquireTriggersWithinLock: {{dolphin_quartz_map['org.quartz.jobStore.acquireTriggersWithinLock']}}
+       org.quartz.scheduler.instanceName: {{dolphin_quartz_map['org.quartz.scheduler.instanceName']}}
+       org.quartz.threadPool.class: {{dolphin_quartz_map['org.quartz.threadPool.class']}}
+       org.quartz.jobStore.useProperties: {{dolphin_quartz_map['org.quartz.jobStore.useProperties']}}
+       org.quartz.threadPool.makeThreadsDaemons: {{dolphin_quartz_map['org.quartz.threadPool.makeThreadsDaemons']}}
+       org.quartz.threadPool.threadCount: {{dolphin_quartz_map['org.quartz.threadPool.threadCount']}}
+       org.quartz.jobStore.misfireThreshold: {{dolphin_quartz_map['org.quartz.jobStore.misfireThreshold']}}
+       org.quartz.scheduler.batchTriggerAcquisitionMaxCount: {{dolphin_quartz_map['org.quartz.scheduler.batchTriggerAcquisitionMaxCount']}}
+       org.quartz.scheduler.makeSchedulerThreadDaemon: {{dolphin_quartz_map['org.quartz.scheduler.makeSchedulerThreadDaemon']}}
+       org.quartz.jobStore.driverDelegateClass: dolphin_quartz_map['org.quartz.jobStore.driverDelegateClass']
+       org.quartz.jobStore.clusterCheckinInterval: {{dolphin_quartz_map['org.quartz.jobStore.clusterCheckinInterval']}}
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+  health:
+    db:
+      enabled: true
+    defaults:
+      enabled: false
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+registry:
+  type: {{dolphin_registry_map['registry.plugin.name']}}
+  zookeeper:
+    namespace: {{dolphin_registry_map['registry.namespace']}}
+    connect-string: {{dolphin_registry_map['registry.servers']}}
+    retry-policy:
+      base-sleep-time: {{dolphin_registry_map['registry.base.sleep.time.ms']}}
+      max-sleep: {{dolphin_registry_map['registry.max.sleep.ms']}}
+      max-retries: {{dolphin_registry_map['registry.max.retries']}}
+    session-timeout: {{dolphin_registry_map['registry.session.timeout.ms']}}
+    connection-timeout: {{dolphin_registry_map['registry.connection.timeout.ms']}}
+    block-until-connected: {{dolphin_registry_map['registry.serversregistry.block.until.connected.wait']}}
+    digest: ~
+
+audit:
+  enabled: false
+
+metrics:
+  enabled: true
+
+python-gateway:
+  # Weather enable python gateway server or not. The default value is true.
+  enabled: true
+  # The address of Python gateway server start. Set its value to `0.0.0.0` if your Python API run in different
+  # between Python gateway server. It could be be specific to other address like `127.0.0.1` or `localhost`
+  gateway-server-address: 0.0.0.0
+  # The port of Python gateway server start. Define which port you could connect to Python gateway server from
+  # Python API side.
+  gateway-server-port: 25333
+  # The address of Python callback client.
+  python-address: 127.0.0.1
+  # The port of Python callback client.
+  python-port: 25334
+  # Close connection of socket server if no other request accept after x milliseconds. Define value is (0 = infinite),
+  # and socket server would never close even though no requests accept
+  connect-timeout: 0
+  # Close each active connection of socket server if python program not active after x milliseconds. Define value is
+  # (0 = infinite), and socket server would never close even though no requests accept
+  read-timeout: 0
+
+security:
+  authentication:
+    # Authentication types (supported types: PASSWORD,LDAP)
+    type: {{dolphin_app_api_map['security.authentication.type']}}
+    # IF you set type `LDAP`, below config will be effective
+    ldap:
+      # ldap server config
+      urls: ldap://ldap.forumsys.com:389/
+      base-dn: dc=example,dc=com
+      username: cn=read-only-admin,dc=example,dc=com
+      password: password
+      user:
+        # admin userId when you use LDAP login
+        admin: read-only-admin
+        identity-attribute: uid
+        email-attribute: mail
+        # action when ldap user is not exist (supported types: CREATE,DENY)
+        not-exist-action: CREATE
+
+# Traffic control, if you turn on this config, the maximum number of request/s will be limited.
+# global max request number per second
+# default tenant-level max request number
+traffic:
+  control:
+    global-switch: false
+    max-global-qps-rate: 300
+    tenant-switch: false
+    default-tenant-qps-rate: 10
+    #customize-tenant-qps-rate:
+      # eg.
+      #tenant1: 11
+      #tenant2: 20

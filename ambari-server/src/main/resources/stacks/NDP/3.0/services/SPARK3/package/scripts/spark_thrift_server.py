@@ -66,7 +66,7 @@ class SparkThriftServer(Script):
     import params
 
     env.set_params(params)
-    Logger.info("Executing Spark2 Thrift Server Stack Upgrade pre-restart")
+    Logger.info("Executing spark3 Thrift Server Stack Upgrade pre-restart")
     stack_select.select_packages(params.version)
       
   def get_log_folder(self):

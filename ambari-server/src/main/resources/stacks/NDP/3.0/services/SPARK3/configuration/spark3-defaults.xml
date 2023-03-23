@@ -37,7 +37,7 @@
     <name>spark.driver.extraLibraryPath</name>
     <value>{{spark_hadoop_lib_native}}</value>
     <description>
-       Set a special library path to use when launching the driver JVM.
+      Set a special library path to use when launching the driver JVM.
     </description>
     <on-ambari-upgrade add="true"/>
   </property>
@@ -52,122 +52,69 @@
   <property>
     <name>spark.history.provider</name>
     <value>org.apache.spark.deploy.history.FsHistoryProvider</value>
-    <description>Name of history provider class</description>
+    <description>
+      Name of history provider
+    </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>spark.history.ui.port</name>
+    <value>18081</value>
+    <description>
+      The port to which the web interface of the History Server binds.
+    </description>
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
     <name>spark.history.fs.logDirectory</name>
     <display-name>Spark History FS Log directory</display-name>
-    <value>{{spark_history_dir}}</value>
-    <final>true</final>
+    <value>hdfs:///spark3-history/</value>
     <description>
-      Base directory for history spark application log. It is the same value
-      as in spark-defaults.xml.
+      Base directory for history spark application log.
+    </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>spark.history.kerberos.principal</name>
+    <value>none</value>
+    <description>
+      Kerberos principal name for the Spark History Server.
+    </description>
+    <property-type>KERBEROS_PRINCIPAL</property-type>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>spark.history.kerberos.keytab</name>
+    <value>none</value>
+    <description>
+      Location of the kerberos keytab file for the Spark History Server.
     </description>
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
     <name>spark.eventLog.enabled</name>
     <value>true</value>
-    <final>true</final>
     <description>
-      Whether to log Spark events, useful for reconstructing the Web UI after the application has finished.
+        Whether to log Spark events, useful for reconstructing the Web UI after the application has finished.
     </description>
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
     <name>spark.eventLog.dir</name>
     <display-name>Spark Eventlog directory</display-name>
-    <value>{{spark_history_dir}}</value>
-    <final>true</final>
+    <value>hdfs:///spark3-history/</value>
     <description>
-      Base directory in which Spark events are logged, if spark.eventLog.enabled is true. It is the same value
-      as in spark-defaults.xml.
+        Base directory in which Spark events are logged, if spark.eventLog.enabled is true.
     </description>
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
-    <name>spark.scheduler.allocation.file</name>
-    <value>{{spark_conf}}/spark-thrift-fairscheduler.xml</value>
-    <description>
-      Scheduler configuration file for thriftserver.
-    </description>
+    <name>spark.yarn.historyServer.address</name>
+    <value>{{spark_history_server_host}}:{{spark_history_ui_port}}</value>
+    <description>The address of the Spark history server (i.e. host.com:18081). The address should not contain a scheme (http://). Defaults to not being set since the history server is an optional service. This address is given to the YARN ResourceManager when the Spark application finishes to link the application from the ResourceManager UI to the Spark history server UI.</description>
     <on-ambari-upgrade add="true"/>
   </property>
-  <property>
-    <name>spark.scheduler.mode</name>
-    <value>FAIR</value>
-    <description>
-      The scheduling mode between jobs submitted to the same SparkContext.
-    </description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
-    <name>spark.shuffle.service.enabled</name>
-    <value>true</value>
-    <description>
-      Enables the external shuffle service.
-    </description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
-    <name>spark.hadoop.cacheConf</name>
-    <value>false</value>
-    <description>
-      Specifies whether HadoopRDD caches the Hadoop configuration object
-    </description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
-    <name>spark.dynamicAllocation.enabled</name>
-    <value>true</value>
-    <description>
-      Whether to use dynamic resource allocation, which scales the number of executors registered with this application up and down based on the workload.
-    </description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
-    <name>spark.dynamicAllocation.initialExecutors</name>
-    <value>0</value>
-    <description>
-      Initial number of executors to run if dynamic allocation is enabled.
-    </description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
-    <name>spark.dynamicAllocation.maxExecutors</name>
-    <value>10</value>
-    <description>
-      Upper bound for the number of executors if dynamic allocation is enabled.
-    </description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
-    <name>spark.dynamicAllocation.minExecutors</name>
-    <value>0</value>
-    <description>
-      Lower bound for the number of executors if dynamic allocation is enabled.
-    </description>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  <property>
-    <name>spark.yarn.executor.failuresValidityInterval</name>
-    <value>2h</value>
-    <description>
-      Defines the validity interval for executor failure tracking.
-      Executor failures which are older than the validity interval will be ignored.
-    </description>
-    <on-ambari-upgrade add="false"/>
-  </property>
-  <property>
-    <name>spark.yarn.maxAppAttempts</name>
-    <value>1</value>
-    <description>
-      The maximum number of attempts that will be made to submit the application.
-      It should be no larger than the global number of max attempts in the YARN configuration.
-    </description>
-    <on-ambari-upgrade add="false"/>
-  </property>
+
 
   <property>
     <name>spark.history.fs.cleaner.enabled</name>
@@ -261,12 +208,9 @@
   </property>
   <property>
     <name>spark.master</name>
-    <value>{{spark_thrift_master}}</value>
-    <description>
-      The deploying mode of spark application, by default it is yarn-client for thrift-server but local mode for there's
-      only one nodemanager.
-    </description>
-    <on-ambari-upgrade add="true"/>
+    <value>yarn</value>
+    <description>The deploying mode of spark application.</description>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>spark.executor.extraJavaOptions</name>
@@ -289,7 +233,14 @@
   </property>
   <property>
     <name>spark.sql.hive.metastore.jars</name>
-    <value>/usr/hdp/{{version}}/spark2/standalone-metastore/standalone-metastore-1.21.2.{{version}}-hive3.jar</value>
+    <value>/usr/ndp/current/spark3-client/standalone-metastore/*</value>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+  <property>
+    <name>spark.history.store.path</name>
+    <value>/var/lib/spark3/shs_db</value>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -299,7 +250,7 @@
     <value> </value>
     <depends-on>
       <property>
-        <type>spark2-atlas-application-properties-override</type>
+        <type>spark3-atlas-application-properties-override</type>
         <name>atlas.spark.enabled</name>
       </property>
     </depends-on>
@@ -312,7 +263,7 @@
     <value> </value>
     <depends-on>
       <property>
-        <type>spark2-atlas-application-properties-override</type>
+        <type>spark3-atlas-application-properties-override</type>
         <name>atlas.spark.enabled</name>
       </property>
     </depends-on>
@@ -325,25 +276,38 @@
     <value> </value>
     <depends-on>
       <property>
-        <type>spark2-atlas-application-properties-override</type>
+        <type>spark3-atlas-application-properties-override</type>
         <name>atlas.spark.enabled</name>
       </property>
     </depends-on>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
-
 
   <property>
     <name>spark.sql.streaming.streamingQueryListeners</name>
     <value> </value>
     <depends-on>
       <property>
-        <type>spark2-atlas-application-properties-override</type>
+        <type>spark3-atlas-application-properties-override</type>
+        <name>atlas.spark.enabled</name>
+     </property>
+    </depends-on>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+  <property>
+    <name>spark.yarn.dist.files</name>
+    <value> </value>
+    <depends-on>
+      <property>
+        <type>spark3-atlas-application-properties-override</type>
         <name>atlas.spark.enabled</name>
       </property>
     </depends-on>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
+
 </configuration>

@@ -2,23 +2,25 @@
   "name": "default",
   "description": "default quick links configuration",
   "configuration": {
-    "protocol": {
-      "type": "HTTP_ONLY"
+    "protocol":
+    {
+      "type":"http"
     },
+
     "links": [
       {
-        "name": "azkaban_web",
-        "label": "Azkaban 控制台",
-        "component_name": "AZKABAN_WEB",
+        "name": "dolphin-application-ui",
+        "label": "DolphinApplication UI",
         "requires_user_name": "false",
-        "url": "%@://%@:%@",
-        "port": {
-          "http_property": "jetty.port",
+        "component_name": "DOLPHIN_API",
+        "url": "%@://%@:%@/dolphinscheduler/ui/view/login/index.html",
+        "port":{
+          "http_property": "server.port",
+          "http_default_port": "12345",
           "regex": "^(\\d+)$",
-          "site": "azkaban.properties"
+          "site": "dolphin-application-api"
         }
       }
     ]
   }
 }
-

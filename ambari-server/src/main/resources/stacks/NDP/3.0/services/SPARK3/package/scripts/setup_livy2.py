@@ -52,7 +52,7 @@ def setup_livy(env, type, upgrade_type = None, action = None):
          )
       params.HdfsResource(None, action="execute")
 
-    generate_logfeeder_input_config('spark2', Template("input.config-spark2.json.j2", extra_imports=[default]))
+    generate_logfeeder_input_config('spark3', Template("input.config-spark3.json.j2", extra_imports=[default]))
 
   # create livy-env.sh in etc/conf dir
   File(os.path.join(params.livy2_conf, 'livy-env.sh'),

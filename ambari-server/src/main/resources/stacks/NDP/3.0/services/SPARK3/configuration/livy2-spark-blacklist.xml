@@ -21,7 +21,7 @@
 <configuration supports_final="false" supports_adding_forbidden="true">
     <property>
         <name>content</name>
-        <description>spark2-blacklist.properties</description>
+        <description>spark3-blacklist.properties</description>
         <value>
             #
             # Configuration override / blacklist. Defines a list of properties that users are not allowed

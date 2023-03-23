@@ -48,7 +48,7 @@
         <value>true</value>
         <depends-on>
             <property>
-                <type>spark2-atlas-application-properties-override</type>
+                <type>spark3-atlas-application-properties-override</type>
                 <name>atlas.spark.enabled</name>
             </property>
         </depends-on>

@@ -1,16 +1,16 @@
 {
-  "SPARK2": {
+  "SPARK3": {
     "service": [],
-    "SPARK2_JOBHISTORYSERVER": [
+    "SPARK3_JOBHISTORYSERVER": [
       {
-        "name": "SPARK2_JOBHISTORYSERVER_PROCESS",
-        "label": "Spark2 History Server",
-        "description": "This host-level alert is triggered if the Spark2 History Server cannot be determined to be up.",
+        "name": "SPARK3_JOBHISTORYSERVER_PROCESS",
+        "label": "spark3 History Server",
+        "description": "This host-level alert is triggered if the spark3 History Server cannot be determined to be up.",
         "interval": 1,
         "scope": "ANY",
         "source": {
           "type": "PORT",
-          "uri": "{{spark2-defaults/spark.history.ui.port}}",
+          "uri": "{{spark3-defaults/spark.history.ui.port}}",
           "default_port": 18081,
           "reporting": {
             "ok": {
@@ -31,13 +31,13 @@
     "LIVY2_SERVER": [
       {
         "name": "livy2_server_status",
-        "label": "Spark2 Livy Server",
+        "label": "spark3 Livy Server",
         "description": "This host-level alert is triggered if the Livy2 Server cannot be determined to be up.",
         "interval": 1,
         "scope": "ANY",
         "source": {
           "type": "SCRIPT",
-          "path": "HDP/3.0/services/SPARK2/package/scripts/alerts/alert_spark2_livy_port.py",
+          "path": "HDP/3.0/services/spark3/package/scripts/alerts/alert_spark3_livy_port.py",
           "parameters": [
             {
               "name": "check.command.timeout",
@@ -52,16 +52,16 @@
         }
       }
     ],
-    "SPARK2_THRIFTSERVER": [
+    "SPARK3_THRIFTSERVER": [
       {
-        "name": "spark2_thriftserver_status",
-        "label": "Spark2 Thrift Server",
-        "description": "This host-level alert is triggered if the Spark2 Thrift Server cannot be determined to be up.",
+        "name": "spark3_thriftserver_status",
+        "label": "spark3 Thrift Server",
+        "description": "This host-level alert is triggered if the spark3 Thrift Server cannot be determined to be up.",
         "interval": 1,
         "scope": "ANY",
         "source": {
           "type": "SCRIPT",
-          "path": "HDP/3.0/services/SPARK2/package/scripts/alerts/alert_spark2_thrift_port.py",
+          "path": "HDP/3.0/services/spark3/package/scripts/alerts/alert_spark3_thrift_port.py",
           "parameters": [
             {
               "name": "check.command.timeout",

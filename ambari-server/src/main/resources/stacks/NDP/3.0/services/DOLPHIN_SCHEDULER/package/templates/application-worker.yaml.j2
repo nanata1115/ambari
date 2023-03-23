@@ -1,0 +1,103 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+spring:
+  banner:
+    charset: UTF-8
+  jackson:
+    time-zone: UTC
+    date-format: "yyyy-MM-dd HH:mm:ss"
+  datasource:
+      driver-class-name: {{dolphin_database_config['dolphin_database_driver']}}
+      url: {{ dolphin_database_config['spring_datasource_url'] }}
+      username: {{ dolphin_database_config['spring_datasource_username'] }}
+      password: {{ dolphin_database_config['spring_datasource_password'] }}
+      hikari:
+        connection-test-query: select 1
+        minimum-idle: 5
+        auto-commit: true
+        validation-timeout: 3000
+        pool-name: DolphinScheduler
+        maximum-pool-size: 50
+        connection-timeout: 30000
+        idle-timeout: 600000
+        leak-detection-threshold: 0
+        initialization-fail-timeout: 1
+
+registry:
+  type: {{dolphin_registry_map['registry.plugin.name']}}
+  zookeeper:
+    namespace: {{dolphin_registry_map['registry.namespace']}}
+    connect-string: {{dolphin_registry_map['registry.servers']}}
+    retry-policy:
+      base-sleep-time: {{dolphin_registry_map['registry.base.sleep.time.ms']}}
+      max-sleep: {{dolphin_registry_map['registry.max.sleep.ms']}}
+      max-retries: {{dolphin_registry_map['registry.max.retries']}}
+    session-timeout: {{dolphin_registry_map['registry.session.timeout.ms']}}
+    connection-timeout: {{dolphin_registry_map['registry.connection.timeout.ms']}}
+    block-until-connected: {{dolphin_registry_map['registry.serversregistry.block.until.connected.wait']}}
+    digest: ~
+
+worker:
+  # worker listener port
+  listen-port: {{dolphin_worker_map['worker.listen.port']}}
+  # worker execute thread number to limit task instances in parallel
+  exec-threads: {{dolphin_worker_map['worker.exec.threads']}}
+  # worker heartbeat interval
+  heartbeat-interval: {{dolphin_worker_map['worker.heartbeat.interval']}}
+  # worker host weight to dispatch tasks, default value 100
+  host-weight: 100
+  # tenant corresponds to the user of the system, which is used by the worker to submit the job. If system does not have this user, it will be automatically created after the parameter worker.tenant.auto.create is true.
+  tenant-auto-create: true
+  #Scenes to be used for distributed users.For example,users created by FreeIpa are stored in LDAP.This parameter only applies to Linux, When this parameter is true, worker.tenant.auto.create has no effect and will not automatically create tenants.
+  tenant-distributed-user: false
+  # worker max cpuload avg, only higher than the system cpu load average, worker server can be dispatched tasks. default value -1: the number of cpu cores * 2
+  max-cpu-load-avg: {{dolphin_worker_map['worker.max.cpuload.avg']}}
+  # worker reserved memory, only lower than system available memory, worker server can be dispatched tasks. default value 0.3, the unit is G
+  reserved-memory: {{dolphin_worker_map['worker.reserved.memory']}}
+  # alert server listen host
+  alert-listen-host: {{alertHosts}}
+  alert-listen-port: 50052
+  registry-disconnect-strategy:
+    # The disconnect strategy: stop, waiting
+    strategy: waiting
+    # The max waiting time to reconnect to registry if you set the strategy to waiting
+    max-waiting-time: 100s
+  task-execute-threads-full-policy: REJECT
+
+server:
+  port: 1235
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+  health:
+    db:
+      enabled: true
+    defaults:
+      enabled: false
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+metrics:
+  enabled: true

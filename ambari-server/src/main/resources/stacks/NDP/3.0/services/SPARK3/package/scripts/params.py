@@ -43,9 +43,9 @@ sudo = AMBARI_SUDO_BINARY
 # a map of the Ambari role to the component name
 # for use with <stack-root>/current/<component>
 SERVER_ROLE_DIRECTORY_MAP = {
-  'SPARK2_JOBHISTORYSERVER' : 'spark2-historyserver',
-  'SPARK2_CLIENT' : 'spark2-client',
-  'SPARK2_THRIFTSERVER' : 'spark2-thriftserver',
+  'SPARK3_JOBHISTORYSERVER' : 'spark3-historyserver',
+  'SPARK3_CLIENT' : 'spark3-client',
+  'SPARK3_THRIFTSERVER' : 'spark3-thriftserver',
   'LIVY2_SERVER' : 'livy2-server',
   'LIVY2_CLIENT' : 'livy2-client'
 
@@ -58,7 +58,7 @@ HIVE_SERVER_ROLE_DIRECTORY_MAP = {
   'HIVE_SERVER_INTERACTIVE' : 'hive-server2'
 }
 
-component_directory = Script.get_component_from_role(SERVER_ROLE_DIRECTORY_MAP, "SPARK2_CLIENT")
+component_directory = Script.get_component_from_role(SERVER_ROLE_DIRECTORY_MAP, "SPARK3_CLIENT")
 hive_component_directory = Script.get_component_from_role(HIVE_SERVER_ROLE_DIRECTORY_MAP, "HIVE_CLIENT")
 
 config = Script.get_config()
@@ -78,18 +78,18 @@ sysprep_skip_copy_tarballs_hdfs = get_sysprep_skip_copy_tarballs_hdfs()
 # New Cluster Stack Version that is defined during the RESTART of a Stack Upgrade
 version = default("/commandParams/version", None)
 
-spark_conf = '/etc/spark2/conf'
+spark_conf = '/etc/spark3/conf'
 hadoop_conf_dir = conf_select.get_hadoop_conf_dir()
 hadoop_bin_dir = stack_select.get_hadoop_dir("bin")
 
 if stack_version_formatted and check_stack_feature(StackFeature.ROLLING_UPGRADE, stack_version_formatted):
   hadoop_home = stack_select.get_hadoop_dir("home")
   spark_conf = format("{stack_root}/current/{component_directory}/conf")
-  spark_log_dir = config['configurations']['spark2-env']['spark_log_dir']
+  spark_log_dir = config['configurations']['spark3-env']['spark_log_dir']
   spark_pid_dir = status_params.spark_pid_dir
   spark_home = format("{stack_root}/current/{component_directory}")
 
-spark_daemon_memory = config['configurations']['spark2-env']['spark_daemon_memory']
+spark_daemon_memory = config['configurations']['spark3-env']['spark_daemon_memory']
 spark_thrift_server_conf_file = spark_conf + "/spark-thrift-sparkconf.conf"
 java_home = config['ambariLevelParams']['java_home']
 
@@ -103,14 +103,14 @@ hive_user = status_params.hive_user
 spark_group = status_params.spark_group
 user_group = status_params.user_group
 spark_hdfs_user_dir = format("/user/{spark_user}")
-spark_history_dir = default('/configurations/spark2-defaults/spark.history.fs.logDirectory', "hdfs:///spark2-history")
+spark_history_dir = default('/configurations/spark3-defaults/spark.history.fs.logDirectory', "hdfs:///spark3-history")
 
-spark2_lib_dir = "/var/lib/spark2"
-spark_history_store_path = default("/configurations/spark2-defaults/spark.history.store.path", "/var/lib/spark2/shs_db")
+spark3_lib_dir = "/var/lib/spark3"
+spark_history_store_path = default("/configurations/spark3-defaults/spark.history.store.path", "/var/lib/spark3/shs_db")
 
-spark_warehouse_dir = config['configurations']['spark2-defaults']["spark.sql.warehouse.dir"]
+spark_warehouse_dir = config['configurations']['spark3-defaults']["spark.sql.warehouse.dir"]
 whs_dir_protocol = urlparse(spark_warehouse_dir).scheme
-default_metastore_catalog = config['configurations']['spark2-hive-site-override']["metastore.catalog.default"]
+default_metastore_catalog = config['configurations']['spark3-hive-site-override']["metastore.catalog.default"]
 
 spark_history_server_pid_file = status_params.spark_history_server_pid_file
 spark_thrift_server_pid_file = status_params.spark_thrift_server_pid_file
@@ -127,7 +127,7 @@ spark_smoke_example = "SparkPi"
 spark_service_check_cmd = format(
   "{run_example_cmd} --master yarn --deploy-mode cluster --num-executors 1 --driver-memory 256m --executor-memory 256m --executor-cores 1 {spark_smoke_example} 1")
 
-spark_jobhistoryserver_hosts = default("/clusterHostInfo/spark2_jobhistoryserver_hosts", [])
+spark_jobhistoryserver_hosts = default("/clusterHostInfo/spark3_jobhistoryserver_hosts", [])
 
 if len(spark_jobhistoryserver_hosts) > 0:
   spark_history_server_host = spark_jobhistoryserver_hosts[0]
@@ -135,26 +135,26 @@ else:
   spark_history_server_host = "localhost"
 
 # spark-defaults params
-ui_ssl_enabled = default("configurations/spark2-defaults/spark.ssl.enabled", False)
+ui_ssl_enabled = default("configurations/spark3-defaults/spark.ssl.enabled", False)
 
 spark_yarn_historyServer_address = default(spark_history_server_host, "localhost")
 spark_history_scheme = "http"
-spark_history_ui_port = config['configurations']['spark2-defaults']['spark.history.ui.port']
+spark_history_ui_port = config['configurations']['spark3-defaults']['spark.history.ui.port']
 
 if ui_ssl_enabled:
   spark_history_ui_port = str(int(spark_history_ui_port) + 400)
   spark_history_scheme = "https"
 
 
-spark_env_sh = config['configurations']['spark2-env']['content']
-spark_log4j_properties = config['configurations']['spark2-log4j-properties']['content']
-spark_metrics_properties = config['configurations']['spark2-metrics-properties']['content']
+spark_env_sh = config['configurations']['spark3-env']['content']
+spark_log4j_properties = config['configurations']['spark3-log4j-properties']['content']
+spark_metrics_properties = config['configurations']['spark3-metrics-properties']['content']
 
 hive_server_host = default("/clusterHostInfo/hive_server_hosts", [])
 is_hive_installed = not len(hive_server_host) == 0
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 
-sac_enabled = default("configurations/spark2-atlas-application-properties-override/atlas.spark.enabled", False)
+sac_enabled = default("configurations/spark3-atlas-application-properties-override/atlas.spark.enabled", False)
 if type(sac_enabled) is str:
   sac_enabled = str(sac_enabled).upper() == 'TRUE'
 
@@ -163,28 +163,28 @@ if sac_enabled:
                                             "atlas.rest.address", "atlas.authentication.method.kerberos.principal", "atlas.authentication.method.kerberos",
                                             "atlas.authentication.method.kerberos.keytab"]
   application_properties = dict(config['configurations']['application-properties'])
-  spark_atlas_jar_dir = "/usr/hdp/current/spark-atlas-connector/"
+  spark_atlas_jar_dir = "/usr/ndp/current/spark-atlas-connector/"
   if security_enabled:
-    atlas_kafka_keytab = default("/configurations/spark2-atlas-application-properties-override/atlas.jaas.KafkaClient.option.keyTab", None)
+    atlas_kafka_keytab = default("/configurations/spark3-atlas-application-properties-override/atlas.jaas.KafkaClient.option.keyTab", None)
     kafka_user = config['configurations']['kafka-env']['kafka_user']
     secure_atlas_application_properties_to_include = {"atlas.jaas.KafkaClient.loginModuleControlFlag":"required", "atlas.jaas.KafkaClient.loginModuleName":"com.sun.security.auth.module.Krb5LoginModule",
                                                       "atlas.jaas.KafkaClient.option.serviceName":"{{kafka_user}}", "atlas.jaas.KafkaClient.option.storeKey":"true",
                                                       "atlas.jaas.KafkaClient.option.useKeyTab":"true"}
 
-application_properties_override = dict(default("/configurations/spark2-atlas-application-properties-override", []))
-application_properties_yarn = dict(default("/configurations/spark2-atlas-application-properties-yarn", []))
+application_properties_override = dict(default("/configurations/spark3-atlas-application-properties-override", []))
+application_properties_yarn = dict(default("/configurations/spark3-atlas-application-properties-yarn", []))
 atlas_properties_path = spark_conf + os.sep + "atlas-application.properties"
 atlas_properties_for_yarn_path = spark_conf + os.sep + "atlas-application.properties.yarn"
 
 
 kinit_path_local = get_kinit_path(default('/configurations/kerberos-env/executable_search_paths', None))
-spark_kerberos_keytab =  config['configurations']['spark2-defaults']['spark.history.kerberos.keytab']
-spark_kerberos_principal =  config['configurations']['spark2-defaults']['spark.history.kerberos.principal']
+spark_kerberos_keytab =  config['configurations']['spark3-defaults']['spark.history.kerberos.keytab']
+spark_kerberos_principal =  config['configurations']['spark3-defaults']['spark.history.kerberos.principal']
 smoke_user = config['configurations']['cluster-env']['smokeuser']
 smoke_user_keytab = config['configurations']['cluster-env']['smokeuser_keytab']
 smokeuser_principal =  config['configurations']['cluster-env']['smokeuser_principal_name']
 
-spark_thriftserver_hosts = default("/clusterHostInfo/spark2_thriftserver_hosts", [])
+spark_thriftserver_hosts = default("/clusterHostInfo/spark3_thriftserver_hosts", [])
 has_spark_thriftserver = not len(spark_thriftserver_hosts) == 0
 
 # hive-site params
@@ -194,9 +194,9 @@ spark_hive_properties = {
 
 # security settings
 if security_enabled:
-  spnego_principal = config['configurations']['spark2-defaults']['history.server.spnego.kerberos.principal']
+  spnego_principal = config['configurations']['spark3-defaults']['history.server.spnego.kerberos.principal']
   spnego_principal = spnego_principal.replace('_HOST', fqdn)
-  spnego_keytab = config['configurations']['spark2-defaults']['history.server.spnego.keytab.file']
+  spnego_keytab = config['configurations']['spark3-defaults']['history.server.spnego.keytab.file']
 
   spark_principal = spark_kerberos_principal.replace('_HOST', fqdn)
 
@@ -212,18 +212,18 @@ if security_enabled:
       'hive.server2.authentication': config['configurations']['hive-site']['hive.server2.authentication'],
     })
 
-    hive_kerberos_keytab = config['configurations']['spark2-hive-site-override']['hive.server2.authentication.kerberos.keytab']
-    default_hive_kerberos_principal = config['configurations']['spark2-hive-site-override']['hive.server2.authentication.kerberos.principal']
+    hive_kerberos_keytab = config['configurations']['spark3-hive-site-override']['hive.server2.authentication.kerberos.keytab']
+    default_hive_kerberos_principal = config['configurations']['spark3-hive-site-override']['hive.server2.authentication.kerberos.principal']
     hive_kerberos_principal = default_hive_kerberos_principal.replace('_HOST', fqdn)
 
-spark_transport_mode = config['configurations']['spark2-hive-site-override']['hive.server2.transport.mode']
+spark_transport_mode = config['configurations']['spark3-hive-site-override']['hive.server2.transport.mode']
 
 if spark_transport_mode.lower() == 'binary':
-  spark_thrift_port = int(config['configurations']['spark2-hive-site-override']['hive.server2.thrift.port'])
+  spark_thrift_port = int(config['configurations']['spark3-hive-site-override']['hive.server2.thrift.port'])
 elif spark_transport_mode.lower() == 'http':
-  spark_thrift_port = int(config['configurations']['spark2-hive-site-override']['hive.server2.thrift.http.port'])
-  spark_thrift_ssl_enabled = default("configurations/spark2-hive-site-override/hive.server2.use.SSL", False)
-  spark_thrift_endpoint = default("configurations/spark2-hive-site-override/hive.server2.http.endpoint", "cliservice")
+  spark_thrift_port = int(config['configurations']['spark3-hive-site-override']['hive.server2.thrift.http.port'])
+  spark_thrift_ssl_enabled = default("configurations/spark3-hive-site-override/hive.server2.use.SSL", False)
+  spark_thrift_endpoint = default("configurations/spark3-hive-site-override/hive.server2.http.endpoint", "cliservice")
 
 # thrift server support - available on HDP 2.3 or higher
 spark_thrift_sparkconf = None
@@ -234,12 +234,12 @@ if 'nm_hosts' in config['clusterHostInfo'] and len(config['clusterHostInfo']['no
   # use local mode when there's only one nodemanager
   spark_thrift_master = "local[4]"
 
-if has_spark_thriftserver and 'spark2-thrift-sparkconf' in config['configurations']:
-  spark_thrift_sparkconf = config['configurations']['spark2-thrift-sparkconf']
-  spark_thrift_cmd_opts_properties = config['configurations']['spark2-env']['spark_thrift_cmd_opts']
+if has_spark_thriftserver and 'spark3-thrift-sparkconf' in config['configurations']:
+  spark_thrift_sparkconf = config['configurations']['spark3-thrift-sparkconf']
+  spark_thrift_cmd_opts_properties = config['configurations']['spark3-env']['spark_thrift_cmd_opts']
 
-  if 'spark2-thrift-fairscheduler' in config['configurations'] and 'fairscheduler_content' in config['configurations']['spark2-thrift-fairscheduler']:
-    spark_thrift_fairscheduler_content = config['configurations']['spark2-thrift-fairscheduler']['fairscheduler_content']
+  if 'spark3-thrift-fairscheduler' in config['configurations'] and 'fairscheduler_content' in config['configurations']['spark3-thrift-fairscheduler']:
+    spark_thrift_fairscheduler_content = config['configurations']['spark3-thrift-fairscheduler']['fairscheduler_content']
 
 if is_hive_installed:
   # update default metastore client properties (async wait for metastore component) it is useful in case of
@@ -247,7 +247,7 @@ if is_hive_installed:
   spark_hive_properties.update({
     'hive.metastore.client.socket.timeout' : config['configurations']['hive-site']['hive.metastore.client.socket.timeout']
   })
-  spark_hive_properties.update(config['configurations']['spark2-hive-site-override'])
+  spark_hive_properties.update(config['configurations']['spark3-hive-site-override'])
 default_fs = config['configurations']['core-site']['fs.defaultFS']
 hdfs_site = config['configurations']['hdfs-site']
 hdfs_resource_ignore_file = "/var/lib/ambari-agent/data/.hdfs_resource_ignore"
@@ -262,7 +262,7 @@ dfs_type = default("/clusterLevelParams/dfs_type", "")
 
 # livy related config
 
-# livy for spark2 is only supported from HDP 2.6
+# livy for spark3 is only supported from HDP 2.6
 has_livyserver = False
 
 if stack_version_formatted and check_stack_feature(StackFeature.SPARK_LIVY2, stack_version_formatted) and "livy2-env" in config['configurations']:

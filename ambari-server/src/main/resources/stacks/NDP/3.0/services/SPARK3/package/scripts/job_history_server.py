@@ -72,7 +72,7 @@ class JobHistoryServer(Script):
 
     env.set_params(params)
     if params.version and check_stack_feature(StackFeature.ROLLING_UPGRADE, params.version):
-      Logger.info("Executing Spark2 Job History Server Stack Upgrade pre-restart")
+      Logger.info("Executing spark3 Job History Server Stack Upgrade pre-restart")
       stack_select.select_packages(params.version)
 
       # Spark 1.3.1.2.3, and higher, which was included in HDP 2.3, does not have a dependency on Tez, so it does not
