@@ -3971,10 +3971,11 @@ public class Configuration {
    * Check to see if the API responses should be compressed via gzip or not
    * Content will only be compressed if content length is either unknown or
    * greater this value
+   *
    * @return false if not, true if ssl needs to be used.
    */
-  public String getApiGzipMinSize() {
-    return getProperty(API_GZIP_MIN_COMPRESSION_SIZE);
+  public int getApiGzipMinSize() {
+    return Integer.parseInt(getProperty(API_GZIP_MIN_COMPRESSION_SIZE));
   }
 
   /**
