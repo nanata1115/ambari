@@ -147,17 +147,17 @@ def setup_hiveserver2():
   #  if copy tarball to HDFS feature  supported copy mapreduce.tar.gz and tez.tar.gz to HDFS
   if params.stack_version_formatted_major and check_stack_feature(StackFeature.COPY_TARBALL_TO_HDFS, params.stack_version_formatted_major):
     copy_to_hdfs("mapreduce", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs)
-    copy_to_hdfs("tez", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs)
+    # copy_to_hdfs("tez", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs)
 
   # Always copy pig.tar.gz and hive.tar.gz using the appropriate mode.
   # This can use a different source and dest location to account
-  copy_to_hdfs("pig",
-               params.user_group,
-               params.hdfs_user,
-               file_mode=params.tarballs_mode,
-               custom_source_file=params.pig_tar_source,
-               custom_dest_file=params.pig_tar_dest_file,
-               skip=params.sysprep_skip_copy_tarballs_hdfs)
+  # copy_to_hdfs("pig",
+  #              params.user_group,
+  #              params.hdfs_user,
+  #              file_mode=params.tarballs_mode,
+  #              custom_source_file=params.pig_tar_source,
+  #              custom_dest_file=params.pig_tar_dest_file,
+  #              skip=params.sysprep_skip_copy_tarballs_hdfs)
   copy_to_hdfs("hive",
                params.user_group,
                params.hdfs_user,
@@ -191,13 +191,13 @@ def setup_hiveserver2():
 
   # if warehouse directory is in DFS
   if not params.whs_dir_protocol or params.whs_dir_protocol == urlparse(params.default_fs).scheme:
-    if not is_empty(params.tez_hook_proto_base_directory):
-      params.HdfsResource(params.tez_hook_proto_base_directory,
-                          type = "directory",
-                          action = "create_on_execute",
-                          owner = params.hive_user,
-                          mode = 01755
-                          )
+    # if not is_empty(params.tez_hook_proto_base_directory):
+    #   params.HdfsResource(params.tez_hook_proto_base_directory,
+    #                       type = "directory",
+    #                       action = "create_on_execute",
+    #                       owner = params.hive_user,
+    #                       mode = 01755
+    #                       )
 
     if not is_empty(params.hive_hook_proto_base_directory):
         params.HdfsResource(params.hive_hook_proto_base_directory,
@@ -207,7 +207,7 @@ def setup_hiveserver2():
                             mode = 01777
                             )
 
-        dag_meta = params.tez_hook_proto_base_directory + "dag_meta"
+        # dag_meta = params.tez_hook_proto_base_directory + "dag_meta"
         params.HdfsResource(dag_meta,
                             type = "directory",
                             action = "create_on_execute",
@@ -215,7 +215,7 @@ def setup_hiveserver2():
                             mode = 01777
                             )
 
-        dag_data = params.tez_hook_proto_base_directory + "dag_data"
+        # dag_data = params.tez_hook_proto_base_directory + "dag_data"
         params.HdfsResource(dag_data,
                             type = "directory",
                             action = "create_on_execute",
@@ -223,7 +223,7 @@ def setup_hiveserver2():
                             mode = 01777
                             )
 
-        app_data = params.tez_hook_proto_base_directory + "app_data"
+        # app_data = params.tez_hook_proto_base_directory + "app_data"
         params.HdfsResource(app_data,
                             type = "directory",
                             action = "create_on_execute",

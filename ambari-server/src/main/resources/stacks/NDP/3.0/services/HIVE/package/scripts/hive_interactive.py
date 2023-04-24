@@ -78,13 +78,13 @@ def hive_interactive(name = None):
                           mode = 01755
       )
 
-    if not is_empty(params.tez_hook_proto_base_directory):
-      params.HdfsResource(params.tez_hook_proto_base_directory,
-                          type = "directory",
-                          action = "create_on_execute",
-                          owner = params.hive_user,
-                          mode = 01755
-                          )
+    # if not is_empty(params.tez_hook_proto_base_directory):
+    #   params.HdfsResource(params.tez_hook_proto_base_directory,
+    #                       type = "directory",
+    #                       action = "create_on_execute",
+    #                       owner = params.hive_user,
+    #                       mode = 01755
+    #                       )
 
     if not is_empty(params.hive_hook_proto_base_directory):
         params.HdfsResource(params.hive_hook_proto_base_directory,
@@ -94,7 +94,7 @@ def hive_interactive(name = None):
                             mode = 01777
                             )
 
-        dag_meta = params.tez_hook_proto_base_directory + "dag_meta"
+        # dag_meta = params.tez_hook_proto_base_directory + "dag_meta"
         params.HdfsResource(dag_meta,
                             type = "directory",
                             action = "create_on_execute",
@@ -102,7 +102,7 @@ def hive_interactive(name = None):
                             mode = 01777
                             )
 
-        dag_data = params.tez_hook_proto_base_directory + "dag_data"
+        # dag_data = params.tez_hook_proto_base_directory + "dag_data"
         params.HdfsResource(dag_data,
                             type = "directory",
                             action = "create_on_execute",
@@ -110,7 +110,7 @@ def hive_interactive(name = None):
                             mode = 01777
                             )
 
-        app_data = params.tez_hook_proto_base_directory + "app_data"
+        # app_data = params.tez_hook_proto_base_directory + "app_data"
         params.HdfsResource(app_data,
                             type="directory",
                             action="create_on_execute",
@@ -193,22 +193,22 @@ def hive_interactive(name = None):
   As tez_hive2/tez-site.xml only contains the new + the changed props compared to tez/tez-site.xml,
   we need to merge tez/tez-site.xml and tez_hive2/tez-site.xml and store it in tez_hive2/tez-site.xml.
   '''
-  merged_tez_interactive_site = {}
-  if 'tez-site' in params.config['configurations']:
-    merged_tez_interactive_site.update(params.config['configurations']['tez-site'])
-    Logger.info("Retrieved 'tez/tez-site' for merging with 'tez_hive2/tez-interactive-site'.")
-  else:
-    Logger.error("Tez's 'tez-site' couldn't be retrieved from passed-in configurations.")
+  # merged_tez_interactive_site = {}
+  # if 'tez-site' in params.config['configurations']:
+  #   merged_tez_interactive_site.update(params.config['configurations']['tez-site'])
+  #   Logger.info("Retrieved 'tez/tez-site' for merging with 'tez_hive2/tez-interactive-site'.")
+  # else:
+  #   Logger.error("Tez's 'tez-site' couldn't be retrieved from passed-in configurations.")
 
-  merged_tez_interactive_site.update(params.config['configurations']['tez-interactive-site'])
+  # merged_tez_interactive_site.update(params.config['configurations']['tez-interactive-site'])
   
-  XmlConfig("tez-site.xml",
-            conf_dir = params.tez_interactive_conf_dir,
-            configurations = merged_tez_interactive_site,
-            configuration_attributes=params.config['configurationAttributes']['tez-interactive-site'],
-            owner = params.tez_interactive_user,
-            group = params.user_group,
-            mode = 0664)
+  # XmlConfig("tez-site.xml",
+  #           conf_dir = params.tez_interactive_conf_dir,
+  #           configurations = merged_tez_interactive_site,
+  #           configuration_attributes=params.config['configurationAttributes']['tez-interactive-site'],
+  #           owner = params.tez_interactive_user,
+  #           group = params.user_group,
+  #           mode = 0664)
 
   '''
   Merge properties from hiveserver2-interactive-site into hiveserver2-site

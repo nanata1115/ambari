@@ -75,13 +75,6 @@
               </auto-deploy>
             </dependency>
             <dependency>
-              <name>TEZ/TEZ_CLIENT</name>
-              <scope>host</scope>
-              <auto-deploy>
-                <enabled>true</enabled>
-              </auto-deploy>
-            </dependency>
-            <dependency>
               <name>YARN/YARN_CLIENT</name>
               <scope>host</scope>
               <auto-deploy>
@@ -157,14 +150,6 @@
             </dependency>
             <dependency>
               <name>MAPREDUCE2/MAPREDUCE2_CLIENT</name>
-              <scope>host</scope>
-              <auto-deploy>
-                <enabled>true</enabled>
-                <co-locate>HIVE/HIVE_SERVER_INTERACTIVE</co-locate>
-              </auto-deploy>
-            </dependency>
-            <dependency>
-              <name>TEZ/TEZ_CLIENT</name>
               <scope>host</scope>
               <auto-deploy>
                 <enabled>true</enabled>
@@ -281,10 +266,7 @@
           <osFamily>redhat7,amazonlinux2,redhat6,suse11,suse12</osFamily>
           <packages>
             <package>
-              <name>hive_${stack_version}</name>
-            </package>
-            <package>
-              <name>hive_${stack_version}-hcatalog</name>
+              <name>hive-packaging-*</name>
             </package>
           </packages>
         </osSpecific>
@@ -376,7 +358,7 @@
         <service>ZOOKEEPER</service>
         <service>HDFS</service>
         <service>YARN</service>
-        <service>TEZ</service>
+<!--        <service>TEZ</service>-->
         <!-- TODO AMBARI-20753
         Re-add after Pig service is being packaged.
         <service>PIG</service>
@@ -397,9 +379,9 @@
         <config-type>parquet-logging</config-type>
         <config-type>mapred-site</config-type>
         <config-type>application.properties</config-type>
-        <config-type>hive-atlas-application.properties</config-type>
-        <config-type>tez-site</config-type>
-        <config-type>druid-common</config-type>
+<!--        <config-type>hive-atlas-application.properties</config-type>-->
+<!--        <config-type>tez-site</config-type>-->
+<!--        <config-type>druid-common</config-type>-->
       </configuration-dependencies>
     </service>
   </services>
