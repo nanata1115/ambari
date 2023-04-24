@@ -23,14 +23,9 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Timer;
 
-import javax.mail.AuthenticationFailedException;
-import javax.mail.Authenticator;
+import javax.mail.*;
 import javax.mail.Message.RecipientType;
-import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -90,7 +85,7 @@ public class EmailDispatcher implements NotificationDispatcher {
    * {@inheritDoc}
    */
   @Override
-  public void dispatch(Notification notification) {
+  public void dispatch(Notification notification) throws AddressException {
     LOG.info("Sending email: {}", notification);
 
     if (null == notification.DispatchProperties) {
@@ -104,7 +99,7 @@ public class EmailDispatcher implements NotificationDispatcher {
     }
 
     // convert properties to JavaMail properties, extracting certain properties for use later
-    String fromAddress = null;
+    Address fromAddress = null;
     Properties properties = new Properties();
     for (Entry<String, String> entry : notification.DispatchProperties.entrySet()) {
       String key = entry.getKey();
@@ -114,7 +109,7 @@ public class EmailDispatcher implements NotificationDispatcher {
 
       // this is needed later on for RFC 2822 compliance when setting headers
       if (key.equals(JAVAMAIL_FROM_PROPERTY)) {
-        fromAddress = value;
+        fromAddress= new InternetAddress(value);
       }
     }
 

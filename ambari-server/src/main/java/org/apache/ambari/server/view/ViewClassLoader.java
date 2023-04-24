@@ -18,12 +18,12 @@
 
 package org.apache.ambari.server.view;
 
-import java.io.IOException;
-import java.net.URL;
-
 import org.apache.ambari.server.view.configuration.ViewConfig;
 import org.eclipse.jetty.webapp.WebAppClassLoader;
 import org.eclipse.jetty.webapp.WebAppContext;
+
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * Class loader used to load classes and resources from a search path of URLs referring to both JAR files
@@ -67,21 +67,21 @@ public class ViewClassLoader extends WebAppClassLoader {
   // ----- helper methods ----------------------------------------------------
 
   // Get a context to initialize the class loader.
-  private static WebAppContext getInitContext(ViewConfig viewConfig) {
+  private static WebAppContext getInitContext(ViewConfig viewConfig) throws IOException {
 
     WebAppContext webAppContext = new WebAppContext();
 
     // add ambari classes as system classes
-    webAppContext.addSystemClass("org.apache.ambari.server.");
-    webAppContext.addSystemClass("org.apache.ambari.view.");
+    WebAppContext.addSystemClasses(webAppContext.getServer(),"org.apache.ambari.server.");
+    WebAppContext.addSystemClasses(webAppContext.getServer(),"org.apache.ambari.view.");
 
     // add com.google.inject as system classes to allow for injection in view components using the google annotation
-    webAppContext.addSystemClass("com.google.inject.");
+    WebAppContext.addSystemClasses(webAppContext.getServer(),"com.google.inject.");
 
     // add as system classes to avoid conflicts and linkage errors
-    webAppContext.addSystemClass("org.slf4j.");
-    webAppContext.addSystemClass("com.sun.jersey.");
-    webAppContext.addSystemClass("org.apache.velocity.");
+    WebAppContext.addSystemClasses(webAppContext.getServer(),"org.slf4j.");
+    WebAppContext.addSystemClasses(webAppContext.getServer(),"com.sun.jersey.");
+    WebAppContext.addSystemClasses(webAppContext.getServer(),"org.apache.velocity.");
 
     // set the class loader settings from the configuration
     if (viewConfig != null) {

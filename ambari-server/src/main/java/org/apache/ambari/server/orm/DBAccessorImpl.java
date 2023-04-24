@@ -106,7 +106,7 @@ public class DBAccessorImpl implements DBAccessor {
       //TODO create own mapping and platform classes for supported databases
       String vendorName = connection.getMetaData().getDatabaseProductName()
               + connection.getMetaData().getDatabaseMajorVersion();
-      String dbPlatform = DBPlatformHelper.getDBPlatform(vendorName, new AbstractSessionLog() {
+      String dbPlatform = DBPlatformHelper.getDBPlatform(vendorName,null,null, new AbstractSessionLog() {
         @Override
         public void log(SessionLogEntry sessionLogEntry) {
           LOG.debug(sessionLogEntry.getMessage());

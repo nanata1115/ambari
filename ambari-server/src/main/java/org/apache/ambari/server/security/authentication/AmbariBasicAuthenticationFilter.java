@@ -19,10 +19,10 @@ package org.apache.ambari.server.security.authentication;
 
 import java.io.IOException;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.ambari.server.security.AmbariEntryPoint;
 import org.apache.ambari.server.utils.RequestUtils;
@@ -147,7 +147,6 @@ public class AmbariBasicAuthenticationFilter extends BasicAuthenticationFilter i
    * @param authResult      the Authentication result
    * @throws IOException
    */
-  @Override
   protected void onSuccessfulAuthentication(HttpServletRequest servletRequest,
                                             HttpServletResponse servletResponse,
                                             Authentication authResult) throws IOException {
@@ -165,7 +164,6 @@ public class AmbariBasicAuthenticationFilter extends BasicAuthenticationFilter i
    * @param authException   the exception, if any, causing the unsuccessful authentication attempt
    * @throws IOException
    */
-  @Override
   protected void onUnsuccessfulAuthentication(HttpServletRequest servletRequest,
                                               HttpServletResponse servletResponse,
                                               AuthenticationException authException) throws IOException {

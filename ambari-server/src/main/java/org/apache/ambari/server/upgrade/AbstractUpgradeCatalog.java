@@ -38,7 +38,7 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 

@@ -80,7 +80,7 @@ UNTAR_JDK_ARCHIVE = "tar --no-same-owner -xvf {0}"
 JDK_PROMPT = "[{0}] {1}\n"
 JDK_VALID_CHOICES = "^[{0}{1:d}]$"
 
-JDK_VERSION_CHECK_CMD = """{0} -version 2>&1 | grep -i version | sed 's/.*version ".*\.\(.*\)\..*"/\\1/; 1q' 2>&1"""
+JDK_VERSION_CHECK_CMD = """{0} -version 2>&1 | grep -i version  2>&1"""
 
 def get_supported_jdbc_drivers():
   factory = DBMSConfigFactory()
@@ -1284,6 +1284,11 @@ def check_ambari_java_version_is_valid(java_home, java_bin, min_version, propert
                                shell=True
                                )
     (out, err) = process.communicate()
+    out=out.split(" ")[2].replace("\"","")
+    if out.index('.')==2:
+      out=out[0:1]
+    else:
+      out=out[2]
     if process.returncode != 0:
       err = "Checking JDK version command returned with exit code %s" % process.returncode
       raise FatalException(process.returncode, err)

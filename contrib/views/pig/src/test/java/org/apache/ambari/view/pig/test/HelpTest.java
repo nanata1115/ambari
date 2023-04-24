@@ -25,7 +25,7 @@ import org.apache.ambari.view.utils.hdfs.HdfsApi;
 import org.json.simple.JSONObject;
 import org.junit.*;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
 public class HelpTest extends HDFSTest {
   private HelpService helpService;

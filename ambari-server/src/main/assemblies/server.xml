@@ -225,6 +225,16 @@
     </fileSet>
     <fileSet>
       <fileMode>755</fileMode>
+      <directory>${basedir}/../dev-support/</directory>
+      <outputDirectory>/usr/lib/ambari-server/</outputDirectory>
+      <includes>
+        <include>guice-persist-5.1.1.jar</include>
+        <include>spring-security-kerberos-web-2.0.0.jar</include>
+        <include>spring-security-kerberos-core-2.0.0.jar</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <fileMode>755</fileMode>
       <directory>src/main/resources/custom_action_definitions</directory>
       <outputDirectory>/var/lib/ambari-server/resources/custom_action_definitions</outputDirectory>
     </fileSet>

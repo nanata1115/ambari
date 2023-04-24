@@ -26,10 +26,10 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
-import org.springframework.messaging.support.ChannelInterceptorAdapter;
+import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageBuilder;
 
-public class AgentRegisteringQueueChecker extends ChannelInterceptorAdapter {
+public class AgentRegisteringQueueChecker implements ChannelInterceptor {
   private static final Logger LOG = LoggerFactory.getLogger(AgentsRegistrationQueue.class);
 
   @Autowired

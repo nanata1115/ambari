@@ -95,7 +95,7 @@
     <distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
     <distMgmtSnapshotsUrl>https://repository.apache.org/content/repositories/snapshots</distMgmtSnapshotsUrl>
     <assemblyPhase>package</assemblyPhase> <!-- use -DassemblyPhase=none to skip building tarball, useful when you want purely compile jar -->
-    <eclipselink.version>2.6.2</eclipselink.version>
+    <eclipselink.version>4.0.1</eclipselink.version>
   </properties>
   <pluginRepositories>
     <pluginRepository>
@@ -124,6 +124,11 @@
   </pluginRepositories>
 
   <repositories>
+    <repository>
+      <id>spring</id>
+      <name>ali sprint</name>
+      <url>https://maven.aliyun.com/repository/jcenter</url>
+    </repository>
     <repository>
       <id>oss.sonatype.org</id>
       <name>OSS Sonatype Staging</name>

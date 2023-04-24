@@ -22,10 +22,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 
 import org.apache.ambari.server.api.resources.ResourceInstance;
 import org.apache.ambari.server.api.resources.ResourceInstanceFactory;
@@ -241,12 +241,14 @@ public abstract class BaseService {
       return new ResultSerializer() {
         @Override
         public Object serialize(Result result) {
-          return JSON.parse(serializer.serialize(result).toString());
+          JSON js = new JSON();
+          return js.fromJSON(serializer.serialize(result).toString());
         }
 
         @Override
         public Object serializeError(ResultStatus error) {
-          return JSON.parse(serializer.serializeError(error).toString());
+          JSON js = new JSON();
+          return js.fromJSON(serializer.serializeError(error).toString());
         }
       };
     }

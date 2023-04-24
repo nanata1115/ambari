@@ -17,18 +17,14 @@
  */
 package org.apache.ambari.server.configuration.spring;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.ServletContext;
-
+import com.google.inject.Injector;
+import jakarta.servlet.ServletContext;
 import org.apache.ambari.server.AmbariException;
 import org.apache.ambari.server.agent.AgentSessionManager;
 import org.apache.ambari.server.agent.stomp.AmbariSubscriptionRegistry;
 import org.apache.ambari.server.api.AmbariSendToMethodReturnValueHandler;
 import org.apache.ambari.server.events.DefaultMessageEmitter;
 import org.apache.ambari.server.events.publishers.AmbariEventPublisher;
-import org.eclipse.jetty.websocket.server.WebSocketServerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +42,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.socket.server.jetty.JettyRequestUpgradeStrategy;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
-import com.google.inject.Injector;
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 public class RootStompConfig {
@@ -78,7 +75,7 @@ public class RootStompConfig {
   public DefaultHandshakeHandler handshakeHandler() {
 
     return new DefaultHandshakeHandler(
-        new JettyRequestUpgradeStrategy(new WebSocketServerFactory(servletContext)));
+        new JettyRequestUpgradeStrategy());
   }
 
   @Autowired

@@ -17,6 +17,7 @@
  */
 package org.apache.ambari.server.notifications;
 
+import javax.mail.internet.AddressException;
 import java.util.Map;
 
 /**
@@ -43,7 +44,7 @@ public interface NotificationDispatcher {
    * @param notification
    *          the notificationt to dispatch (not {@code null}).
    */
-  void dispatch(Notification notification);
+  void dispatch(Notification notification) throws AddressException;
 
   /**
    * Gets whether the dispatcher supports sending a digest or summary in a

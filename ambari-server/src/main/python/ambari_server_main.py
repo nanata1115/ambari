@@ -64,7 +64,7 @@ IS_FOREGROUND = ENV_FOREGROUND_KEY in os.environ and os.environ[ENV_FOREGROUND_K
 
 SERVER_START_CMD = "{0} " \
     "-server -XX:NewRatio=3 " \
-    "-XX:+UseConcMarkSweepGC " + \
+    "--add-opens java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions " + \
     "-XX:-UseGCOverheadLimit -XX:CMSInitiatingOccupancyFraction=60 " \
     "-XX:+CMSClassUnloadingEnabled " \
     "-Dsun.zip.disableMemoryMapping=true " + \
@@ -74,9 +74,9 @@ SERVER_START_CMD = "{0} " \
     "> {4} 2>&1 || echo $? > {5}"
 SERVER_START_CMD_DEBUG = "{0} " \
     "-server -XX:NewRatio=2 " \
-    "-XX:+UseConcMarkSweepGC " + \
+    "--add-opens java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions " + \
     "{1} {2} " \
-    " -Xdebug -Xrunjdwp:transport=dt_socket,address=5005," \
+    " -agentlib:jdwp=transport=dt_socket,address=*:5005," \
     "server=y,suspend={6} " \
     "-cp {3} " + \
     "org.apache.ambari.server.controller.AmbariServer " \
@@ -88,7 +88,7 @@ if not IS_FOREGROUND:
 
 SERVER_START_CMD_WINDOWS = "{0} " \
     "-server -XX:NewRatio=3 " \
-    "-XX:+UseConcMarkSweepGC " + \
+    "--add-opens java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions " + \
     "-XX:-UseGCOverheadLimit -XX:CMSInitiatingOccupancyFraction=60 " \
     "-XX:+CMSClassUnloadingEnabled " \
     "{1} {2} " \
@@ -96,7 +96,7 @@ SERVER_START_CMD_WINDOWS = "{0} " \
     "org.apache.ambari.server.controller.AmbariServer"
 SERVER_START_CMD_DEBUG_WINDOWS = "{0} " \
     "-server -XX:NewRatio=2 " \
-    "-XX:+UseConcMarkSweepGC " \
+    "--add-opens java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions " \
     "{1} {2} " \
     "-Xdebug -Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend={4} " \
     "-cp {3} " \

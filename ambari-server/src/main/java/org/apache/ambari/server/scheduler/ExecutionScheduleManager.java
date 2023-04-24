@@ -18,35 +18,12 @@
 
 package org.apache.ambari.server.scheduler;
 
-import static org.apache.ambari.server.state.scheduler.RequestExecution.Status.ABORTED;
-import static org.apache.ambari.server.state.scheduler.RequestExecution.Status.PAUSED;
-import static org.apache.ambari.server.state.scheduler.RequestExecution.Status.SCHEDULED;
-import static org.quartz.CronScheduleBuilder.cronSchedule;
-import static org.quartz.JobBuilder.newJob;
-import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
-import static org.quartz.TriggerBuilder.newTrigger;
-
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.text.ParseException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.regex.Pattern;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import jakarta.ws.rs.client.ClientRequestFilter;
+import jakarta.ws.rs.client.Entity;
 import org.apache.ambari.server.AmbariException;
 import org.apache.ambari.server.actionmanager.ActionDBAccessor;
 import org.apache.ambari.server.actionmanager.HostRoleStatus;
@@ -63,38 +40,36 @@ import org.apache.ambari.server.security.authorization.internal.InternalTokenCli
 import org.apache.ambari.server.security.authorization.internal.InternalTokenStorage;
 import org.apache.ambari.server.state.Cluster;
 import org.apache.ambari.server.state.Clusters;
-import org.apache.ambari.server.state.scheduler.Batch;
-import org.apache.ambari.server.state.scheduler.BatchRequest;
-import org.apache.ambari.server.state.scheduler.BatchRequestJob;
-import org.apache.ambari.server.state.scheduler.BatchRequestResponse;
-import org.apache.ambari.server.state.scheduler.BatchSettings;
-import org.apache.ambari.server.state.scheduler.RequestExecution;
-import org.apache.ambari.server.state.scheduler.Schedule;
+import org.apache.ambari.server.state.scheduler.*;
 import org.apache.ambari.server.utils.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrBuilder;
-import org.quartz.CronExpression;
-import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobKey;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
+import org.glassfish.jersey.client.ClientResponse;
+import org.glassfish.jersey.client.JerseyClient;
+import org.glassfish.jersey.client.JerseyClientBuilder;
+import org.glassfish.jersey.client.JerseyWebTarget;
+import org.glassfish.jersey.client.filter.CsrfProtectionFilter;
+import org.glassfish.jersey.client.internal.ClientResponseProcessingException;
+import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.client.filter.ClientFilter;
-import com.sun.jersey.api.client.filter.CsrfProtectionFilter;
-import com.sun.jersey.client.urlconnection.HTTPSProperties;
+import javax.net.ssl.*;
+import jakarta.ws.rs.core.MediaType;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.text.ParseException;
+import java.util.*;
+import java.util.regex.Pattern;
+
+import static org.apache.ambari.server.state.scheduler.RequestExecution.Status.*;
+import static org.quartz.CronScheduleBuilder.cronSchedule;
+import static org.quartz.JobBuilder.newJob;
+import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
+import static org.quartz.TriggerBuilder.newTrigger;
 
 /**
  * This class handles scheduling request execution for managed clusters
@@ -119,8 +94,8 @@ public class ExecutionScheduleManager {
 
   public static final String USER_ID_HEADER = "X-Authenticated-User-ID";
 
-  protected Client ambariClient;
-  protected WebResource ambariWebResource;
+  protected JerseyClient ambariClient;
+  protected JerseyWebTarget ambariWebResource;
 
   protected static final String REQUESTS_STATUS_KEY = "request_status";
   protected static final String REQUESTS_ID_KEY = "id";
@@ -154,7 +129,7 @@ public class ExecutionScheduleManager {
 
   protected void buildApiClient() throws NoSuchAlgorithmException, KeyManagementException {
 
-    Client client;
+    JerseyClient client;
 
     String pattern;
     String url;
@@ -188,33 +163,28 @@ public class ExecutionScheduleManager {
       sc.init(null, trustAllCerts, new SecureRandom());
 
       //Install all trusting cert SSL context for jersey client
-      ClientConfig config = new DefaultClientConfig();
-      config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES, new HTTPSProperties(
-        new HostnameVerifier() {
+
+      client = new JerseyClientBuilder().hostnameVerifier(new HostnameVerifier() {
           @Override
           public boolean verify( String s, SSLSession sslSession ) {
-            return true;
+              return true;
           }
-        },
-        sc
-      ));
-
-      client = Client.create(config);
+      }).sslContext(sc).createClient();
 
     } else {
-      client = Client.create();
+      client = JerseyClientBuilder.createClient();
       pattern = "http://localhost:%s/";
       url = String.format(pattern, configuration.getClientApiPort());
     }
 
     this.ambariClient = client;
-    this.ambariWebResource = client.resource(url);
+    this.ambariWebResource = client.target(url);
 
     //Install auth filters
-    ClientFilter csrfFilter = new CsrfProtectionFilter("RequestSchedule");
-    ClientFilter tokenFilter = new InternalTokenClientFilter(tokenStorage);
-    ambariClient.addFilter(csrfFilter);
-    ambariClient.addFilter(tokenFilter);
+    ClientRequestFilter csrfFilter = new CsrfProtectionFilter("RequestSchedule");
+    ClientRequestFilter tokenFilter = new InternalTokenClientFilter(tokenStorage);
+    ambariClient.register(csrfFilter);
+    ambariClient.register(tokenFilter);
 
   }
 
@@ -737,7 +707,7 @@ public class ExecutionScheduleManager {
 
     batchRequestResponse.setReturnCode(retCode);
 
-    String responseString = clientResponse.getEntity(String.class);
+    String responseString = (String) clientResponse.getEntity();
     LOG.debug("Processing API response: status={}, body={}", retCode, responseString);
     Map<String, Object> httpResponseMap;
     try {
@@ -833,9 +803,9 @@ public class ExecutionScheduleManager {
   protected BatchRequestResponse performUriRequest(String url, String body, String method) {
     ClientResponse response;
     try {
-      response = ambariClient.resource(url).entity(body).method(method, ClientResponse.class);
-    } catch (UniformInterfaceException e) {
-      response = e.getResponse();
+      response = ambariClient.target(url).request(body).method(method, ClientResponse.class);
+    } catch (ClientResponseProcessingException e) {
+      response = e.getClientResponse();
     }
     //Don't read response entity for logging purposes, it can be read only once from http stream
 
@@ -843,26 +813,27 @@ public class ExecutionScheduleManager {
   }
 
   protected BatchRequestResponse performApiGetRequest(String relativeUri, boolean queryAllFields) {
-    WebResource webResource = extendApiResource(ambariWebResource, relativeUri);
+      JerseyWebTarget webResource = extendApiResource(ambariWebResource, relativeUri);
     if (queryAllFields) {
       webResource = webResource.queryParam("fields", "*");
     }
     ClientResponse response;
     try {
-      response = webResource.get(ClientResponse.class);
-    } catch (UniformInterfaceException e) {
-      response = e.getResponse();
+      response = webResource.request().get(ClientResponse.class);
+    } catch (ClientResponseProcessingException e) {
+      response = e.getClientResponse();
     }
     return convertToBatchRequestResponse(response);
   }
 
   protected BatchRequestResponse performApiRequest(String relativeUri, String body, String method, Integer userId) {
     ClientResponse response;
+    Entity<String> bd= Entity.entity(body, MediaType.TEXT_HTML);
     try {
-      response = extendApiResource(ambariWebResource, relativeUri)
-          .header(USER_ID_HEADER, userId).method(method, ClientResponse.class, body);
-    } catch (UniformInterfaceException e) {
-      response = e.getResponse();
+      response = extendApiResource(ambariWebResource, relativeUri).request().header(USER_ID_HEADER, userId)
+              .method(method, bd, ClientResponse.class);
+    } catch (ClientResponseProcessingException e) {
+      response = e.getClientResponse();
     }
 
     return convertToBatchRequestResponse(response);
@@ -989,8 +960,8 @@ public class ExecutionScheduleManager {
    * @param relativeUri relative request URI
    * @return  Extended WebResource
    */
-  protected WebResource extendApiResource(WebResource webResource, String relativeUri) {
-    WebResource result = webResource;
+  protected JerseyWebTarget extendApiResource(JerseyWebTarget webResource, String relativeUri) {
+      JerseyWebTarget result = webResource;
     if (StringUtils.isNotEmpty(relativeUri) && !CONTAINS_API_VERSION_PATTERN.matcher(relativeUri).matches()) {
       result = webResource.path(DEFAULT_API_PATH);
     }

@@ -20,19 +20,19 @@ package org.apache.ambari.server.api.services;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 
-import org.apache.ambari.annotations.ApiIgnore;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.apache.ambari.server.api.resources.ResourceInstance;
 import org.apache.ambari.server.controller.spi.Resource;
 
@@ -47,7 +47,7 @@ public class WidgetLayoutService extends BaseService {
     this.clusterName = clusterName;
   }
 
-  @GET @ApiIgnore // until documented
+  @GET @Hidden // until documented
   @Path("{widgetLayoutId}")
   @Produces("text/plain")
   public Response getService(String body, @Context HttpHeaders headers, @Context UriInfo ui,
@@ -66,14 +66,14 @@ public class WidgetLayoutService extends BaseService {
    *
    * @return instance collection resource representation
    */
-  @GET @ApiIgnore // until documented
+  @GET @Hidden // until documented
   @Produces("text/plain")
   public Response getServices(String body, @Context HttpHeaders headers, @Context UriInfo ui) {
     return handleRequest(headers, body, ui, Request.Type.GET,
             createResource(null));
   }
 
-  @POST @ApiIgnore // until documented
+  @POST @Hidden // until documented
   @Path("{widgetLayoutId}")
   @Produces("text/plain")
   public Response createService(String body, @Context HttpHeaders headers, @Context UriInfo ui,
@@ -82,7 +82,7 @@ public class WidgetLayoutService extends BaseService {
             createResource(widgetLayoutId));
   }
 
-  @POST @ApiIgnore // until documented
+  @POST @Hidden // until documented
   @Produces("text/plain")
   public Response createServices(String body, @Context HttpHeaders headers, @Context UriInfo ui) {
 
@@ -90,7 +90,7 @@ public class WidgetLayoutService extends BaseService {
             createResource(null));
   }
 
-  @PUT @ApiIgnore // until documented
+  @PUT @Hidden // until documented
   @Path("{widgetLayoutId}")
   @Produces("text/plain")
   public Response updateService(String body, @Context HttpHeaders headers, @Context UriInfo ui,
@@ -99,14 +99,14 @@ public class WidgetLayoutService extends BaseService {
     return handleRequest(headers, body, ui, Request.Type.PUT, createResource(widgetLayoutId));
   }
 
-  @PUT @ApiIgnore // until documented
+  @PUT @Hidden // until documented
   @Produces("text/plain")
   public Response updateServices(String body, @Context HttpHeaders headers, @Context UriInfo ui) {
 
     return handleRequest(headers, body, ui, Request.Type.PUT, createResource(null));
   }
 
-  @DELETE @ApiIgnore // until documented
+  @DELETE @Hidden // until documented
   @Path("{widgetLayoutId}")
   @Produces("text/plain")
   public Response deleteService(@Context HttpHeaders headers, @Context UriInfo ui,

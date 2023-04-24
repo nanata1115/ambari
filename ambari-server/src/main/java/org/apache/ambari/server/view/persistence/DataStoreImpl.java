@@ -36,10 +36,10 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 
 import org.apache.ambari.server.orm.entities.ViewEntityEntity;
 import org.apache.ambari.server.orm.entities.ViewInstanceEntity;
@@ -300,7 +300,7 @@ public class DataStoreImpl implements DataStore {
       typeBuilderMap.put(entityName, typeBuilder);
     }
 
-    Session session = JpaHelper.getEntityManager(getEntityManager()).getServerSession();
+    Session session = JpaHelper.getEntityManager((jakarta.persistence.EntityManager) getEntityManager()).getServerSession();
     // add the direct mapped properties to the dynamic type builders
     for (Map.Entry<Class, String> entry: entityClassMap.entrySet()) {
 

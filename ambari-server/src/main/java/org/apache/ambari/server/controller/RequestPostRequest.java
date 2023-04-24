@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Request schema for endpoint {@link org.apache.ambari.server.api.services.RequestService#createRequests(String,
- *    javax.ws.rs.core.HttpHeaders, javax.ws.rs.core.UriInfo)}
+ *    jakarta.ws.rs.core.HttpHeaders, jakarta.ws.rs.core.UriInfo)}
  *
  * The interface is not actually implemented, it only carries swagger annotations.
  */
@@ -37,7 +37,7 @@ public interface RequestPostRequest extends ApiModel {
   @ApiModelProperty(name = RequestResourceProvider.REQUEST_INFO)
   RequestInfo getRequestInfo();
 
-  @ApiModelProperty(name = "Body")
+  @ApiResponse(description = "Body")
   Body getBody();
 
   interface RequestInfo {

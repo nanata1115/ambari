@@ -21,20 +21,20 @@ package org.apache.ambari.server.api.services.views;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 
-import org.apache.ambari.annotations.ApiIgnore;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.apache.ambari.server.api.resources.ResourceInstance;
 import org.apache.ambari.server.api.services.BaseService;
 import org.apache.ambari.server.api.services.Request;
@@ -141,7 +141,7 @@ public class ViewPermissionService extends BaseService {
    *
    * @return information regarding the created permission
    */
-  @POST @ApiIgnore // until documented, not supported
+  @POST @Hidden // until documented, not supported
   @Path("{permissionId}")
   @Produces(MediaType.TEXT_PLAIN)
   public Response createPermission(String body, @Context HttpHeaders headers, @Context UriInfo ui,
@@ -164,7 +164,7 @@ public class ViewPermissionService extends BaseService {
    * @param permissionId  permission id
    * @return information regarding the updated permission
    */
-  @PUT @ApiIgnore // until documented, not supported
+  @PUT @Hidden // until documented, not supported
   @Path("{permissionId}")
   @Produces(MediaType.TEXT_PLAIN)
   public Response updatePermission(String body, @Context HttpHeaders headers, @Context UriInfo ui,
@@ -188,7 +188,7 @@ public class ViewPermissionService extends BaseService {
    *
    * @return information regarding the deleted permission
    */
-  @DELETE @ApiIgnore // until documented, not supported
+  @DELETE @Hidden // until documented, not supported
   @Path("{permissionId}")
   @Produces("text/plain")
   public Response deletePermission(@Context HttpHeaders headers, @Context UriInfo ui,

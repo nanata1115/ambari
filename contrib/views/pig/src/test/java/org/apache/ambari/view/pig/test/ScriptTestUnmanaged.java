@@ -29,7 +29,7 @@ import org.apache.ambari.view.utils.hdfs.HdfsApiException;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;

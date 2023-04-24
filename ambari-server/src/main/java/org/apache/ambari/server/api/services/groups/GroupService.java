@@ -19,16 +19,16 @@ package org.apache.ambari.server.api.services.groups;
 
 import java.util.Collections;
 
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 
 import org.apache.ambari.annotations.ApiIgnore;
 import org.apache.ambari.server.api.resources.ResourceInstance;
@@ -37,13 +37,13 @@ import org.apache.ambari.server.api.services.Request;
 import org.apache.ambari.server.controller.GroupResponse;
 import org.apache.ambari.server.controller.spi.Resource;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Api;
+import io.swagger.v3.oas.annotations.ApiImplicitParam;
+import io.swagger.v3.oas.annotations.ApiImplicitParams;
+import io.swagger.v3.oas.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.ApiResponse;
+import io.swagger.v3.oas.annotations.ApiResponses;
 
 /**
  * Service responsible for user groups requests.
@@ -132,7 +132,7 @@ public class GroupService extends BaseService {
    *
    * @deprecated Use requests to /groups instead.
    */
-   @POST @ApiIgnore // deprecated
+   @POST @Hidden // deprecated
    @Deprecated
    @Path("{groupName}")
    @Produces("text/plain")

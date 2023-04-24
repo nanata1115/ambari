@@ -17,12 +17,11 @@
  */
 package org.apache.ambari.server.configuration.spring;
 
-import javax.servlet.ServletContext;
-
+import com.google.inject.Injector;
+import jakarta.servlet.ServletContext;
 import org.apache.ambari.server.agent.stomp.HeartbeatController;
 import org.apache.ambari.server.events.DefaultMessageEmitter;
 import org.apache.ambari.server.events.listeners.requests.STOMPUpdateListener;
-import org.eclipse.jetty.websocket.server.WebSocketServerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -30,20 +29,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 import org.springframework.web.socket.server.jetty.JettyRequestUpgradeStrategy;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
-
-import com.google.inject.Injector;
 
 @Configuration
 @EnableWebSocketMessageBroker
 @ComponentScan(basePackageClasses = {HeartbeatController.class})
 @Import({RootStompConfig.class,GuiceBeansConfig.class})
-public class AgentStompConfig extends AbstractWebSocketMessageBrokerConfigurer {
+public class AgentStompConfig implements WebSocketMessageBrokerConfigurer {
   private org.apache.ambari.server.configuration.Configuration configuration;
 
   private final ServletContext servletContext;
@@ -62,11 +59,8 @@ public class AgentStompConfig extends AbstractWebSocketMessageBrokerConfigurer {
   }
 
   public DefaultHandshakeHandler getHandshakeHandler() {
-    WebSocketServerFactory webSocketServerFactory = new WebSocketServerFactory(servletContext);
-    webSocketServerFactory.getPolicy().setMaxTextMessageSize(configuration.getStompMaxIncomingMessageSize());
-
     return new DefaultHandshakeHandler(
-        new JettyRequestUpgradeStrategy(webSocketServerFactory));
+        new JettyRequestUpgradeStrategy());
   }
 
   @Override
@@ -84,7 +78,7 @@ public class AgentStompConfig extends AbstractWebSocketMessageBrokerConfigurer {
   @Override
   public void configureClientOutboundChannel(ChannelRegistration registration) {
     registration.taskExecutor().corePoolSize(configuration.getSpringMessagingThreadPoolSize());
-    registration.setInterceptors(agentRegisteringQueueChecker);
+    registration.interceptors(agentRegisteringQueueChecker);
   }
 
   @Override

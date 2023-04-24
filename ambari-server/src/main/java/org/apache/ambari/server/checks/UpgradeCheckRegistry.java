@@ -225,9 +225,10 @@ public class UpgradeCheckRegistry {
 
       // next find all plugin checks which are required for this upgrade type by
       // scanning just the classes shipped with the stack's library JAR
+      ClassLoader[] cls = new URLClassLoader[]{classLoader};
       Reflections reflections = new Reflections(
           new ConfigurationBuilder()
-            .addClassLoader(classLoader)
+            .setClassLoaders(cls)
             .addUrls(classLoader.getURLs())
             .setScanners(new SubTypesScanner(),new TypeAnnotationsScanner()));
 

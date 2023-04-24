@@ -17,19 +17,20 @@
  */
 package org.apache.ambari.server.api;
 
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.container.ContainerRequestFilter;
+import org.apache.ambari.server.api.services.ResultStatus;
+import org.apache.ambari.server.api.services.serializers.JsonSerializer;
+
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.apache.ambari.server.api.services.ResultStatus;
-import org.apache.ambari.server.api.services.serializers.JsonSerializer;
-
-import com.sun.jersey.spi.container.ContainerRequest;
-import com.sun.jersey.spi.container.ContainerRequestFilter;
+//import com.sun.jersey.spi.container.ContainerRequest;
+//import com.sun.jersey.spi.container.ContainerRequestFilter;
 
 public class AmbariCsrfProtectionFilter implements ContainerRequestFilter {
   private static final Set<String> IGNORED_METHODS;
@@ -48,13 +49,12 @@ public class AmbariCsrfProtectionFilter implements ContainerRequestFilter {
   }
 
   @Override
-  public ContainerRequest filter(ContainerRequest containerRequest) {
-    if (!IGNORED_METHODS.contains(containerRequest.getMethod()) &&
-            !containerRequest.getRequestHeaders().containsKey(CSRF_HEADER)) {
+  public void filter(ContainerRequestContext containerRequestContext) {
+    if (!IGNORED_METHODS.contains(containerRequestContext.getRequest().getMethod()) &&
+            !containerRequestContext.getHeaders().containsKey(CSRF_HEADER)) {
       throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(
               JSON_SERIALIZER.serializeError(new ResultStatus(ResultStatus.STATUS.BAD_REQUEST, ERROR_MESSAGE))
       ).type(MediaType.TEXT_PLAIN_TYPE).build());
     }
-    return containerRequest;
   }
 }

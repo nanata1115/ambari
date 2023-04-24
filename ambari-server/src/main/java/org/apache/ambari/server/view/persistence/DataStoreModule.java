@@ -23,8 +23,8 @@ import static org.eclipse.persistence.config.PersistenceUnitProperties.JDBC_USER
 
 import java.util.Map;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
 import org.apache.ambari.server.configuration.Configuration;
 import org.apache.ambari.server.controller.ControllerModule;
@@ -81,7 +81,7 @@ public class DataStoreModule implements Module, SchemaManagerFactory {
     this.viewInstanceEntity   = viewInstanceEntity;
     this.classLoader          = new DynamicClassLoader(view.getClassLoader());
     this.entityManagerFactory = getEntityManagerFactory(view.getAmbariConfiguration());
-    this.jpaDynamicHelper     = new JPADynamicHelper(entityManagerFactory.createEntityManager());
+    this.jpaDynamicHelper     = new JPADynamicHelper((jakarta.persistence.EntityManagerFactory) entityManagerFactory.createEntityManager());
   }
 
   public DataStoreModule(ViewInstanceEntity viewInstanceEntity,String puName) {
@@ -91,7 +91,7 @@ public class DataStoreModule implements Module, SchemaManagerFactory {
     this.viewInstanceEntity   = viewInstanceEntity;
     this.classLoader          = new DynamicClassLoader(view.getClassLoader());
     this.entityManagerFactory = getEntityManagerFactory(view.getAmbariConfiguration());
-    this.jpaDynamicHelper     = new JPADynamicHelper(entityManagerFactory.createEntityManager());
+    this.jpaDynamicHelper     = new JPADynamicHelper((jakarta.persistence.EntityManagerFactory) entityManagerFactory.createEntityManager());
   }
 
 

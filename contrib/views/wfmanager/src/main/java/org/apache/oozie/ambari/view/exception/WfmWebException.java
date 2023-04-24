@@ -21,9 +21,9 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.hadoop.security.AccessControlException;
 import org.json.simple.JSONObject;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.HashMap;
 

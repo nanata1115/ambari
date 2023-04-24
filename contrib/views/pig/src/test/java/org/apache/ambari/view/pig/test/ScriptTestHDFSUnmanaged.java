@@ -35,7 +35,7 @@ import org.json.simple.JSONObject;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
 import java.io.File;
 import java.io.IOException;

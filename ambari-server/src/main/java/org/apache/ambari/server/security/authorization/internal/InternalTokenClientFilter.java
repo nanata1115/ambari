@@ -19,12 +19,10 @@
 package org.apache.ambari.server.security.authorization.internal;
 
 import com.google.inject.Inject;
-import com.sun.jersey.api.client.ClientHandlerException;
-import com.sun.jersey.api.client.ClientRequest;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.filter.ClientFilter;
+import jakarta.ws.rs.client.ClientRequestContext;
+import jakarta.ws.rs.client.ClientRequestFilter;
 
-public class InternalTokenClientFilter extends ClientFilter {
+public class InternalTokenClientFilter implements ClientRequestFilter {
   public static final String INTERNAL_TOKEN_HEADER = "X-Internal-Token";
   private final InternalTokenStorage tokenStorage;
 
@@ -34,8 +32,7 @@ public class InternalTokenClientFilter extends ClientFilter {
   }
 
   @Override
-  public ClientResponse handle(ClientRequest cr) throws ClientHandlerException {
+  public void filter(ClientRequestContext cr)  {
     cr.getHeaders().add(INTERNAL_TOKEN_HEADER, tokenStorage.getInternalToken());
-    return getNext().handle(cr);
   }
 }

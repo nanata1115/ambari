@@ -28,10 +28,10 @@ import org.json.simple.JSONObject;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriBuilder;
+import jakarta.ws.rs.core.UriInfo;
 import java.io.File;
 import java.net.URI;
 import java.util.List;

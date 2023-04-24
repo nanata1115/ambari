@@ -18,6 +18,7 @@
 
 package org.apache.ambari.server.notifications;
 
+import javax.mail.internet.AddressException;
 import java.util.concurrent.Executor;
 
 /**
@@ -55,6 +56,10 @@ public final class DispatchRunnable implements Runnable {
    */
   @Override
   public void run() {
-    m_dispatcher.dispatch(m_notification);
+    try {
+      m_dispatcher.dispatch(m_notification);
+    } catch (AddressException e) {
+      throw new RuntimeException(e);
+    }
   }
 }
