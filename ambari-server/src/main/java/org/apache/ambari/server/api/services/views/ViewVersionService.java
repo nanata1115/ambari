@@ -34,7 +34,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 
-import io.swagger.v3.oas.annotations.Hidden;
+import org.apache.ambari.annotations.ApiIgnore;
 import org.apache.ambari.server.api.resources.ResourceInstance;
 import org.apache.ambari.server.api.services.BaseService;
 import org.apache.ambari.server.api.services.Request;
@@ -136,7 +136,7 @@ public class ViewVersionService extends BaseService {
    *
    * @return information regarding the created view
    */
-  @POST @Hidden // until documented, unsupported method
+  @POST @ApiIgnore // until documented, unsupported method
   @Path("{version}")
   @Produces(MediaType.TEXT_PLAIN)
   public Response createVersions(String body, @Context HttpHeaders headers, @Context UriInfo ui,
@@ -157,7 +157,7 @@ public class ViewVersionService extends BaseService {
    *
    * @return information regarding the updated view
    */
-  @PUT @Hidden // until documented, unsupported method
+  @PUT @ApiIgnore // until documented, unsupported method
   @Path("{version}")
   @Produces(MediaType.TEXT_PLAIN)
   public Response updateVersions(String body, @Context HttpHeaders headers, @Context UriInfo ui,
@@ -178,7 +178,7 @@ public class ViewVersionService extends BaseService {
    *
    * @return information regarding the deleted view version
    */
-  @DELETE @Hidden // until documented, unsupported method
+  @DELETE @ApiIgnore // until documented, unsupported method
   @Path("{version}")
   @Produces(MediaType.TEXT_PLAIN)
   public Response deleteVersions(@Context HttpHeaders headers, @Context UriInfo ui,

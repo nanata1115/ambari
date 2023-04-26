@@ -33,8 +33,6 @@
     <jetty.version>11.0.14</jetty.version>
     <ldap-api.version>1.0.0</ldap-api.version>
     <checkstyle.version>10.9.1</checkstyle.version>
-    <swagger.version>2.2.9</swagger.version>
-    <swagger.maven.plugin.version>2.2.9</swagger.maven.plugin.version>
     <slf4j.version>2.0.0</slf4j.version>
     <reload4j.version>1.2.24</reload4j.version>
     <logback.version>1.2.10</logback.version>
@@ -611,9 +609,9 @@
         <version>3.4</version>
       </dependency>
       <dependency>
-        <groupId>io.swagger.core.v3</groupId>
+        <groupId>com.github.kongchen</groupId>
         <artifactId>swagger-maven-plugin</artifactId>
-        <version>${swagger.maven.plugin.version}</version>
+        <version>3.1.8</version>
       </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
@@ -684,7 +682,7 @@
           </dependencies>
         </plugin>
         <plugin>
-          <groupId>io.swagger.core.v3</groupId>
+          <groupId>com.github.kongchen</groupId>
           <artifactId>swagger-maven-plugin</artifactId>
           <version>${swagger.maven.plugin.version}</version>
           <dependencies>

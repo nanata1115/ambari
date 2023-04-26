@@ -44,13 +44,13 @@ import org.apache.ambari.server.controller.spi.Resource;
 import org.apache.ambari.server.state.Clusters;
 import org.apache.http.HttpStatus;
 
-import io.swagger.v3.oas.annotations.Api;
-import io.swagger.v3.oas.annotations.ApiImplicitParam;
-import io.swagger.v3.oas.annotations.ApiImplicitParams;
-import io.swagger.v3.oas.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.ApiParam;
-import io.swagger.v3.oas.annotations.ApiResponse;
-import io.swagger.v3.oas.annotations.ApiResponses;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 /**
  * Service responsible for cluster resource requests.

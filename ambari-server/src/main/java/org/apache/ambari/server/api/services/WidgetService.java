@@ -32,7 +32,7 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 
-import io.swagger.v3.oas.annotations.Hidden;
+import org.apache.ambari.annotations.ApiIgnore;
 import org.apache.ambari.server.api.resources.ResourceInstance;
 import org.apache.ambari.server.controller.spi.Resource;
 
@@ -47,7 +47,7 @@ public class WidgetService extends BaseService {
     this.clusterName = clusterName;
   }
 
-  @GET @Hidden // until documented
+  @GET @ApiIgnore // until documented
   @Path("{widgetId}")
   @Produces("text/plain")
   public Response getService(String body, @Context HttpHeaders headers, @Context UriInfo ui,
@@ -66,7 +66,7 @@ public class WidgetService extends BaseService {
    *
    * @return instance collection resource representation
    */
-  @GET @Hidden // until documented
+  @GET @ApiIgnore // until documented
   @Produces("text/plain")
   public Response getServices(String body, @Context HttpHeaders headers, @Context UriInfo ui) {
 
@@ -74,7 +74,7 @@ public class WidgetService extends BaseService {
             createResource(null));
   }
 
-  @POST @Hidden // until documented
+  @POST @ApiIgnore // until documented
   @Path("{widgetId}")
   @Produces("text/plain")
   public Response createService(String body, @Context HttpHeaders headers, @Context UriInfo ui,
@@ -83,7 +83,7 @@ public class WidgetService extends BaseService {
             createResource(widgetId));
   }
 
-  @POST @Hidden // until documented
+  @POST @ApiIgnore // until documented
   @Produces("text/plain")
   public Response createServices(String body, @Context HttpHeaders headers, @Context UriInfo ui) {
 
@@ -91,7 +91,7 @@ public class WidgetService extends BaseService {
             createResource(null));
   }
 
-  @PUT @Hidden // until documented
+  @PUT @ApiIgnore // until documented
   @Path("{widgetId}")
   @Produces("text/plain")
   public Response updateService(String body, @Context HttpHeaders headers, @Context UriInfo ui,
@@ -100,14 +100,14 @@ public class WidgetService extends BaseService {
     return handleRequest(headers, body, ui, Request.Type.PUT, createResource(widgetId));
   }
 
-  @PUT @Hidden // until documented
+  @PUT @ApiIgnore // until documented
   @Produces("text/plain")
   public Response updateServices(String body, @Context HttpHeaders headers, @Context UriInfo ui) {
 
     return handleRequest(headers, body, ui, Request.Type.PUT, createResource(null));
   }
 
-  @DELETE @Hidden // until documented
+  @DELETE @ApiIgnore // until documented
   @Path("{widgetId}")
   @Produces("text/plain")
   public Response deleteService(@Context HttpHeaders headers, @Context UriInfo ui,

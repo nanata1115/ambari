@@ -199,7 +199,7 @@ public class AmbariSwaggerReader extends JaxrsReader {
       } else {
         // Get the path parameters of the parent API method. All methods of the nested API class should include these
         // parameters.
-        Operation operation = parseMethod(nestedApiRecord.parentMethod);
+        Operation operation = parseMethod("",nestedApiRecord.parentMethod);
         pathParameters = ImmutableList.copyOf(
           Collections2.filter(operation.getParameters(), Predicates.instanceOf(PathParameter.class)));
         logger.info("Will copy path params from parent method: {}",

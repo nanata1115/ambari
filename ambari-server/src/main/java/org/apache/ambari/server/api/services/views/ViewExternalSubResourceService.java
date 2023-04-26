@@ -31,7 +31,7 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 
-import io.swagger.v3.oas.annotations.Hidden;
+import org.apache.ambari.annotations.ApiIgnore;
 import org.apache.ambari.server.api.resources.ResourceInstance;
 import org.apache.ambari.server.api.services.BaseService;
 import org.apache.ambari.server.api.services.Request;
@@ -89,7 +89,7 @@ public class ViewExternalSubResourceService  extends BaseService {
    *
    * @return instance collection resource representation
    */
-  @GET @Hidden // until documented
+  @GET @ApiIgnore // until documented
   @Produces("text/plain")
   public Response getResources(String body, @Context HttpHeaders headers, @Context UriInfo ui) {
     return handleRequest(headers, body, ui, Request.Type.GET,

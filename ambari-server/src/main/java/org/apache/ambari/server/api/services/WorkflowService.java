@@ -30,7 +30,7 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 
-import io.swagger.v3.oas.annotations.Hidden;
+import org.apache.ambari.annotations.ApiIgnore;
 import org.apache.ambari.server.api.resources.ResourceInstance;
 import org.apache.ambari.server.controller.spi.Resource;
 
@@ -61,7 +61,7 @@ public class WorkflowService extends BaseService {
    *          workflow id
    * @return workflow instance representation
    */
-  @GET @Hidden // until documented
+  @GET @ApiIgnore // until documented
   @Path("{workflowId}")
   @Produces("text/plain")
   public Response getWorkflow(String body, @Context HttpHeaders headers,
@@ -79,7 +79,7 @@ public class WorkflowService extends BaseService {
    *          uri info
    * @return workflow collection resource representation
    */
-  @GET @Hidden // until documented
+  @GET @ApiIgnore // until documented
   @Produces("text/plain")
   public Response getWorkflows(String body, @Context HttpHeaders headers, @Context UriInfo ui) {
     return handleRequest(headers, body, ui, Request.Type.GET,

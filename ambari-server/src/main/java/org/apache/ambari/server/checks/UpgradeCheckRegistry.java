@@ -226,11 +226,11 @@ public class UpgradeCheckRegistry {
       // next find all plugin checks which are required for this upgrade type by
       // scanning just the classes shipped with the stack's library JAR
       ClassLoader[] cls = new URLClassLoader[]{classLoader};
-      Reflections reflections = new Reflections(
-          new ConfigurationBuilder()
-            .setClassLoaders(cls)
-            .addUrls(classLoader.getURLs())
-            .setScanners(new SubTypesScanner(),new TypeAnnotationsScanner()));
+      ConfigurationBuilder configurationBuilder=new ConfigurationBuilder();
+      configurationBuilder.setClassLoaders(cls);
+      configurationBuilder.addUrls(classLoader.getURLs());
+      configurationBuilder.setScanners(new SubTypesScanner(),new TypeAnnotationsScanner());
+      Reflections reflections = new Reflections(configurationBuilder);
 
       Set<Class<? extends UpgradeCheck>> upgradeChecksFromLoader = reflections.getSubTypesOf(
           UpgradeCheck.class);

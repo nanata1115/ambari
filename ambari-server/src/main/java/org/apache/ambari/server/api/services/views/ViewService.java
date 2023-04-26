@@ -33,7 +33,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 
-import io.swagger.v3.oas.annotations.Hidden;
+import org.apache.ambari.annotations.ApiIgnore;
 import org.apache.ambari.server.api.resources.ResourceInstance;
 import org.apache.ambari.server.api.services.BaseService;
 import org.apache.ambari.server.api.services.Request;
@@ -129,7 +129,7 @@ public class ViewService extends BaseService {
    *
    * @return information regarding the created view
    */
-  @POST @Hidden // until documented
+  @POST @ApiIgnore // until documented
   @Path("{viewName}")
   @Produces(MediaType.TEXT_PLAIN)
   public Response createView(String body, @Context HttpHeaders headers, @Context UriInfo ui,
@@ -147,7 +147,7 @@ public class ViewService extends BaseService {
    *
    * @return information regarding the updated view
    */
-  @PUT @Hidden // until documented
+  @PUT @ApiIgnore // until documented
   @Path("{viewName}")
   @Produces(MediaType.TEXT_PLAIN)
   public Response updateView(String body, @Context HttpHeaders headers, @Context UriInfo ui,
@@ -166,7 +166,7 @@ public class ViewService extends BaseService {
    *
    * @return information regarding the deleted view
    */
-  @DELETE @Hidden // until documented
+  @DELETE @ApiIgnore // until documented
   @Path("{viewName}")
   @Produces(MediaType.TEXT_PLAIN)
   public Response deleteView(@Context HttpHeaders headers, @Context UriInfo ui,

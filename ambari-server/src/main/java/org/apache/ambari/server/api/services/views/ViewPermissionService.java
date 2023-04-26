@@ -34,7 +34,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 
-import io.swagger.v3.oas.annotations.Hidden;
+import org.apache.ambari.annotations.ApiIgnore;
 import org.apache.ambari.server.api.resources.ResourceInstance;
 import org.apache.ambari.server.api.services.BaseService;
 import org.apache.ambari.server.api.services.Request;
@@ -141,7 +141,7 @@ public class ViewPermissionService extends BaseService {
    *
    * @return information regarding the created permission
    */
-  @POST @Hidden // until documented, not supported
+  @POST @ApiIgnore // until documented, not supported
   @Path("{permissionId}")
   @Produces(MediaType.TEXT_PLAIN)
   public Response createPermission(String body, @Context HttpHeaders headers, @Context UriInfo ui,
@@ -164,7 +164,7 @@ public class ViewPermissionService extends BaseService {
    * @param permissionId  permission id
    * @return information regarding the updated permission
    */
-  @PUT @Hidden // until documented, not supported
+  @PUT @ApiIgnore // until documented, not supported
   @Path("{permissionId}")
   @Produces(MediaType.TEXT_PLAIN)
   public Response updatePermission(String body, @Context HttpHeaders headers, @Context UriInfo ui,
@@ -188,7 +188,7 @@ public class ViewPermissionService extends BaseService {
    *
    * @return information regarding the deleted permission
    */
-  @DELETE @Hidden // until documented, not supported
+  @DELETE @ApiIgnore // until documented, not supported
   @Path("{permissionId}")
   @Produces("text/plain")
   public Response deletePermission(@Context HttpHeaders headers, @Context UriInfo ui,

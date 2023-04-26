@@ -37,7 +37,7 @@ public interface RequestPostRequest extends ApiModel {
   @ApiModelProperty(name = RequestResourceProvider.REQUEST_INFO)
   RequestInfo getRequestInfo();
 
-  @ApiResponse(description = "Body")
+  @ApiModelProperty(name = "Body")
   Body getBody();
 
   interface RequestInfo {

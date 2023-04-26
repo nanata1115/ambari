@@ -34,7 +34,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 
-import io.swagger.v3.oas.annotations.Hidden;
+import org.apache.ambari.annotations.ApiIgnore;
 import org.apache.ambari.server.api.resources.ResourceInstance;
 import org.apache.ambari.server.api.services.BaseService;
 import org.apache.ambari.server.api.services.Request;
@@ -180,7 +180,7 @@ public class ViewPrivilegeService extends BaseService {
    *
    * @return information regarding the updated privilege
    */
-  @PUT @Hidden // until documented
+  @PUT @ApiIgnore // until documented
   // Remove comments when the below API call is fixed
   /*@Path("{privilegeId}")
   @Produces("text/plain")

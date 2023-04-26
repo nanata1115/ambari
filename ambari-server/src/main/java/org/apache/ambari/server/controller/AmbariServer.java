@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.logging.LogManager;
 
 import javax.crypto.BadPaddingException;
-import javax.servlet.DispatcherType;
+import jakarta.servlet.DispatcherType;
 
 import org.apache.ambari.server.AmbariException;
 import org.apache.ambari.server.StateRecoveryManager;
@@ -130,17 +130,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpVersion;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.velocity.app.Velocity;
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.HttpConfiguration;
-import org.eclipse.jetty.server.HttpConnectionFactory;
-import org.eclipse.jetty.server.NCSARequestLog;
-import org.eclipse.jetty.server.SecureRequestCustomizer;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.SessionIdManager;
-import org.eclipse.jetty.server.SslConnectionFactory;
-import org.eclipse.jetty.server.handler.HandlerCollection;
-import org.eclipse.jetty.server.handler.RequestLogHandler;
+import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.gzip.GzipHandler;
 import org.eclipse.jetty.server.session.DefaultSessionIdManager;
 import org.eclipse.jetty.server.session.SessionHandler;
@@ -148,9 +138,9 @@ import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.servlets.GzipFilter;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -173,7 +163,7 @@ import com.google.inject.Scopes;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.google.inject.persist.Transactional;
-import com.sun.jersey.spi.container.servlet.ServletContainer;
+//import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 
 @Singleton
@@ -643,7 +633,7 @@ public class AmbariServer {
       https_config.setSendServerVersion(false);
 
       // Secured connector - default constructor sets trustAll = true for certs
-      SslContextFactory sslContextFactory = new SslContextFactory();
+      SslContextFactory.Server sslContextFactory = new SslContextFactory.Server();
       disableInsecureProtocols(sslContextFactory);
       sslContextFactory.setKeyStorePath(keystore);
       sslContextFactory.setTrustStorePath(truststore);
@@ -689,7 +679,7 @@ public class AmbariServer {
       https_config.addCustomizer(new SecureRequestCustomizer());
       https_config.setSecurePort(configs.getClientSSLApiPort());
 
-      SslContextFactory contextFactoryApi = new SslContextFactory();
+      SslContextFactory.Server contextFactoryApi = new SslContextFactory.Server();
       disableInsecureProtocols(contextFactoryApi);
       contextFactoryApi.setKeyStorePath(httpsKeystore);
       contextFactoryApi.setTrustStorePath(httpsTruststore);
@@ -845,16 +835,14 @@ public class AmbariServer {
    */
   protected void configureHandlerCompression(ServletContextHandler context) {
     if (configs.isApiGzipped()) {
-      FilterHolder gzipFilter = context.addFilter(GzipFilter.class, "/*",
-          EnumSet.of(DispatcherType.REQUEST));
-
-      gzipFilter.setInitParameter("methods", "GET,POST,PUT,DELETE");
-      gzipFilter.setInitParameter("excludePathPatterns", ".*(\\.woff|\\.ttf|\\.woff2|\\.eot|\\.svg)");
-      gzipFilter.setInitParameter("mimeTypes",
-          "text/html,text/plain,text/xml,text/css,application/x-javascript," +
-              "application/xml,application/x-www-form-urlencoded," +
-              "application/javascript,application/json");
-      gzipFilter.setInitParameter("minGzipSize", configs.getApiGzipMinSize());
+      GzipHandler handler=new GzipHandler();
+      handler.setMinGzipSize(configs.getApiGzipMinSize());
+      handler.addExcludedMimeTypes("text/html","text/plain","text/xml","text/css","application/x-javascript",
+              "application/xml","application/x-www-form-urlencoded",
+              "application/javascript","application/json");
+      handler.addIncludedMethods("GET,POST,PUT,DELETE");
+      handler.addExcludedPaths("*.woff","*.ttf","*.woff2","*.eot","*.svg");
+      context.setHandler(handler);
     }
   }
 
@@ -1052,32 +1040,21 @@ public class AmbariServer {
     if(!StringUtils.isBlank(requestlogpath)) {
       String logfullpath = requestlogpath + "//" + Configuration.REQUEST_LOGNAMEPATTERN.getDefaultValue();
       LOG.info("********* Initializing request access log: " + logfullpath);
-      RequestLogHandler requestLogHandler = new RequestLogHandler();
 
-      NCSARequestLog requestLog = new NCSARequestLog(requestlogpath);
+      CustomRequestLog requestLog = new CustomRequestLog(requestlogpath);
 
       String retaindays = configsMap.get(Configuration.REQUEST_LOG_RETAINDAYS.getKey());
       int retaindaysInt = Configuration.REQUEST_LOG_RETAINDAYS.getDefaultValue();
       if(retaindays != null && !StringUtils.isBlank(retaindays)) {
         retaindaysInt = Integer.parseInt(retaindays.trim());
       }
-
-      requestLog.setRetainDays(retaindaysInt);
-      requestLog.setAppend(true);
-      requestLog.setLogLatency(true);
-      requestLog.setExtended(true);
-      requestLogHandler.setRequestLog(requestLog);
-      //Add requestloghandler to existing handlerlist.
-      handlerList.addHandler(requestLogHandler);
-
+      ((RequestLogWriter)requestLog.getWriter()).setRetainDays(retaindaysInt);
+      ((RequestLogWriter)requestLog.getWriter()).setAppend(true);
+//      requestLogWriter.setLogLatency(true);
+//      requestLogWriter.setExtended(true);
       //For agent communication.
-      HandlerCollection handlers = new HandlerCollection();
-      Handler[] handler = serverForAgent.getHandlers();
-      if(handler != null ) {
-        handlers.setHandlers((Handler[])handler);
-        handlers.addHandler(requestLogHandler);
-        serverForAgent.setHandler(handlers);
-      }
+//      HandlerCollection handlers = new HandlerCollection();
+      serverForAgent.setRequestLog(requestLog);
 
     }
   }
