@@ -247,7 +247,13 @@
         <include>commons-logging:commons-logging</include>
         <include>com.google.guava:guava</include>
         <include>org.slf4j:slf4j-api</include>
+        <include>com.fasterxml.woodstox:woodstox-core</include>
+        <include>com.fasterxml.woodstox:stax2-api</include>
         <include>org.apache.hadoop:hadoop-common</include>
+        <include>org.apache.hadoop.thirdparty:hadoop-shaded-guava</include>
+        <include>org.apache.commons:commons-lang3</include>
+        <include>org.apache.commons:commons-compress</include>
+        <include>org.apache.commons:commons-configuration2</include>
         <include>org.apache.hadoop:hadoop-auth</include>
         <include>org.apache.htrace:htrace-core</include>
       </includes>
