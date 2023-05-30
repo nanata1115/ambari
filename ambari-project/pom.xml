@@ -30,7 +30,7 @@
     <solr.version>5.5.2</solr.version>
     <ambari.dir>${project.parent.basedir}</ambari.dir>
     <powermock.version>1.6.3</powermock.version>
-    <jetty.version>11.0.14</jetty.version>
+    <jetty.version>11.0.15</jetty.version>
     <ldap-api.version>1.0.0</ldap-api.version>
     <checkstyle.version>10.9.1</checkstyle.version>
     <slf4j.version>2.0.0</slf4j.version>
@@ -38,8 +38,8 @@
     <logback.version>1.2.10</logback.version>
     <guice.version>5.1.0</guice.version>
     <spring.version>6.0.8</spring.version>
-    <fasterxml.jackson.version>2.12.7</fasterxml.jackson.version>
-    <fasterxml.jackson.databind.version>2.12.7.1</fasterxml.jackson.databind.version>
+    <fasterxml.jackson.version>2.15.1</fasterxml.jackson.version>
+    <fasterxml.jackson.databind.version>2.15.1</fasterxml.jackson.databind.version>
     <postgres.version>42.2.2</postgres.version>
     <testContainers.version>1.17.6</testContainers.version>
     <forkCount>4</forkCount>
