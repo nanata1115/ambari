@@ -17,16 +17,21 @@
  */
 package org.apache.ambari.server.configuration.spring;
 
+import org.apache.ambari.server.agent.AgentSessionManager;
 import org.apache.ambari.server.api.stomp.NamedTasksSubscriptions;
 import org.apache.ambari.server.api.stomp.TestController;
 import org.apache.ambari.server.events.DefaultMessageEmitter;
 import org.apache.ambari.server.events.listeners.requests.STOMPUpdateListener;
+import org.apache.ambari.server.events.publishers.AmbariEventPublisher;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -34,6 +39,7 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import com.google.inject.Injector;
 
 @Configuration
+@EnableWebSocket
 @EnableWebSocketMessageBroker
 @ComponentScan(basePackageClasses = {TestController.class})
 @Import(RootStompConfig.class)
@@ -41,11 +47,23 @@ public class ApiStompConfig implements WebSocketMessageBrokerConfigurer {
   private final String HEARTBEAT_THREAD_NAME = "ws-heartbeat-thread-";
   private final int HEARTBEAT_POOL_SIZE = 1;
   private final org.apache.ambari.server.configuration.Configuration configuration;
+  @Autowired
+  private SimpMessagingTemplate brokerTemplate;
 
   public ApiStompConfig(Injector injector) {
     configuration = injector.getInstance(org.apache.ambari.server.configuration.Configuration.class);
   }
 
+  @Bean
+  public DefaultMessageEmitter defaultMessageEmitter(Injector injector) {
+    org.apache.ambari.server.configuration.Configuration configuration =
+            injector.getInstance(org.apache.ambari.server.configuration.Configuration.class);
+    return new DefaultMessageEmitter(injector.getInstance(AgentSessionManager.class),
+            brokerTemplate,
+            injector.getInstance(AmbariEventPublisher.class),
+            configuration.getExecutionCommandsRetryCount(),
+            configuration.getExecutionCommandsRetryInterval());
+  }
   @Bean
   public STOMPUpdateListener requestSTOMPListener(Injector injector) {
     return new STOMPUpdateListener(injector, DefaultMessageEmitter.DEFAULT_API_EVENT_TYPES);

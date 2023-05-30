@@ -59,25 +59,6 @@ public class RootStompConfig {
     this.servletContext = servletContext;
     configuration = injector.getInstance(org.apache.ambari.server.configuration.Configuration.class);
   }
-
-  @Bean
-  public DefaultMessageEmitter defaultMessageEmitter(Injector injector) {
-    org.apache.ambari.server.configuration.Configuration configuration =
-        injector.getInstance(org.apache.ambari.server.configuration.Configuration.class);
-    return new DefaultMessageEmitter(injector.getInstance(AgentSessionManager.class),
-        brokerTemplate,
-        injector.getInstance(AmbariEventPublisher.class),
-        configuration.getExecutionCommandsRetryCount(),
-        configuration.getExecutionCommandsRetryInterval());
-  }
-
-  @Bean
-  public DefaultHandshakeHandler handshakeHandler() {
-
-    return new DefaultHandshakeHandler(
-        new JettyRequestUpgradeStrategy());
-  }
-
   @Autowired
   public void configureRegistryCacheSize(SimpleBrokerMessageHandler simpleBrokerMessageHandler) throws NoSuchFieldException, IllegalAccessException {
     AmbariSubscriptionRegistry defaultSubscriptionRegistry =

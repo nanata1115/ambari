@@ -18,39 +18,52 @@
 package org.apache.ambari.server.configuration.spring;
 
 import com.google.inject.Injector;
-import jakarta.servlet.ServletContext;
+import org.apache.ambari.server.agent.AgentSessionManager;
 import org.apache.ambari.server.agent.stomp.HeartbeatController;
 import org.apache.ambari.server.events.DefaultMessageEmitter;
 import org.apache.ambari.server.events.listeners.requests.STOMPUpdateListener;
+import org.apache.ambari.server.events.publishers.AmbariEventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
-import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
-import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
+import org.springframework.web.socket.config.annotation.*;
 import org.springframework.web.socket.server.jetty.JettyRequestUpgradeStrategy;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
 @Configuration
+@EnableWebSocket
 @EnableWebSocketMessageBroker
 @ComponentScan(basePackageClasses = {HeartbeatController.class})
 @Import({RootStompConfig.class,GuiceBeansConfig.class})
 public class AgentStompConfig implements WebSocketMessageBrokerConfigurer {
   private org.apache.ambari.server.configuration.Configuration configuration;
 
-  private final ServletContext servletContext;
+//  private final ServletContextHandler context;
 
   @Autowired
   private AgentRegisteringQueueChecker agentRegisteringQueueChecker;
+  @Autowired
+  private SimpMessagingTemplate brokerTemplate;
 
-  public AgentStompConfig(ServletContext servletContext, Injector injector) {
-    this.servletContext = servletContext;
+  public AgentStompConfig(Injector injector) {
+//    this.context = context;
     configuration = injector.getInstance(org.apache.ambari.server.configuration.Configuration.class);
+  }
+
+  @Bean
+  public DefaultMessageEmitter defaultMessageEmitter(Injector injector) {
+    org.apache.ambari.server.configuration.Configuration configuration =
+            injector.getInstance(org.apache.ambari.server.configuration.Configuration.class);
+    return new DefaultMessageEmitter(injector.getInstance(AgentSessionManager.class),
+            brokerTemplate,
+            injector.getInstance(AmbariEventPublisher.class),
+            configuration.getExecutionCommandsRetryCount(),
+            configuration.getExecutionCommandsRetryInterval());
   }
 
   @Bean
@@ -59,8 +72,8 @@ public class AgentStompConfig implements WebSocketMessageBrokerConfigurer {
   }
 
   public DefaultHandshakeHandler getHandshakeHandler() {
-    return new DefaultHandshakeHandler(
-        new JettyRequestUpgradeStrategy());
+    DefaultHandshakeHandler defaultHandshakeHandler = new DefaultHandshakeHandler(new JettyRequestUpgradeStrategy());
+    return defaultHandshakeHandler;
   }
 
   @Override
