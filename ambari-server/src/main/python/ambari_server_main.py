@@ -64,7 +64,13 @@ IS_FOREGROUND = ENV_FOREGROUND_KEY in os.environ and os.environ[ENV_FOREGROUND_K
 
 SERVER_START_CMD = "{0} " \
     "-server -XX:NewRatio=3 " \
-    "--add-opens java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions " + \
+    "--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED " \
+    "--add-opens java.base/java.math=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED " \
+    "--add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/java.security=ALL-UNNAMED " \
+    "--add-opens java.base/java.text=ALL-UNNAMED --add-opens java.base/java.time=ALL-UNNAMED " \
+    "--add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/jdk.internal.access=ALL-UNNAMED " \
+    "--add-opens java.base/jdk.internal.misc=ALL-UNNAMED --add-opens java.base/java.util.concurrent.atomic=ALL-UNNAMED " \
+    "-XX:+IgnoreUnrecognizedVMOptions " + \
     "-XX:-UseGCOverheadLimit -XX:CMSInitiatingOccupancyFraction=60 " \
     "-XX:+CMSClassUnloadingEnabled " \
     "-Dsun.zip.disableMemoryMapping=true " + \
@@ -74,7 +80,13 @@ SERVER_START_CMD = "{0} " \
     "> {4} 2>&1 || echo $? > {5}"
 SERVER_START_CMD_DEBUG = "{0} " \
     "-server -XX:NewRatio=2 " \
-    "--add-opens java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions " + \
+    "--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED " \
+    "--add-opens java.base/java.math=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED " \
+    "--add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/java.security=ALL-UNNAMED " \
+    "--add-opens java.base/java.text=ALL-UNNAMED --add-opens java.base/java.time=ALL-UNNAMED " \
+    "--add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/jdk.internal.access=ALL-UNNAMED " \
+    "--add-opens java.base/jdk.internal.misc=ALL-UNNAMED --add-opens java.base/java.util.concurrent.atomic=ALL-UNNAMED " \
+    "-XX:+IgnoreUnrecognizedVMOptions " + \
     "{1} {2} " \
     " -agentlib:jdwp=transport=dt_socket,address=*:5005," \
     "server=y,suspend={6} " \

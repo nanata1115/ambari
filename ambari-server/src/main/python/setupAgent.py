@@ -130,7 +130,7 @@ def installAgent(projectVersion, ret=None):
     packageParams = "/AmbariRoot:" + AMBARI_INSTALL_ROOT
     Command = ["cmd", "/c", "choco", "install", "-y", "ambari-agent", "--version=" + projectVersion, "--params=\"" + packageParams + "\""]
   else:
-    Command = ["yum", "-y", "install", "--nogpgcheck", "ambari-agent-" + projectVersion + " zulu-17 "]
+    Command = ["yum", "-y", "install", "--nogpgcheck", "ambari-agent-" + projectVersion,"zulu-17"]
   return execOsCommand(Command, tries=3, try_sleep=10, ret=ret)
 
 
