@@ -19,6 +19,7 @@
 package org.apache.ambari.server.view;
 
 import org.apache.ambari.server.view.configuration.ViewConfig;
+import org.eclipse.jetty.webapp.ClassMatcher;
 import org.eclipse.jetty.webapp.WebAppClassLoader;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -57,7 +58,6 @@ public class ViewClassLoader extends WebAppClassLoader {
    */
   public ViewClassLoader(ViewConfig viewConfig, ClassLoader parent, URL[] urls) throws IOException {
     super(parent, getInitContext(viewConfig));
-
     for (URL url : urls) {
       addURL(url);
     }
@@ -72,16 +72,18 @@ public class ViewClassLoader extends WebAppClassLoader {
     WebAppContext webAppContext = new WebAppContext();
 
     // add ambari classes as system classes
-    WebAppContext.addSystemClasses(webAppContext.getServer(),"org.apache.ambari.server.");
-    WebAppContext.addSystemClasses(webAppContext.getServer(),"org.apache.ambari.view.");
+    webAppContext.addSystemClassMatcher(new ClassMatcher("org.apache.ambari.server.","org.apache.ambari.view."));
 
     // add com.google.inject as system classes to allow for injection in view components using the google annotation
-    WebAppContext.addSystemClasses(webAppContext.getServer(),"com.google.inject.");
+    webAppContext.addSystemClassMatcher(new ClassMatcher("com.google.inject."));
 
     // add as system classes to avoid conflicts and linkage errors
-    WebAppContext.addSystemClasses(webAppContext.getServer(),"org.slf4j.");
-    WebAppContext.addSystemClasses(webAppContext.getServer(),"com.sun.jersey.");
-    WebAppContext.addSystemClasses(webAppContext.getServer(),"org.apache.velocity.");
+    webAppContext.addSystemClassMatcher(new ClassMatcher("org.slf4j.","org.glassfish.jersey.","org.apache.velocity."
+            ,"org.eclipse.jetty.servlet.listener.","org.eclipse.jetty.jsp.JettyJspServlet",
+            "org.eclipse.jetty.servlet.","org.eclipse.jetty.servlets.","org.eclipse.jetty.websocket"));
+    webAppContext.addServerClassMatcher(new ClassMatcher("-org.eclipse.jetty.jsp.NoJspServlet","-org.eclipse.jetty.jsp.",
+            "-org.eclipse.jetty.servlet.listener.","-org.eclipse.jetty.servlet.",
+            "-org.eclipse.jetty.servlets.","-org.eclipse.jetty.websocket"));
 
     // set the class loader settings from the configuration
     if (viewConfig != null) {

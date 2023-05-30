@@ -17,19 +17,13 @@
  */
 package org.apache.ambari.server;
 
-//import org.eclipse.jetty.websocket.api.BatchMode;
-//import org.eclipse.jetty.websocket.api.RemoteEndpoint;
-//import org.eclipse.jetty.websocket.api.extensions.OutgoingFrames;
-//import org.eclipse.jetty.websocket.common.LogicalConnection;
-//import org.eclipse.jetty.websocket.common.RemoteEndpointFactory;
-//import org.eclipse.jetty.websocket.common.WebSocketRemoteEndpoint;
-import jakarta.websocket.RemoteEndpoint;
+import org.eclipse.jetty.websocket.api.BatchMode;
+import org.eclipse.jetty.websocket.common.JettyWebSocketRemoteEndpoint;
 import org.eclipse.jetty.websocket.core.CoreSession;
-import org.eclipse.jetty.websocket.jakarta.common.JakartaWebSocketRemoteEndpoint;
-import org.eclipse.jetty.websocket.jakarta.common.JakartaWebSocketSession;
 
-public class DisableBatchingRemoteEndpointFactory extends JakartaWebSocketRemoteEndpoint {
-  protected DisableBatchingRemoteEndpointFactory(JakartaWebSocketSession session, CoreSession coreSession) {
-    super(session, coreSession);
+
+public class DisableBatchingRemoteEndpointFactory extends JettyWebSocketRemoteEndpoint {
+  public DisableBatchingRemoteEndpointFactory(CoreSession coreSession, BatchMode batchMode) {
+    super(coreSession, batchMode.OFF);
   }
 }

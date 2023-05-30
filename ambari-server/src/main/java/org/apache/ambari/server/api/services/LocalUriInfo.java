@@ -26,6 +26,7 @@ import jakarta.ws.rs.core.*;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 
 /**
  * Internal {@link UriInfo} implementation. Most of the methods are not
@@ -124,7 +125,7 @@ public class LocalUriInfo implements UriInfo {
   public MultivaluedMap<String, String> getQueryParameters() {
     List<NameValuePair> parametersList = URLEncodedUtils.parse(uri, "UTF-8");
 
-    MultivaluedMap<String, String> parameters = new MultivaluedHashMap();
+    MultivaluedMap<String, String> parameters = new MultivaluedStringMap();
     for (NameValuePair pair : parametersList) {
       parameters.add(pair.getName(), pair.getValue());
     }
