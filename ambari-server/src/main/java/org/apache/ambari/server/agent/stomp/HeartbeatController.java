@@ -17,47 +17,28 @@
  */
 package org.apache.ambari.server.agent.stomp;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.google.inject.Injector;
+import com.google.inject.persist.UnitOfWork;
 import jakarta.ws.rs.WebApplicationException;
-
 import org.apache.ambari.server.AmbariException;
-import org.apache.ambari.server.agent.AgentSessionManager;
-import org.apache.ambari.server.agent.HeartBeat;
-import org.apache.ambari.server.agent.HeartBeatHandler;
-import org.apache.ambari.server.agent.HeartBeatResponse;
-import org.apache.ambari.server.agent.Register;
-import org.apache.ambari.server.agent.RegistrationResponse;
-import org.apache.ambari.server.agent.RegistrationStatus;
+import org.apache.ambari.server.agent.*;
 import org.apache.ambari.server.configuration.Configuration;
-import org.apache.ambari.server.configuration.spring.GuiceBeansConfig;
 import org.apache.ambari.server.state.cluster.ClustersImpl;
 import org.apache.ambari.server.state.fsm.InvalidStateTransitionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.google.inject.Injector;
-import com.google.inject.persist.UnitOfWork;
+import java.util.concurrent.*;
 
 @Controller
 @SendToUser("/")
 @MessageMapping("/")
-@Import(GuiceBeansConfig.class)
 public class HeartbeatController {
   private static Logger LOG = LoggerFactory.getLogger(HeartbeatController.class);
   private final HeartBeatHandler hh;

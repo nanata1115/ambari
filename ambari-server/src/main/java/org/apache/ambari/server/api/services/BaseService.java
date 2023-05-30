@@ -39,6 +39,8 @@ import org.apache.ambari.server.api.services.serializers.ResultSerializer;
 import org.apache.ambari.server.audit.request.RequestAuditLogger;
 import org.apache.ambari.server.controller.spi.Resource;
 import org.apache.ambari.server.utils.RetryHelper;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.util.ajax.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

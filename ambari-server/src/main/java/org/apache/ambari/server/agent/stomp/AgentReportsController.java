@@ -17,31 +17,12 @@
  */
 package org.apache.ambari.server.agent.stomp;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Provider;
+import com.google.inject.Injector;
 import jakarta.ws.rs.WebApplicationException;
-
 import org.apache.ambari.server.AmbariException;
 import org.apache.ambari.server.HostNotRegisteredException;
-import org.apache.ambari.server.agent.AgentReportsProcessor;
-import org.apache.ambari.server.agent.AgentSessionManager;
-import org.apache.ambari.server.agent.CommandReport;
-import org.apache.ambari.server.agent.CommandStatusAgentReport;
-import org.apache.ambari.server.agent.ComponentStatus;
-import org.apache.ambari.server.agent.ComponentStatusAgentReport;
-import org.apache.ambari.server.agent.ComponentVersionAgentReport;
-import org.apache.ambari.server.agent.HeartBeatHandler;
-import org.apache.ambari.server.agent.HostStatusAgentReport;
-import org.apache.ambari.server.agent.stomp.dto.AckReport;
-import org.apache.ambari.server.agent.stomp.dto.CommandStatusReports;
-import org.apache.ambari.server.agent.stomp.dto.ComponentStatusReport;
-import org.apache.ambari.server.agent.stomp.dto.ComponentStatusReports;
-import org.apache.ambari.server.agent.stomp.dto.ComponentVersionReports;
-import org.apache.ambari.server.agent.stomp.dto.HostStatusReport;
+import org.apache.ambari.server.agent.*;
+import org.apache.ambari.server.agent.stomp.dto.*;
 import org.apache.ambari.server.events.DefaultMessageEmitter;
 import org.apache.ambari.server.state.Alert;
 import org.apache.ambari.server.state.fsm.InvalidStateTransitionException;
@@ -53,7 +34,10 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
-import com.google.inject.Injector;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @SendToUser("/")
@@ -62,7 +46,7 @@ public class AgentReportsController {
   private static final Logger LOG = LoggerFactory.getLogger(AgentReportsController.class);
 
   @Autowired
-  private Provider<DefaultMessageEmitter> defaultMessageEmitterProvider;
+  private DefaultMessageEmitter defaultMessageEmitter;
 
   private final HeartBeatHandler hh;
   private final AgentSessionManager agentSessionManager;
@@ -137,7 +121,7 @@ public class AgentReportsController {
     Long hostId = agentSessionManager.getHost(simpSessionId).getHostId();
     LOG.debug("Handling agent receive report for execution message with messageId {}, status {}, reason {}",
         ackReport.getMessageId(), ackReport.getStatus(), ackReport.getReason());
-    defaultMessageEmitterProvider.get().processReceiveReport(hostId, ackReport);
+    defaultMessageEmitter.processReceiveReport(hostId, ackReport);
     return new ReportsResponse();
   }
 
