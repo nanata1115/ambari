@@ -75,7 +75,7 @@ public class ConfigGroupService extends BaseService {
    * @return
    */
   @GET
-  @Path("") // This is needed if class level path is not present otherwise no Swagger docs will be generated for this method
+//  @Path("") // This is needed if class level path is not present otherwise no Swagger docs will be generated for this method
   @Produces(MediaType.TEXT_PLAIN)
   @ApiOperation(value = "Returns all config groups", response = ConfigGroupResponse.ConfigGroupWrapper.class, responseContainer =
           RESPONSE_CONTAINER_LIST)
@@ -137,7 +137,7 @@ public class ConfigGroupService extends BaseService {
    * @return
    */
   @POST
-  @Path("") // This is needed if class level path is not present otherwise no Swagger docs will be generated for this method
+  //@Path("") // This is needed if class level path is not present otherwise no Swagger docs will be generated for this method
   @Produces(MediaType.TEXT_PLAIN)
   @ApiOperation(value = "Creates a config group")
   @ApiImplicitParams({

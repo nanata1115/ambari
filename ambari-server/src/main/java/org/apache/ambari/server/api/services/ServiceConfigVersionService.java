@@ -66,7 +66,7 @@ public class ServiceConfigVersionService extends BaseService {
    * @return service config version collection resource representation
    */
   @GET
-  @Path("") // This is needed if class level path is not present otherwise no Swagger docs will be generated for this method
+  //@Path("") // This is needed if class level path is not present otherwise no Swagger docs will be generated for this method
   @Produces(MediaType.TEXT_PLAIN)
   @ApiOperation(value = "Get all service config versions", response = ServiceConfigVersionResponse.class,
     responseContainer = RESPONSE_CONTAINER_LIST)
