@@ -1179,7 +1179,7 @@ yarn.node-labels.manager-class
   </property>
   <property>
     <name>yarn.timeline-service.versions</name>
-    <value>1.5f,2.0f</value>
+    <value>2.0f</value>
     <description>Comma separated Timeline service versions we&#x2019;re currently using. This overrides yarn.timeline-service.version. Acceptable values are 1.5f or 2.0f</description>
     <on-ambari-upgrade add="false"/>
   </property>
