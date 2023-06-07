@@ -38,11 +38,9 @@ java64_home = config['ambariLevelParams']['java_home']
 
 # conf_dir = "/etc/"
 dolphin_home = format("{stack_root}/current/dolphin-client")
-# dolphin_conf_dir = dolphin_home + "/conf"
-# dolphin_log_dir = dolphin_home + "/logs"
 dolphin_bin_dir = dolphin_home + "/bin"
 dolphin_lib_jars = dolphin_home + "/lib/*"
-dolphin_pidfile_dir = "/var/run/dolphinscheduler"
+dolphin_pidfile_dir = dolphin_home
 
 rmHosts = default("/clusterHostInfo/rm_host", [])
 alertHosts = default("/clusterHostInfo/alert_host", [])
@@ -77,21 +75,21 @@ else:
                                                       + '/' + dolphin_env_map['dolphin.database.name']
 
 # application-alert.properties
-dolphin_alert_map = {}
-wechat_push_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=$token'
-wechat_token_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$corpId&corpsecret=$secret'
-wechat_team_send_msg = '{\"toparty\":\"$toParty\",\"agentid\":\"$agentId\",\"msgtype\":\"text\",\"text\":{\"content\":\"$msg\"},\"safe\":\"0\"}'
-wechat_user_send_msg = '{\"touser\":\"$toUser\",\"agentid\":\"$agentId\",\"msgtype\":\"markdown\",\"markdown\":{\"content\":\"$msg\"}}'
-
-dolphin_alert_config_map = config['configurations']['dolphin-alert']
-
-if dolphin_alert_config_map['enterprise.wechat.enable']:
-    dolphin_alert_map['enterprise.wechat.push.ur'] = wechat_push_url
-    dolphin_alert_map['enterprise.wechat.token.url'] = wechat_token_url
-    dolphin_alert_map['enterprise.wechat.team.send.msg'] = wechat_team_send_msg
-    dolphin_alert_map['enterprise.wechat.user.send.msg'] = wechat_user_send_msg
-
-dolphin_alert_map.update(dolphin_alert_config_map)
+# dolphin_alert_map = {}
+# wechat_push_url = 'https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=$token'
+# wechat_token_url = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$corpId&corpsecret=$secret'
+# wechat_team_send_msg = '{\"toparty\":\"$toParty\",\"agentid\":\"$agentId\",\"msgtype\":\"text\",\"text\":{\"content\":\"$msg\"},\"safe\":\"0\"}'
+# wechat_user_send_msg = '{\"touser\":\"$toUser\",\"agentid\":\"$agentId\",\"msgtype\":\"markdown\",\"markdown\":{\"content\":\"$msg\"}}'
+#
+# dolphin_alert_config_map = config['configurations']['dolphin-alert']
+#
+# if dolphin_alert_config_map['enterprise.wechat.enable']:
+#     dolphin_alert_map['enterprise.wechat.push.ur'] = wechat_push_url
+#     dolphin_alert_map['enterprise.wechat.token.url'] = wechat_token_url
+#     dolphin_alert_map['enterprise.wechat.team.send.msg'] = wechat_team_send_msg
+#     dolphin_alert_map['enterprise.wechat.user.send.msg'] = wechat_user_send_msg
+#
+# dolphin_alert_map.update(dolphin_alert_config_map)
 
 # application-api.properties
 dolphin_app_api_map = {}

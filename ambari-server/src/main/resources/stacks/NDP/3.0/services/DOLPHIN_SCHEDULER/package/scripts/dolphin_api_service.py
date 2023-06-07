@@ -26,13 +26,29 @@ class DolphinApiService(Script):
         import params
         env.set_params(params)
         self.install_packages(env)
-        # Execute(('chmod', '-R', '777', params.dolphin_home))
-        # Execute(('chown', '-R', params.dolphin_user + ":" + params.dolphin_group,  params.dolphin_home))
+        with open("/etc/passwd") as f:
+            userlist = []
+            for line in f:
+                line=line.strip()
+                vec =line.split(':')
+                userlist.append(vec[0])
+            if params.dolphin_user in userlist:
+                Logger.info("Dolphin Deploy User : " + params.dolphin_user + "already exists ")
+            else:
+                Execute(('useradd', params.dolphin_user))
+        Execute(('sed -i \'/^' + params.dolphin_user + '/d\' /etc/sudoers'))
+        Execute(('sed -i \'$a' + params.dolphin_user + '  ALL=(ALL)  NOPASSWD: NOPASSWD: ALL\' /etc/sudoers'))
+
 
     def configure(self, env):
         import params
         params.pika_slave = True
         env.set_params(params)
+
+        Execute(('rm -f ' + " " + params.dolphin_home+"/master-server/conf/core-site.xml"))
+        Execute(('ln -s /etc/hadoop/conf/core-site.xml' + " " + params.dolphin_home+"/master-server/conf/core-site.xml"))
+        Execute(('rm -f ' + " " + params.dolphin_home+"/master-server/conf/hdfs-site.xml"))
+        Execute(('ln -s /etc/hadoop/conf/hdfs-site.xml' + " " + params.dolphin_home+"/master-server/conf/hdfs-site.xml"))
 
         dolphin_env()
 
@@ -40,16 +56,11 @@ class DolphinApiService(Script):
         import params
         env.set_params(params)
         self.configure(env)
+        #init
+        init_cmd=format("export DATABASE="+params.dolphin_database_config['dolphin_database_type']+";sh " + params.dolphin_home + "/tools/bin/upgrade-schema.sh")
+        Execute(init_cmd, user=params.dolphin_user)
 
-        # #init
-        # init_cmd=format("sh " + params.dolphin_home + "/script/create-dolphinscheduler.sh")
-        # Execute(init_cmd, user=params.dolphin_user)
-        #
-        # #upgrade
-        # upgrade_cmd=format("sh " + params.dolphin_home + "/script/upgrade-dolphinscheduler.sh")
-        # Execute(upgrade_cmd, user=params.dolphin_user)
-
-        no_op_test = format("ls {dolphin_pidfile_dir}/api-server.pid >/dev/null 2>&1 && ps `cat {dolphin_pidfile_dir}/api-server.pid` | grep `cat {dolphin_pidfile_dir}/api-server.pid` >/dev/null 2>&1")
+        no_op_test = format("ls {dolphin_pidfile_dir}/api-server/pid >/dev/null 2>&1 && ps `cat {dolphin_pidfile_dir}/api-server/pid` | grep `cat {dolphin_pidfile_dir}/api-server/pid` >/dev/null 2>&1")
 
         start_cmd = format("sh " + params.dolphin_bin_dir + "/dolphinscheduler-daemon.sh start api-server")
         Execute(start_cmd, user=params.dolphin_user, not_if=no_op_test)
@@ -64,7 +75,7 @@ class DolphinApiService(Script):
     def status(self, env):
         import status_params
         env.set_params(status_params)
-        check_process_status(status_params.dolphin_run_dir + "api-server.pid")
+        check_process_status(status_params.dolphin_run_dir + "api-server/pid")
 
 
 if __name__ == "__main__":

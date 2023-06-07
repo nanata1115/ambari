@@ -18,4 +18,4 @@ limitations under the License.
 from resource_management import *
 
 config = Script.get_config()
-dolphin_run_dir = "/var/run/dolphinscheduler/pid/"
+dolphin_run_dir = "/usr/ndp/current/dolphin-client/"

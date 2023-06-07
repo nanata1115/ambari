@@ -21,26 +21,7 @@ limitations under the License.
 from resource_management import *
 
 def dolphin_env():
-    import params # import 导入params.py文件
-    Directory(params.dolphin_pidfile_dir, # Directory执行文件夹操作
-              mode=0777,
-              owner=params.dolphin_user,
-              group=params.dolphin_group,
-              create_parents=True # 父目录不存在时一起创建
-              )
-    # Directory(params.dolphin_log_dir,
-    #           mode=0777,
-    #           owner=params.dolphin_user,
-    #           group=params.dolphin_group,
-    #           create_parents=True
-    #           )
-    # Directory(params.dolphin_conf_dir,
-    #           mode=0777,
-    #           owner=params.dolphin_user,
-    #           group=params.dolphin_group,
-    #           create_parents=True
-    #           )
-
+    import params # import 导入params.
     Directory(params.dolphin_common_map['data.basedir.path'],
               mode=0777,
               owner=params.dolphin_user,
@@ -63,53 +44,66 @@ def dolphin_env():
                group=params.dolphin_group
                )
 
-    File(format(params.dolphin_home + "master-server/conf/application.yaml"),
+    File(format(params.dolphin_home + "/master-server/conf/application.yaml"),
          mode=0755,
          content=Template("application-master.yaml.j2"),
          owner=params.dolphin_user,
          group=params.dolphin_group
          )
 
-    File(format(params.dolphin_home + "worker-server/conf/application.yaml"),
+    File(format(params.dolphin_home + "/worker-server/conf/application.yaml"),
          mode=0755,
          content=Template("application-worker.yaml.j2"),
          owner=params.dolphin_user,
          group=params.dolphin_group
          )
 
-    File(format(params.dolphin_home + "api-server/conf/application.yaml"),
+    File(format(params.dolphin_home + "/api-server/conf/application.yaml"),
          mode=0755,
          content=Template("application-api.yaml.j2"),
          owner=params.dolphin_user,
          group=params.dolphin_group
          )
 
-    File(format(params.dolphin_home + "alert-server/conf/application.yaml"),
+    File(format(params.dolphin_home + "/alert-server/conf/application.yaml"),
          mode=0755,
          content=Template("application-alert.yaml.j2"),
          owner=params.dolphin_user,
          group=params.dolphin_group
          )
 
-    File(format(params.dolphin_home + "master-server/conf/common.properties"),
+    File(format(params.dolphin_home + "/tools/conf/application.yaml"),
+         mode=0755,
+         content=Template("application-tools.yaml.j2"),
+         owner=params.dolphin_user,
+         group=params.dolphin_group
+         )
+
+    File(format(params.dolphin_home + "/master-server/conf/common.properties"),
          mode=0755,
          content=Template("common.properties.j2"),
          owner=params.dolphin_user,
          group=params.dolphin_group
          )
-    File(format(params.dolphin_home + "worker-server/conf/common.properties"),
+    File(format(params.dolphin_home + "/tools/conf/common.properties"),
          mode=0755,
          content=Template("common.properties.j2"),
          owner=params.dolphin_user,
          group=params.dolphin_group
          )
-    File(format(params.dolphin_home + "api-server/conf/common.properties"),
+    File(format(params.dolphin_home + "/worker-server/conf/common.properties"),
          mode=0755,
          content=Template("common.properties.j2"),
          owner=params.dolphin_user,
          group=params.dolphin_group
          )
-    File(format(params.dolphin_home + "alert-server/conf/common.properties"),
+    File(format(params.dolphin_home + "/api-server/conf/common.properties"),
+         mode=0755,
+         content=Template("common.properties.j2"),
+         owner=params.dolphin_user,
+         group=params.dolphin_group
+         )
+    File(format(params.dolphin_home + "/alert-server/conf/common.properties"),
          mode=0755,
          content=Template("common.properties.j2"),
          owner=params.dolphin_user,

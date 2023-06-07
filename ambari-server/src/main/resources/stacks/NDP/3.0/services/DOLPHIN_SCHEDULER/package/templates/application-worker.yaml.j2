@@ -22,9 +22,9 @@ spring:
     date-format: "yyyy-MM-dd HH:mm:ss"
   datasource:
       driver-class-name: {{dolphin_database_config['dolphin_database_driver']}}
-      url: {{ dolphin_database_config['spring_datasource_url'] }}
-      username: {{ dolphin_database_config['spring_datasource_username'] }}
-      password: {{ dolphin_database_config['spring_datasource_password'] }}
+      url: {{ dolphin_database_config['dolphin_database_url'] }}
+      username: {{ dolphin_database_config['dolphin_database_username'] }}
+      password: {{ dolphin_database_config['dolphin_database_password'] }}
       hikari:
         connection-test-query: select 1
         minimum-idle: 5
@@ -48,7 +48,7 @@ registry:
       max-retries: {{dolphin_registry_map['registry.max.retries']}}
     session-timeout: {{dolphin_registry_map['registry.session.timeout.ms']}}
     connection-timeout: {{dolphin_registry_map['registry.connection.timeout.ms']}}
-    block-until-connected: {{dolphin_registry_map['registry.serversregistry.block.until.connected.wait']}}
+    block-until-connected: {{dolphin_registry_map['registry.block.until.connected.wait']}}
     digest: ~
 
 worker:

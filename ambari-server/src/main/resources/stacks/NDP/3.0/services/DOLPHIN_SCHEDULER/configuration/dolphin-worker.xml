@@ -35,10 +35,7 @@
 	</property>
 	<property>
 		<name>worker.heartbeat.interval</name>
-		<value>10</value>
-		<value-attributes>
-			<type>int</type>
-		</value-attributes>
+		<value>10s</value>
 		<description>worker heartbeat interval, the unit is second</description>
 		<on-ambari-upgrade add="true"/>
 	</property>

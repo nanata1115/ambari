@@ -616,13 +616,6 @@
           "current_dir": "{0}/current/zookeeper-client/conf",
           "component": "zookeeper-client"
         }
-      ],
-      "dolphinscheduler": [
-        {
-          "conf_dir": "/etc/dolphinscheduler/conf",
-          "current_dir": "{0}/current/dolphinscheduler/conf",
-          "component": "dolphinscheduler-worker"
-        }
       ]
     },
     "conf-select-patching": {

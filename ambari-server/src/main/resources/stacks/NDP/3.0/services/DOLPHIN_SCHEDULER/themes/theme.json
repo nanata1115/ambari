@@ -123,6 +123,10 @@
           "subsection-name": "database-row1-col1"
         },
         {
+          "config": "dolphin-env/dolphin.database.name",
+          "subsection-name": "database-row1-col1"
+        },
+        {
           "config": "dolphin-env/dolphin.database.host",
           "subsection-name": "database-row1-col2"
         },
@@ -177,7 +181,7 @@
           ]
         },
         {
-          "config": "dolphin-common/hdfs.root.user",
+          "config": "dolphin-common/resource.hdfs.root.user",
           "subsection-name": "dynamic-row1-col1",
           "depends-on": [
             {
@@ -199,7 +203,7 @@
           ]
         },
         {
-          "config": "dolphin-common/data.store2hdfs.basepath",
+          "config": "dolphin-common/resource.storage.upload.base.path",
           "subsection-name": "dynamic-row1-col1",
           "depends-on": [
             {
@@ -221,7 +225,7 @@
           ]
         },
         {
-          "config": "dolphin-common/fs.defaultFS",
+          "config": "dolphin-common/resource.hdfs.fs.defaultFS",
           "subsection-name": "dynamic-row1-col1",
           "depends-on": [
             {
@@ -243,7 +247,7 @@
           ]
         },
         {
-          "config": "dolphin-common/fs.s3a.endpoint",
+          "config": "dolphin-common/resource.aws.s3.endpoint",
           "subsection-name": "dynamic-row1-col1",
           "depends-on": [
             {
@@ -265,7 +269,7 @@
           ]
         },
         {
-          "config": "dolphin-common/fs.s3a.access.key",
+          "config": "dolphin-common/resource.aws.access.key.id",
           "subsection-name": "dynamic-row1-col1",
           "depends-on": [
             {
@@ -287,7 +291,7 @@
           ]
         },
         {
-          "config": "dolphin-common/fs.s3a.secret.key",
+          "config": "dolphin-common/resource.aws.secret.access.key",
           "subsection-name": "dynamic-row1-col1",
           "depends-on": [
             {
@@ -502,6 +506,12 @@
         }
       },
       {
+        "config": "dolphin-env/dolphin.database.name",
+        "widget": {
+          "type": "text-field"
+        }
+      },
+      {
         "config": "dolphin-env/dolphin.database.host",
         "widget": {
           "type": "text-field"
@@ -555,7 +565,7 @@
         }
       },
       {
-        "config": "dolphin-common/resource.upload.path",
+        "config": "dolphin-common/resource.storage.upload.base.path",
         "widget": {
           "type": "text-field"
         }
@@ -573,25 +583,25 @@
         }
       },
       {
-        "config": "dolphin-common/fs.defaultFS",
+        "config": "dolphin-common/resource.hdfs.fs.defaultFS",
         "widget": {
           "type": "text-field"
         }
       },
       {
-        "config": "dolphin-common/fs.s3a.endpoint",
+        "config": "dolphin-common/resource.aws.s3.endpoint",
         "widget": {
           "type": "text-field"
         }
       },
       {
-        "config": "dolphin-common/fs.s3a.access.key",
+        "config": "dolphin-common/resource.aws.access.key.id",
         "widget": {
           "type": "text-field"
         }
       },
       {
-        "config": "dolphin-common/fs.s3a.secret.key",
+        "config": "dolphin-common/resource.aws.secret.access.key",
         "widget": {
           "type": "text-field"
         }

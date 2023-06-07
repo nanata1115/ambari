@@ -33,9 +33,9 @@ spring:
       spec: maximumSize=100,expireAfterWrite=300s,recordStats
   datasource:
     driver-class-name: {{dolphin_database_config['dolphin_database_driver']}}
-    url: {{ dolphin_database_config['spring_datasource_url'] }}
-    username: {{ dolphin_database_config['spring_datasource_username'] }}
-    password: {{ dolphin_database_config['spring_datasource_password'] }}
+    url: {{ dolphin_database_config['dolphin_database_url'] }}
+    username: {{ dolphin_database_config['dolphin_database_username'] }}
+    password: {{ dolphin_database_config['dolphin_database_password'] }}
     hikari:
       connection-test-query: select 1
       minimum-idle: 5
@@ -66,7 +66,7 @@ spring:
       org.quartz.jobStore.misfireThreshold: {{dolphin_quartz_map['org.quartz.jobStore.misfireThreshold']}}
       org.quartz.scheduler.batchTriggerAcquisitionMaxCount: {{dolphin_quartz_map['org.quartz.scheduler.batchTriggerAcquisitionMaxCount']}}
       org.quartz.scheduler.makeSchedulerThreadDaemon: {{dolphin_quartz_map['org.quartz.scheduler.makeSchedulerThreadDaemon']}}
-      org.quartz.jobStore.driverDelegateClass: dolphin_quartz_map['org.quartz.jobStore.driverDelegateClass']
+      org.quartz.jobStore.driverDelegateClass: {{dolphin_quartz_map['org.quartz.jobStore.driverDelegateClass']}}
       org.quartz.jobStore.clusterCheckinInterval: {{dolphin_quartz_map['org.quartz.jobStore.clusterCheckinInterval']}}
 
 registry:
@@ -80,7 +80,7 @@ registry:
       max-retries: {{dolphin_registry_map['registry.max.retries']}}
     session-timeout: {{dolphin_registry_map['registry.session.timeout.ms']}}
     connection-timeout: {{dolphin_registry_map['registry.connection.timeout.ms']}}
-    block-until-connected: {{dolphin_registry_map['registry.serversregistry.block.until.connected.wait']}}
+    block-until-connected: {{dolphin_registry_map['registry.block.until.connected.wait']}}
     digest: ~
 
 master:

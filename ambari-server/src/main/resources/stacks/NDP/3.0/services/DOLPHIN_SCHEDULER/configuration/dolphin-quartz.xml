@@ -27,6 +27,14 @@
 		<description></description>
 	</property>
 	<property>
+		<name>org.quartz.scheduler.batchTriggerAcquisitionMaxCount</name>
+		<value>1</value>
+		<value-attributes>
+			<type>int</type>
+		</value-attributes>
+		<description></description>
+	</property>
+	<property>
 		<name>org.quartz.scheduler.makeSchedulerThreadDaemon</name>
 		<value>true</value>
 		<value-attributes>
@@ -109,8 +117,8 @@
 		<description></description>
 	</property>
 	<property>
-		<name>org.quartz.jobStore.dataSource</name>
-		<value>myDs</value>
+		<name>org.quartz.jobStore.tablePrefix</name>
+		<value>QRTZ_</value>
 		<description></description>
 	</property>
 	<property>
