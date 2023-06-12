@@ -66,7 +66,7 @@ downgrade_from_version = upgrade_summary.get_downgrade_from_version("KAFKA")
 hostname = config['agentLevelParams']['hostname']
 
 # default kafka parameters
-kafka_home = '/usr/lib/kafka'
+kafka_home = '/usr/ndp/current/kafka-broker'
 kafka_bin = kafka_home+'/bin/kafka'
 conf_dir = "/etc/kafka/conf"
 limits_conf_dir = "/etc/security/limits.d"

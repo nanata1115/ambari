@@ -564,7 +564,7 @@
       "kafka": [
         {
           "conf_dir": "/etc/kafka/conf",
-          "current_dir": "{0}/current/kafka-broker/conf",
+          "current_dir": "{0}/current/kafka-broker/config",
           "component": "kafka-broker"
         }
       ],
