@@ -95,28 +95,28 @@ def hive_interactive(name = None):
                             )
 
         # dag_meta = params.tez_hook_proto_base_directory + "dag_meta"
-        params.HdfsResource(dag_meta,
-                            type = "directory",
-                            action = "create_on_execute",
-                            owner = params.hive_user,
-                            mode = 01777
-                            )
-
-        # dag_data = params.tez_hook_proto_base_directory + "dag_data"
-        params.HdfsResource(dag_data,
-                            type = "directory",
-                            action = "create_on_execute",
-                            owner = params.hive_user,
-                            mode = 01777
-                            )
-
-        # app_data = params.tez_hook_proto_base_directory + "app_data"
-        params.HdfsResource(app_data,
-                            type="directory",
-                            action="create_on_execute",
-                            owner=params.hive_user,
-                            mode=01777
-                            )
+        # params.HdfsResource(dag_meta,
+        #                     type = "directory",
+        #                     action = "create_on_execute",
+        #                     owner = params.hive_user,
+        #                     mode = 01777
+        #                     )
+        #
+        # # dag_data = params.tez_hook_proto_base_directory + "dag_data"
+        # params.HdfsResource(dag_data,
+        #                     type = "directory",
+        #                     action = "create_on_execute",
+        #                     owner = params.hive_user,
+        #                     mode = 01777
+        #                     )
+        #
+        # # app_data = params.tez_hook_proto_base_directory + "app_data"
+        # params.HdfsResource(app_data,
+        #                     type="directory",
+        #                     action="create_on_execute",
+        #                     owner=params.hive_user,
+        #                     mode=01777
+        #                     )
 
   else:
     Logger.info(format("Not creating warehouse directory '{hive_metastore_warehouse_dir}', as the location is not in DFS."))

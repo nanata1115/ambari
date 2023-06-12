@@ -73,9 +73,9 @@ def hive_service(name, action='start', upgrade_type=None):
     if upgrade_type == UPGRADE_TYPE_ROLLING:
       process_id_exists_command = None
 
-      if params.version and params.stack_root:
-        hadoop_home = format("{stack_root}/{version}/hadoop")
-        hive_bin = os.path.join(params.hive_bin, hive_bin)
+    if params.version and params.stack_root:
+      # hadoop_home = format("{stack_root}/{version}/hadoop-3.3.4")
+      hive_bin = os.path.join(params.hive_bin, hive_bin)
       
     Execute(daemon_cmd, 
       user = params.hive_user,

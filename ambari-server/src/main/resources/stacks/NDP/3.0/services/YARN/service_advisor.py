@@ -1466,10 +1466,10 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
 
     # Set 'hive.tez.container.size' only if it is read as "SET_ON_FIRST_INVOCATION", implying initialization.
     # Else, we don't (1). Override the previous calculated value or (2). User provided value.
-    if is_cluster_create_opr or changed_configs_has_enable_hive_int:
-      mem_per_thread_for_llap = long(mem_per_thread_for_llap)
-      putHiveInteractiveSiteProperty('hive.tez.container.size', mem_per_thread_for_llap)
-      self.logger.info("DBG: Setting 'hive.tez.container.size' config value as : {0}".format(mem_per_thread_for_llap))
+    # if is_cluster_create_opr or changed_configs_has_enable_hive_int:
+    #   mem_per_thread_for_llap = long(mem_per_thread_for_llap)
+    #   putHiveInteractiveSiteProperty('hive.tez.container.size', mem_per_thread_for_llap)
+    #   self.logger.info("DBG: Setting 'hive.tez.container.size' config value as : {0}".format(mem_per_thread_for_llap))
 
     tez_runtime_io_sort_mb = (long((0.8 * mem_per_thread_for_llap) / 3))
     tez_runtime_unordered_output_max_per_buffer_size_bytes=1024*1024*max(min(tez_runtime_io_sort_mb, 256), 128)
@@ -1588,41 +1588,41 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
     # TODO: This potentially takes up the entire node leaving no space for AMs.
     return min(floor(nm_mem_per_node_normalized / mem_per_thread), nm_cpus_per_node)
 
-  def calculate_mem_per_thread_for_llap(self, services, nm_mem_per_node_normalized, cpu_per_nm_host, is_cluster_create_opr=False,
+  # def calculate_mem_per_thread_for_llap(self, services, nm_mem_per_node_normalized, cpu_per_nm_host, is_cluster_create_opr=False,
                                         enable_hive_interactive_1st_invocation=False):
     """
     Calculates 'mem_per_thread_for_llap' for 1st time initialization. Else returns 'hive.tez.container.size' read value.
     """
-    hive_tez_container_size = self.get_hive_tez_container_size(services)
+    # hive_tez_container_size = self.get_hive_tez_container_size(services)
 
-    if is_cluster_create_opr or enable_hive_interactive_1st_invocation:
-      if nm_mem_per_node_normalized <= 1024:
-        calculated_hive_tez_container_size = min(512, nm_mem_per_node_normalized)
-      elif nm_mem_per_node_normalized <= 4096:
-        calculated_hive_tez_container_size = 1024
-      elif nm_mem_per_node_normalized <= 10240:
-        calculated_hive_tez_container_size = 2048
-      elif nm_mem_per_node_normalized <= 24576:
-        calculated_hive_tez_container_size = 3072
-      else:
-        calculated_hive_tez_container_size = 4096
+    # if is_cluster_create_opr or enable_hive_interactive_1st_invocation:
+    #   if nm_mem_per_node_normalized <= 1024:
+    #     calculated_hive_tez_container_size = min(512, nm_mem_per_node_normalized)
+    #   elif nm_mem_per_node_normalized <= 4096:
+    #     calculated_hive_tez_container_size = 1024
+    #   elif nm_mem_per_node_normalized <= 10240:
+    #     calculated_hive_tez_container_size = 2048
+    #   elif nm_mem_per_node_normalized <= 24576:
+    #     calculated_hive_tez_container_size = 3072
+    #   else:
+    #     calculated_hive_tez_container_size = 4096
+    #
+    #   self.logger.info("DBG: Calculated and returning 'hive_tez_container_size' : {0}".format(calculated_hive_tez_container_size))
+    #   return calculated_hive_tez_container_size
+    # else:
+    #   self.logger.info("DBG: Returning 'hive_tez_container_size' : {0}".format(hive_tez_container_size))
+    #   return hive_tez_container_size
 
-      self.logger.info("DBG: Calculated and returning 'hive_tez_container_size' : {0}".format(calculated_hive_tez_container_size))
-      return calculated_hive_tez_container_size
-    else:
-      self.logger.info("DBG: Returning 'hive_tez_container_size' : {0}".format(hive_tez_container_size))
-      return hive_tez_container_size
-
-  def get_hive_tez_container_size(self, services):
-    """
-    Gets HIVE Tez container size (hive.tez.container.size).
-    """
-    hive_container_size = None
-    hsi_site = self.getServicesSiteProperties(services, YARNRecommender.HIVE_INTERACTIVE_SITE)
-    if hsi_site and 'hive.tez.container.size' in hsi_site:
-      hive_container_size = hsi_site['hive.tez.container.size']
-
-    if not hive_container_size:
+  # def get_hive_tez_container_size(self, services):
+  #   """
+  #   Gets HIVE Tez container size (hive.tez.container.size).
+  #   """
+  #   hive_container_size = None
+  #   hsi_site = self.getServicesSiteProperties(services, YARNRecommender.HIVE_INTERACTIVE_SITE)
+  #   if hsi_site and 'hive.tez.container.size' in hsi_site:
+  #     hive_container_size = hsi_site['hive.tez.container.size']
+  #
+  #   if not hive_container_size:
       # This can happen (1). If config is missing in hive-interactive-site or (2). its an
       # upgrade scenario from Ambari 2.4 to Ambari 2.5 with HDP 2.5 installed. Read it
       # from hive-site.
@@ -1630,11 +1630,11 @@ class YARNRecommender(service_advisor.ServiceAdvisor):
       # If Ambari 2.5 after upgrade from 2.4 is managing HDP 2.6 here, this config would have
       # already been added in hive-interactive-site as part of HDP upgrade from 2.5 to 2.6,
       # and we wont end up in this block to look up in hive-site.
-      hive_site = self.getServicesSiteProperties(services, "hive-site")
-      if hive_site and 'hive.tez.container.size' in hive_site:
-        hive_container_size = hive_site['hive.tez.container.size']
-
-    return hive_container_size
+      # hive_site = self.getServicesSiteProperties(services, "hive-site")
+      # if hive_site and 'hive.tez.container.size' in hive_site:
+      #   hive_container_size = hive_site['hive.tez.container.size']
+    #
+    # return hive_container_size
 
   def get_llap_headroom_space(self, services, configurations):
     """

@@ -260,13 +260,6 @@ class StackAdvisor(object):
               "tez.am.java.opts": "-server -Xmx546m -Djava.net.preferIPv4Stack=true -XX:+UseNUMA -XX:+UseParallelGC", 
               "tez.am.resource.memory.mb": "682"
              }
-            }, 
-            "hive-site": {
-             "properties": {
-              "hive.tez.container.size": "682", 
-              "hive.tez.java.opts": "-server -Xmx546m -Djava.net.preferIPv4Stack=true -XX:NewRatio=8 -XX:+UseNUMA -XX:+UseParallelGC", 
-              "hive.auto.convert.join.noconditionaltask.size": "238026752"
-             }
             }
            }
           }, 
@@ -318,13 +311,6 @@ class StackAdvisor(object):
               "tez.am.java.opts": "-server -Xmx546m -Djava.net.preferIPv4Stack=true -XX:+UseNUMA -XX:+UseParallelGC",
               "tez.am.resource.memory.mb": "682"
              }
-            },
-            "hive-site": {
-             "properties": {
-              "hive.tez.container.size": "682",
-              "hive.tez.java.opts": "-server -Xmx546m -Djava.net.preferIPv4Stack=true -XX:NewRatio=8 -XX:+UseNUMA -XX:+UseParallelGC",
-              "hive.auto.convert.join.noconditionaltask.size": "238026752"
-             }
             }
            }
           },
@@ -375,13 +361,6 @@ class StackAdvisor(object):
              "properties": {
               "tez.am.java.opts": "-server -Xmx546m -Djava.net.preferIPv4Stack=true -XX:+UseNUMA -XX:+UseParallelGC",
               "tez.am.resource.memory.mb": "682"
-             }
-            },
-            "hive-site": {
-             "properties": {
-              "hive.tez.container.size": "682",
-              "hive.tez.java.opts": "-server -Xmx546m -Djava.net.preferIPv4Stack=true -XX:NewRatio=8 -XX:+UseNUMA -XX:+UseParallelGC",
-              "hive.auto.convert.join.noconditionaltask.size": "238026752"
              }
             }
            }

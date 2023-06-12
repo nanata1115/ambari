@@ -183,7 +183,6 @@
             <config-type>hive-log4j2</config-type>
             <config-type>hive-site</config-type>
             <config-type>hive-interactive-site</config-type>
-            <config-type>tez-interactive-site</config-type>
             <config-type>hiveserver2-interactive-site</config-type>
             <config-type>hive-interactive-env</config-type>
             <config-type>llap-cli-log4j2</config-type>
@@ -379,9 +378,6 @@
         <config-type>parquet-logging</config-type>
         <config-type>mapred-site</config-type>
         <config-type>application.properties</config-type>
-<!--        <config-type>hive-atlas-application.properties</config-type>-->
-<!--        <config-type>tez-site</config-type>-->
-<!--        <config-type>druid-common</config-type>-->
       </configuration-dependencies>
     </service>
   </services>

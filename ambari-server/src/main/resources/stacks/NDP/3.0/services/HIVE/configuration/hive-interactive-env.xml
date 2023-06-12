@@ -24,7 +24,7 @@
   <property>
     <name>num_llap_nodes</name>
     <value>1</value>
-    <description>Number of nodes used by Hive's LLAP, which includes nodes running : LLAP daemon, YARN Service and Tez App Master(s).</description>
+    <description>Number of nodes used by Hive's LLAP, which includes nodes running : LLAP daemon, YARN Service and  App Master(s).</description>
     <display-name>Number of nodes used by Hive's LLAP</display-name>
     <value-attributes>
       <type>int</type>
@@ -71,14 +71,6 @@
       <property>
         <type>capacity-scheduler</type>
         <name>yarn.scheduler.capacity.root.queues</name>
-      </property>
-      <property>
-        <type>hive-interactive-site</type>
-        <name>hive.server2.tez.sessions.per.default.queue</name>
-      </property>
-      <property>
-        <type>tez-site</type>
-        <name>tez.am.resource.memory.mb</name>
       </property>
     </depends-on>
     <on-ambari-upgrade add="false"/>
@@ -150,10 +142,6 @@
       <property>
         <type>capacity-scheduler</type>
         <name>yarn.scheduler.capacity.root.queues</name>
-      </property>
-      <property>
-        <type>hive-interactive-site</type>
-        <name>hive.server2.tez.sessions.per.default.queue</name>
       </property>
     </depends-on>
   </property>
