@@ -55,10 +55,10 @@ superset_admin_email = config['configurations']['superset-env']['superset_admin_
 superset_env_sh_template = config['configurations']['superset-env']['content']
 superset_user = config['configurations']['superset-env']['superset_user']
 superset_protocol = "http"
-superset_webserver_address=config['configurations']['superset']['SUPERSET_WEBSERVER_ADDRESS']
+superset_webserver_address = config['configurations']['superset']['SUPERSET_WEBSERVER_ADDRESS']
 superset_webserver_port = config['configurations']['superset']['SUPERSET_WEBSERVER_PORT']
 superset_timeout = config['configurations']['superset']['SUPERSET_TIMEOUT']
-superset_workers =  config['configurations']['superset']['SUPERSET_WORKERS']
+superset_workers = config['configurations']['superset']['SUPERSET_WORKERS']
 superset_hosts = default('/clusterHostInfo/superset_hosts', None)
 
 # superset database configs
@@ -71,28 +71,39 @@ superset_db_host = config['configurations']['superset']['SUPERSET_DATABASE_HOSTN
 
 superset_db_uri = None
 if superset_db_type == "sqlite":
-  superset_db_uri = format("sqlite:///{superset_config_dir}/{superset_db_name}.db")
+    superset_db_uri = format("sqlite:///{superset_config_dir}/{superset_db_name}.db")
 elif superset_db_type == "postgresql":
-  superset_db_uri = format("postgresql+pygresql://{superset_db_user}:{superset_db_password}@{superset_db_host}:{superset_db_port}/{superset_db_name}")
+    superset_db_uri = format(
+        "postgresql+pygresql://{superset_db_user}:{superset_db_password}@{superset_db_host}:{superset_db_port}/{superset_db_name}")
 elif superset_db_type == "mysql":
-  superset_db_uri = format("mysql+pymysql://{superset_db_user}:{superset_db_password}@{superset_db_host}:{superset_db_port}/{superset_db_name}")
+    superset_db_uri = format(
+        "mysql+pymysql://{superset_db_user}:{superset_db_password}@{superset_db_host}:{superset_db_port}/{superset_db_name}")
 
 druid_coordinator_hosts = default("/clusterHostInfo/druid_coordinator_hosts", [])
 
 if not len(druid_coordinator_hosts) == 0:
-  druid_coordinator_host = druid_coordinator_hosts[0]
-  druid_coordinator_port = config['configurations']['druid-coordinator']['druid.port']
+    druid_coordinator_host = druid_coordinator_hosts[0]
+    druid_coordinator_port = config['configurations']['druid-coordinator']['druid.port']
 druid_router_hosts = default("/clusterHostInfo/druid_router_hosts", [])
 if not len(druid_router_hosts) == 0:
-  druid_router_host = druid_router_hosts[0]
-  druid_router_port = config['configurations']['druid-router']['druid.port']
+    druid_router_host = druid_router_hosts[0]
+    druid_router_port = config['configurations']['druid-router']['druid.port']
 
 # Configs for which string values need not be quoted
 non_quoted_configs = ['AUTH_TYPE']
 AUTH_NAME_TO_AUTH_ID_MAP = {
-  'AUTH_OID': '0',
-  'AUTH_DB': '1',
-  'AUTH_LDAP': '2',
-  'AUTH_REMOTE': '3',
-  'AUTH_OAUTH' : '4'
+    'AUTH_OID': '0',
+    'AUTH_DB': '1',
+    'AUTH_LDAP': '2',
+    'AUTH_REMOTE': '3',
+    'AUTH_OAUTH': '4'
 }
+
+superset_config = {}
+superset_config.update(config["configurations"]["superset"])
+
+if 'AUTH_TYPE' in superset_config and superset_config['AUTH_TYPE'] in AUTH_NAME_TO_AUTH_ID_MAP:
+    superset_config['AUTH_TYPE'] = AUTH_NAME_TO_AUTH_ID_MAP[superset_config['AUTH_TYPE']]
+
+if superset_db_uri:
+    superset_config["SQLALCHEMY_DATABASE_URI"] = superset_db_uri

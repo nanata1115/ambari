@@ -23,7 +23,7 @@
       <displayName>Superset</displayName>
       <comment>Superset is a data exploration platform designed to be visual, intuitive and interactive. </comment>
       <version>2.0.1</version>
-      <selection>TECH_PREVIEW</selection>
+      <selection>PROD</selection>
       <components>
         <component>
           <name>SUPERSET</name>
@@ -41,7 +41,7 @@
           </configuration-dependencies>
           <logs>
             <log>
-              <logId>suberset</logId>
+              <logId>superset</logId>
               <primary>true</primary>
             </log>
           </logs>
@@ -68,7 +68,7 @@
           <osFamily>redhat7,amazonlinux2,redhat6,suse11,suse12</osFamily>
           <packages>
             <package>
-              <name>superset_${stack_version}</name>
+              <name>superset</name>
             </package>
           </packages>
         </osSpecific>
@@ -76,7 +76,7 @@
           <osFamily>debian7,debian9,ubuntu12,ubuntu14,ubuntu16,ubuntu18</osFamily>
           <packages>
             <package>
-              <name>superset-${stack_version}</name>
+              <name>superset</name>
             </package>
           </packages>
         </osSpecific>

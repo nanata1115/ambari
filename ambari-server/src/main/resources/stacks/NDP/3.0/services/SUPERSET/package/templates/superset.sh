@@ -54,7 +54,7 @@ case $command in
       fi
     fi
 
-    $BIN_DIR/gunicorn -D --workers $WORKERS -p $pid --log-file $LOG_DIR/superset.log -t $TIMEOUT -b $WEBSERVER_ADDRESS:$WEBSERVER_PORT --limit-request-line 0 --limit-request-field_size 0 superset:app
+    $BIN_DIR/gunicorn -D --workers $WORKERS -k gevent --worker-connections 1000 -p $pid --log-file $LOG_DIR/superset.log -t $TIMEOUT -b $WEBSERVER_ADDRESS:$WEBSERVER_PORT --limit-request-line 0 --limit-request-field_size 0 "superset.app:create_app()"
 
     echo "Started Superset"
     ;;

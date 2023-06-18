@@ -130,6 +130,8 @@
       export SUPERSET_WEBSERVER_ADDRESS={{superset_webserver_address}}
       export SUPERSET_TIMEOUT={{superset_timeout}}
       export SUPERSET_WORKERS={{superset_workers}}
+      export FLASK_ENV="PROD"
+      export FLASK_APP="superset"
     </value>
     <on-ambari-upgrade add="true"/>
   </property>

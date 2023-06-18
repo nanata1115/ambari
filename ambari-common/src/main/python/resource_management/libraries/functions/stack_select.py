@@ -192,7 +192,6 @@ def get_packages(scope, service_name = None, component_name = None):
     Logger.error("Temporary disable: The stack packages are not defined on the command. Unable to load packages for the stack-select tool")
     return None
     # raise Fail("The stack packages are not defined on the command. Unable to load packages for the stack-select tool")
-
   data = json.loads(stack_packages_config)
 
   if stack_name not in data:
@@ -211,13 +210,14 @@ def get_packages(scope, service_name = None, component_name = None):
   component_name = component_name.upper()
 
   if service_name not in data:
-    Logger.info("Skipping stack-select on {0} because it does not exist in the stack-select package structure.".format(service_name))
+    Logger.info("Service Skipping stack-select on {0} because it does not exist in the stack-select package structure.".format(service_name))
     return None
 
   data = data[service_name]
 
   if component_name not in data:
-    Logger.info("Skipping stack-select on {0} because it does not exist in the stack-select package structure.".format(component_name))
+    Logger.info("Component Skipping stack-select on {0} because it does not exist in the stack-select package structure.".format(component_name))
+    Logger.info("service :{0}".format(data))
     return None
 
   # this one scope is not an array, so transform it into one for now so we can

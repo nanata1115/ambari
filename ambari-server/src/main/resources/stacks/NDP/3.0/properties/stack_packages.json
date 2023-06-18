@@ -516,6 +516,20 @@
             "dolphin-client"
           ]
         }
+      },
+      "SUPERSET": {
+        "SUPERSET": {
+          "STACK-SELECT-PACKAGE": "superset",
+          "INSTALL": [
+            "superset"
+          ],
+          "PATCH": [
+            "superset"
+          ],
+          "STANDARD": [
+            "superset"
+          ]
+        }
       }
     },
     "conf-select": {
@@ -615,6 +629,13 @@
           "conf_dir": "/etc/zookeeper/conf",
           "current_dir": "{0}/current/zookeeper-client/conf",
           "component": "zookeeper-client"
+        }
+      ],
+      "superset": [
+        {
+          "conf_dir": "/etc/superset/conf",
+          "current_dir": "{0}/current/superset/conf",
+          "component": "superset"
         }
       ]
     },
