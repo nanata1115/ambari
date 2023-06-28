@@ -1,0 +1,49 @@
+{
+  "name": "env",
+  "configuration": {
+    "placement": {
+      "configs": [
+        {
+          "config": "crate-env/content",
+          "subsection-name": "crate-env-configurations-col-1"
+        }
+      ],
+      "configuration-layout": "env"
+    },
+    "widgets": [
+      {
+        "config": "crate-env/content",
+        "widget": {
+          "type": "text-field"
+        }
+      }
+    ],
+    "layouts": [
+      {
+        "name": "env",
+        "tabs": [
+          {
+            "name": "crate_env",
+            "display-name": "crate",
+            "layout": {
+              "sections": [
+                {
+                  "subsections": [
+                    {
+                      "name": "crate-env-configurations-col-1",
+                      "removed": false,
+                      "row-index": "0",
+                      "column-span": "1",
+                      "row-span": "1",
+                      "column-index": "0"
+                    }
+              ],
+              "tab-rows": "1",
+              "tab-columns": "1"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

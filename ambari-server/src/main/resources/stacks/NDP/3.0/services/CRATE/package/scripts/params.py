@@ -23,7 +23,7 @@ from resource_management.libraries.functions.expect import expect
 from resource_management.libraries.functions.copy_tarball import get_sysprep_skip_copy_tarballs_hdfs
 
 if OSCheck.is_windows_family():
-  from params_windows import *
+  None
 else:
   from params_linux import *
 
@@ -32,9 +32,3 @@ java_version = expect("/ambariLevelParams/java_version", int)
 
 
 host_sys_prepped = default("/ambariLevelParams/host_sys_prepped", False)
-
-# By default, copy the tarballs to HDFS. If the cluster is sysprepped, then set based on the config.
-sysprep_skip_copy_oozie_share_lib_to_hdfs = False
-if host_sys_prepped:
-  sysprep_skip_copy_oozie_share_lib_to_hdfs = default("/configurations/cluster-env/sysprep_skip_copy_oozie_share_lib_to_hdfs", False)
-sysprep_skip_oozie_schema_create = host_sys_prepped and default("/configurations/cluster-env/sysprep_skip_oozie_schema_create", False)

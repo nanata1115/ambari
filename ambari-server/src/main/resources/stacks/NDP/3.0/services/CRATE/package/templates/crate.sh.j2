@@ -1,0 +1,64 @@
+#!/bin/bash
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+startStop=$1
+shift
+
+echo "Begin $startStop crate......"
+
+BIN_DIR=`dirname $0`
+BIN_DIR=`cd "$BIN_DIR"; pwd`
+CRATE_HOME=`cd "$BIN_DIR/.."; pwd`
+
+export STOP_TIMEOUT=5
+
+case $startStop in
+  (start)
+    # if server is already started, cancel this launch
+    nohup /bin/bash "$CRATE_HOME/bin/crate" > /usr/ndp/current/crate/logs/crate.out 2>&1 &
+    echo $! > {{crate_pid_path}}
+    ;;
+
+  (stop)
+      if [ -f {{crate_pid_path}} ]; then
+        TARGET_PID=`cat {{crate_pid_path}}`
+        if kill -0 $TARGET_PID > /dev/null 2>&1; then
+          echo "stopping crate $TARGET_PID"
+          kill -15 $TARGET_PID
+          sleep $STOP_TIMEOUT
+          if kill -0 $TARGET_PID > /dev/null 2>&1; then
+            echo "crate did not stop gracefully after $STOP_TIMEOUT seconds: killing with kill -9"
+            kill -9 $TARGET_PID
+          fi
+        else
+          echo no crate to stop
+        fi
+        rm -f {{crate_pid_path}}
+      else
+        echo no crate to stop
+      fi
+      ;;
+
+  (*)
+    echo $usage
+    exit 1
+    ;;
+
+esac
+
+echo "End $startStop crate."

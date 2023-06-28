@@ -1,0 +1,126 @@
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to You under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<configuration>
+    <property>
+        <name>auth.host_based.enabled</name>
+        <value>false</value>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>auth.trust.address</name>
+        <value>localhost</value>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>node.master</name>
+        <value>true</value>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>node.data</name>
+        <value>true</value>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>cluster.name</name>
+        <value>crate</value>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>cluster.graceful_stop.timeout</name>
+        <value>2h</value>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>node.attr.rack</name>
+        <value>rack1</value>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>path.data</name>
+        <value></value>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>transport.tcp.port</name>
+        <value>4300</value>
+    </property>
+    <property>
+        <name>transport.tcp.compress</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>http.port</name>
+        <value>4200</value>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>http.max_content_length</name>
+        <value>100mb</value>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>cluster.routing.allocation.balance.shard</name>
+        <value>0.45f</value>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>cluster.routing.allocation.balance.index</name>
+        <value>0.5f</value>
+        <on-ambari-upgrade add="true"/>
+    </property>
+<!--    <property>-->
+<!--        <name>cluster.routing.allocation.balance.primary</name>-->
+<!--        <value>0.05f</value>-->
+<!--        <on-ambari-upgrade add="true"/>-->
+<!--    </property>-->
+    <property>
+        <name>cluster.routing.allocation.balance.threshold</name>
+        <value>1.0f</value>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>cluster.routing.allocation.disk.threshold_enabled</name>
+        <value>true</value>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>cluster.routing.allocation.disk.watermark.low</name>
+        <value>85%</value>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>cluster.routing.allocation.disk.watermark.high</name>
+        <value>90%</value>\
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>cluster.routing.allocation.disk.watermark.flood_stage</name>
+        <value>95%</value>\
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>psql.enabled</name>
+        <value>false</value>\
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
+        <name>psql.port</name>
+        <value>5432</value>\
+        <on-ambari-upgrade add="true"/>
+    </property>
+</configuration>
