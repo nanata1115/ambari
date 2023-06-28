@@ -17,17 +17,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 """
-from ambari_commons import OSCheck
-from resource_management.libraries.functions import conf_select
-from resource_management.libraries.functions import stack_select
-from resource_management.libraries.resources.hdfs_resource import HdfsResource
-from resource_management.libraries.functions import get_kinit_path
-from resource_management.libraries.script.script import Script
-from resource_management.libraries.functions import format
-from resource_management.libraries.functions.get_not_managed_resources import get_not_managed_resources
-from resource_management.libraries.functions.default import default
-
 import status_params
+from resource_management.libraries.functions import format
+from resource_management.libraries.functions.default import default
+from resource_management.libraries.script.script import Script
 
 # server configurations
 config = Script.get_config()
