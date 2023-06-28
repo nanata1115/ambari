@@ -37,7 +37,7 @@
         "scope": "ANY",
         "source": {
           "type": "SCRIPT",
-          "path": "HDP/3.0/services/spark3/package/scripts/alerts/alert_spark3_livy_port.py",
+          "path": "NDP/3.0/services/spark3/package/scripts/alerts/alert_spark3_livy_port.py",
           "parameters": [
             {
               "name": "check.command.timeout",
@@ -61,7 +61,7 @@
         "scope": "ANY",
         "source": {
           "type": "SCRIPT",
-          "path": "HDP/3.0/services/spark3/package/scripts/alerts/alert_spark3_thrift_port.py",
+          "path": "NDP/3.0/services/spark3/package/scripts/alerts/alert_spark3_thrift_port.py",
           "parameters": [
             {
               "name": "check.command.timeout",

@@ -182,7 +182,7 @@ class HostInfoLinux(HostInfo):
   # Default set of directories that are checked for existence of files and folders
   DEFAULT_BASEDIRS = [
     "/etc", "/var/run", "/var/log", "/usr/lib", "/var/lib", "/var/tmp", "/tmp", "/var",
-    "/hadoop", "/usr/hdp"
+    "/hadoop", "/usr/ndp"
   ]
 
   # Exact directories names which are checked for existance

@@ -26,7 +26,7 @@ import traceback
 from AmbariConfig import AmbariConfig
 import ConfigParser
 
-HADOOP_ROOT_DIR = "/usr/hdp"
+HADOOP_ROOT_DIR = "/usr/ndp"
 HADOOP_PERM_REMOVE_LIST = ["current"]
 HADOOP_ITEMDIR_REGEXP = re.compile("(\d\.){3}\d-\d{4}")
 logger = logging.getLogger(__name__)

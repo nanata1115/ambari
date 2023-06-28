@@ -274,7 +274,7 @@ class TestExecutionCommand(TestCase):
         self.assertEqual(dfs_type, 'HDFS')
 
         module_package_folder = exec_cmd.get_module_package_folder()
-        self.assertEqual(module_package_folder, 'stacks/HDP/3.0/services/HDFS/package')
+        self.assertEqual(module_package_folder, 'stacks/NDP/3.0/services/HDFS/package')
 
         component_hosts = exec_cmd.get_component_hosts("secondary_namenode")
         self.assertEqual(component_hosts, ['host-2.openstacklocal'])

@@ -17,7 +17,7 @@
     {
       "href": "/api/v1/stacks/HDP/versions/3.0/services/HDFS",
       "StackServices": {
-        "advisor_path": "/var/lib/ambari-server/resources/stacks/HDP/3.0/services/HDFS/service_advisor.py",
+        "advisor_path": "/var/lib/ambari-server/resources/stacks/NDP/3.0/services/HDFS/service_advisor.py",
         "service_version": "3.0.0.3.0",
         "stack_name": "HDP",
         "service_name": "HDFS",
