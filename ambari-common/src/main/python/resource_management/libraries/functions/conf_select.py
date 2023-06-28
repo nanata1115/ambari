@@ -232,7 +232,7 @@ def convert_conf_directories_to_symlinks(package, version, dirs):
   # # set it for the installed component:
   # # - Creates /etc/<component>/<version>/0
   # # - Links <stack-root>/<version>/<component>/conf -> /etc/<component>/<version>/0
-  # select(stack_name, package, version, ignore_errors = True)
+  select(stack_name, package, version, ignore_errors = True)
 
   # check every existing link to see if it's a link and if it's pointed to the right spot
   for directory_struct in dirs:
@@ -296,6 +296,8 @@ def convert_conf_directories_to_symlinks(package, version, dirs):
               old_conf, current_dir))
         else:
           # Normal path for other packages
+          Directory(old_conf, mode=0755, cd_access='a', create_parents=True)
+          Directory(old_conf, action = "delete")
           Link(old_conf, to = current_dir)
 
     except Exception, e:
