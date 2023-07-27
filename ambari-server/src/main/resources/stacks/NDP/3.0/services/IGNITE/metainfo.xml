@@ -27,20 +27,19 @@
       <version>2.15.0</version>
       <components>
         <component>
-          <name>HBASE_MASTER</name>
-          <displayName>HBase Master</displayName>
+          <name>Ignite-Server</name>
+          <displayName>Ignite Server</displayName>
           <category>MASTER</category>
           <cardinality>1+</cardinality>
           <versionAdvertised>true</versionAdvertised>
-          <timelineAppid>hbase</timelineAppid>
           <commandScript>
-            <script>scripts/hbase_master.py</script>
+            <script>scripts/ignite_service.py</script>
             <scriptType>PYTHON</scriptType>
             <timeout>1200</timeout>
           </commandScript>
           <logs>
             <log>
-              <logId>hbase_master</logId>
+              <logId>Ignite-Server</logId>
               <primary>true</primary>
             </log>
           </logs>
@@ -48,7 +47,7 @@
             <customCommand>
               <name>DECOMMISSION</name>
               <commandScript>
-                <script>scripts/hbase_master.py</script>
+                <script>scripts/ignite_service.py</script>
                 <scriptType>PYTHON</scriptType>
                 <timeout>600</timeout>
               </commandScript>
@@ -67,40 +66,17 @@
       
       <requiredServices>
         <service>ZOOKEEPER</service>
-        <service>HDFS</service>
       </requiredServices>
 
       <configuration-dependencies>
-        <config-type>core-site</config-type> <!-- hbase puts core-site in it's folder -->
-        <config-type>viewfs-mount-table</config-type>
-        <config-type>hbase-policy</config-type>
-        <config-type>hbase-site</config-type>
-        <config-type>hbase-env</config-type>
-        <config-type>hbase-log4j</config-type>
-        <config-type>ranger-hbase-plugin-properties</config-type>
-        <config-type>ranger-hbase-audit</config-type>
-        <config-type>ranger-hbase-policymgr-ssl</config-type>
-        <config-type>ranger-hbase-security</config-type>
-        <config-type>hbase-atlas-application-properties</config-type>
+        <config-type>ignite-conf</config-type>
       </configuration-dependencies>
-
-      <quickLinksConfigurations>
-        <quickLinksConfiguration>
-          <fileName>quicklinks.json</fileName>
-          <default>true</default>
-        </quickLinksConfiguration>
-      </quickLinksConfigurations>
-
       <osSpecifics>
         <osSpecific>
           <osFamily>redhat7,amazonlinux2,redhat6,suse11,suse12</osFamily>
           <packages>
             <package>
-              <name>hbase_${stack_version}</name>
-            </package>
-            <package>
-              <name>phoenix_${stack_version}</name>
-              <condition>should_install_phoenix</condition>
+              <name>apache-ignite</name>
             </package>
           </packages>
         </osSpecific>

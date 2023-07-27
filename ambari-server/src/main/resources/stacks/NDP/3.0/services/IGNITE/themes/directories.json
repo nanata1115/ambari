@@ -1,6 +1,6 @@
 {
   "name": "directories",
-  "description": "Directories theme for HBASE service",
+  "description": "Directories theme for  service",
   "configuration": {
     "layouts": [
       {
@@ -80,84 +80,14 @@
       "configuration-layout": "default",
       "configs": [
         {
-          "config": "hbase-env/hbase_pid_dir",
+          "config": "-env/_pid_dir",
           "subsection-name": "subsection-pid-dirs"
-        },
-        {
-          "config": "hbase-env/hbase_log_dir",
-          "subsection-name": "subsection-log-dirs"
-        },
-        {
-          "config": "hbase-env/hbase_java_io_tmpdir",
-          "subsection-name": "subsection-data-dirs"
-        },
-        {
-          "config": "hbase-site/hbase.bulkload.staging.dir",
-          "subsection-name": "subsection-data-dirs"
-        },
-        {
-          "config": "hbase-site/hbase.local.dir",
-          "subsection-name": "subsection-data-dirs"
-        },
-        {
-          "config": "hbase-site/hbase.rootdir",
-          "subsection-name": "subsection-data-dirs"
-        },
-        {
-          "config": "hbase-site/hbase.tmp.dir",
-          "subsection-name": "subsection-data-dirs"
-        },
-        {
-          "config": "hbase-site/zookeeper.znode.parent",
-          "subsection-name": "subsection-data-dirs"
         }
       ]
     },
     "widgets": [
       {
-        "config": "hbase-env/hbase_pid_dir",
-        "widget": {
-          "type": "text-field"
-        }
-      },
-      {
-        "config": "hbase-env/hbase_log_dir",
-        "widget": {
-          "type": "text-field"
-        }
-      },
-      {
-        "config": "hbase-env/hbase_java_io_tmpdir",
-        "widget": {
-          "type": "directories"
-        }
-      },
-      {
-        "config": "hbase-site/hbase.bulkload.staging.dir",
-        "widget": {
-          "type": "directories"
-        }
-      },
-      {
-        "config": "hbase-site/hbase.local.dir",
-        "widget": {
-          "type": "directories"
-        }
-      },
-      {
-        "config": "hbase-site/hbase.rootdir",
-        "widget": {
-          "type": "text-field"
-        }
-      },
-      {
-        "config": "hbase-site/hbase.tmp.dir",
-        "widget": {
-          "type": "text-field"
-        }
-      },
-      {
-        "config": "hbase-site/zookeeper.znode.parent",
+        "config": "-env/_pid_dir",
         "widget": {
           "type": "text-field"
         }

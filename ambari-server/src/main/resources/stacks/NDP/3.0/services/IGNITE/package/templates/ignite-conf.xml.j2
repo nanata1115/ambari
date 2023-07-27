@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="org.apache.ignite.configuration.IgniteConfiguration">
+        <property name="dataStorageConfiguration">
+            <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
+                <property name="defaultDataRegionConfiguration">
+                    <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                        <property name="persistenceEnabled" value="{{ignite_conf['DataStorageConfiguration.DataRegionConfiguration.persistenceEnabled']}}"/>
+                        <property name="initialSize" value="{{ignite_conf['DataStorageConfiguration.DataRegionConfiguration.initialSize']}}"/>
+                        <!-- 20 GB maximum size (RAM). -->
+                        <property name="maxSize" value="{{ignite_conf['DataStorageConfiguration.DataRegionConfiguration.maxSize']}}"/>
+                        <!-- Enabling RANDOM_LRU eviction for this region.  -->
+                        <property name="pageEvictionMode" value="{{ignite_conf['DataStorageConfiguration.DataRegionConfiguration.pageEvictionMode']}}"/>
+                    </bean>
+                </property>
+                <property name="defaultWarmUpConfiguration">
+                    <bean class="{{ignite_conf['DataStorageConfiguration.defaultWarmUpConfiguration']}}"/>
+                </property>
+                <property name="storagePath" value="{{ignite_conf['DataStorageConfiguration.storagePath']}}"/>
+                <property name="walPath" value="{{ignite_conf['DataStorageConfiguration.walPath']}}"/>
+                <property name="walArchivePath" value="{{ignite_conf['DataStorageConfiguration.walArchivePath']}}"/>
+                <property name="walCompactionEnabled" value="{{ignite_conf['DataStorageConfiguration.walCompactionEnabled']}}"/>
+                <property name="walCompactionLevel" value="{{ignite_conf['DataStorageConfiguration.walCompactionLevel']}}"/>
+                <property name="walMode" value="{{ignite_conf['DataStorageConfiguration.walMode']}}"/>
+                <!-- set the size of wal segments to 128MB -->
+                <property name="walSegmentSize" value="{{ignite_conf['DataStorageConfiguration.walSegmentSize']}}"/>
+                <property name="pageSize" value="{{ignite_conf['DataStorageConfiguration.pageSize']}}"/>
+            </bean>
+        </property>
+        <property name="cacheConfiguration">
+            <bean class="org.apache.ignite.configuration.CacheConfiguration">
+                <property name="name" value="myCacheTemplate*"/>
+                <!-- enable disk page compression for this cache -->
+                <property name="diskPageCompression" value="{{ignite_conf['cacheConfiguration.diskPageCompression']}}"/>
+                <!-- optionally set the compression level -->
+                <property name="diskPageCompressionLevel" value="{{ignite_conf['cacheConfiguration.diskPageCompressionLevel']}}"/>
+                <property name="cacheMode" value="{{ignite_conf['cacheConfiguration.cacheMode']}}"/>
+                <property name="onheapCacheEnabled" value="{{ignite_conf['cacheConfiguration.onheapCacheEnabled']}}"/>
+                <property name="backups" value="{{ignite_conf['cacheConfiguration.backups']}}"/>
+                <property name="rebalanceMode" value="{{ignite_conf['cacheConfiguration.rebalanceMode']}}"/>
+                <property name="writeSynchronizationMode" value="{{ignite_conf['cacheConfiguration.writeSynchronizationMode']}}"/>
+                <property name="partitionLossPolicy" value="{{ignite_conf['cacheConfiguration.partitionLossPolicy']}}"/>
+                <property name="atomicityMode" value="{{ignite_conf['cacheConfiguration.atomicityMode']}}"/>
+            </bean>
+        </property>
+        <property name="transactionConfiguration">
+            <bean class="org.apache.ignite.configuration.TransactionConfiguration">
+                <!-- Configure TM lookup here. -->
+            </bean>
+        </property>
+        <property name="discoverySpi">
+            <bean class="org.apache.ignite.spi.discovery.zk.ZookeeperDiscoverySpi">
+              <property name="zkConnectionString" value="{{ignite_conf['zkConnectionString']}}"/>
+              <property name="sessionTimeout" value="30000"/>
+              <property name="zkRootPath" value="/apacheIgnite"/>
+              <property name="joinTimeout" value="10000"/>
+            </bean>
+        </property>
+         <!-- Thin client connection configuration. -->
+        <property name="clientConnectorConfiguration">
+            <bean class="org.apache.ignite.configuration.ClientConnectorConfiguration">
+                <property name="host" value="0.0.0.0"/>
+                <property name="port" value="{{ignite_conf['clientConnectorConfiguration.port']}}"/>
+                <property name="portRange" value="30"/>
+            </bean>
+        </property>
+    </bean>
+</beans>
+
