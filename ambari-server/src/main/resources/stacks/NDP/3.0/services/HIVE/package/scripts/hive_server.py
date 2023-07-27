@@ -19,7 +19,7 @@ limitations under the License.
 """
 
 # Local Imports
-from hive import hive
+from hive import hive, make_tarfile
 import hive_server_upgrade
 from hive_service import hive_service
 from setup_ranger_hive import setup_ranger_hive
@@ -30,7 +30,7 @@ from resource_management.core.resources.zkmigrator import ZkMigrator
 from resource_management.libraries.functions import stack_select
 from resource_management.libraries.functions import StackFeature
 from resource_management.libraries.functions.check_process_status import check_process_status
-from resource_management.libraries.functions.copy_tarball import copy_to_hdfs
+from resource_management.libraries.functions.copy_tarball import copy_to_hdfs, get_tarball_paths
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.script.script import Script
 
@@ -86,7 +86,9 @@ class HiveServer(Script):
 
     if params.version and check_stack_feature(StackFeature.ROLLING_UPGRADE, params.version):
       stack_select.select_packages(params.version)
-
+      source_dirs = [params.hadoop_home + "/share/hadoop/mapreduce"]
+      tmp_archive_file = get_tarball_paths("mapreduce")[1]
+      make_tarfile(tmp_archive_file, source_dirs)
       # Copy mapreduce.tar.gz and tez.tar.gz to HDFS
       resource_created = copy_to_hdfs(
         "mapreduce",
@@ -94,12 +96,14 @@ class HiveServer(Script):
         params.hdfs_user,
         skip=params.sysprep_skip_copy_tarballs_hdfs)
 
-      # resource_created = copy_to_hdfs(
-      #   "tez",
-      #   params.user_group,
-      #   params.hdfs_user,
-      #   skip=params.sysprep_skip_copy_tarballs_hdfs) or resource_created
-
+      resource_created = copy_to_hdfs(
+        "tez",
+        params.user_group,
+        params.hdfs_user,
+        skip=params.sysprep_skip_copy_tarballs_hdfs) or resource_created
+      source_dirs = [params.hadoop_home + "/share/hadoop/yarn"]
+      tmp_archive_file = get_tarball_paths("yarn")[1]
+      make_tarfile(tmp_archive_file, source_dirs)
       resource_created = copy_to_hdfs(
         "yarn",
         params.user_group,

@@ -21,7 +21,10 @@ limitations under the License.
 # Python Imports
 import os
 import glob
+import shutil
+import tarfile
 import traceback
+from contextlib import closing
 from urlparse import urlparse
 
 # Ambari Commons & Resource Management Imports
@@ -32,7 +35,7 @@ from resource_management.core.logger import Logger
 from resource_management.core.shell import as_user, quote_bash_args
 from resource_management.core.source import StaticFile, Template, DownloadSource, InlineTemplate
 from resource_management.libraries.functions import StackFeature
-from resource_management.libraries.functions.copy_tarball import copy_to_hdfs
+from resource_management.libraries.functions.copy_tarball import copy_to_hdfs, get_tarball_paths
 from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions.generate_logfeeder_input_config import generate_logfeeder_input_config
@@ -72,7 +75,19 @@ def hive(name=None):
             owner = params.hive_user,
             group = params.user_group,
             mode = 0644)
-
+  XmlConfig("tez-site.xml",
+            conf_dir=params.hive_config_dir,
+            configurations=params.tez_site_config,
+            configuration_attributes=params.config['configurationAttributes']['tez-site'],
+            owner=params.hive_user,
+            group=params.user_group,
+            mode=0644)
+  File(format("{hive_config_dir}/tez-env.sh"),
+       owner=params.hive_user,
+       group=params.user_group,
+       content=InlineTemplate(params.tez_env_sh_template),
+       mode=0755
+       )
   # Generate atlas-application.properties.xml file
   if params.enable_atlas_hook:
     atlas_hook_filepath = os.path.join(params.hive_config_dir, params.atlas_hook_filename)
@@ -119,6 +134,20 @@ def hive(name=None):
     setup_hiveserver2()
   if name == 'metastore':
     setup_metastore()
+def make_tarfile(output_filename, source_dirs):
+  try:
+    os.remove(output_filename)
+  except OSError:
+    pass
+  parent_dir=os.path.dirname(output_filename)
+  if not os.path.exists(parent_dir):
+    os.makedirs(parent_dir)
+  os.chmod(parent_dir, 0711)
+  with closing(tarfile.open(output_filename, "w:gz")) as tar:
+    for dir in source_dirs:
+      for file in os.listdir(dir):
+        tar.add(os.path.join(dir,file),arcname=file)
+  os.chmod(output_filename, 0644)
 
 def setup_hiveserver2():
   import params
@@ -145,9 +174,12 @@ def setup_hiveserver2():
   # ****** Begin Copy Tarballs ******
   # *********************************
   #  if copy tarball to HDFS feature  supported copy mapreduce.tar.gz and tez.tar.gz to HDFS
-  # if params.stack_version_formatted_major and check_stack_feature(StackFeature.COPY_TARBALL_TO_HDFS, params.stack_version_formatted_major):
-  #   copy_to_hdfs("mapreduce", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs)
-    # copy_to_hdfs("tez", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs)
+  if params.stack_version_formatted_major and check_stack_feature(StackFeature.COPY_TARBALL_TO_HDFS, params.stack_version_formatted_major):
+      source_dirs = [params.hadoop_home + "/share/hadoop/mapreduce"]
+      tmp_archive_file = get_tarball_paths("mapreduce")[1]
+      make_tarfile(tmp_archive_file, source_dirs)
+      copy_to_hdfs("mapreduce", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs)
+      copy_to_hdfs("tez", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs)
 
   # Always copy pig.tar.gz and hive.tar.gz using the appropriate mode.
   # This can use a different source and dest location to account
@@ -165,7 +197,7 @@ def setup_hiveserver2():
   #              custom_source_file=params.hive_tar_source,
   #              custom_dest_file=params.hive_tar_dest_file,
   #              skip=params.sysprep_skip_copy_tarballs_hdfs)
-  #
+
   # wildcard_tarballs = ["sqoop", "hadoop_streaming"]
   # for tarball_name in wildcard_tarballs:
   #   source_file_pattern = eval("params." + tarball_name + "_tar_source")
@@ -191,13 +223,13 @@ def setup_hiveserver2():
 
   # if warehouse directory is in DFS
   if not params.whs_dir_protocol or params.whs_dir_protocol == urlparse(params.default_fs).scheme:
-    # if not is_empty(params.tez_hook_proto_base_directory):
-    #   params.HdfsResource(params.tez_hook_proto_base_directory,
-    #                       type = "directory",
-    #                       action = "create_on_execute",
-    #                       owner = params.hive_user,
-    #                       mode = 01755
-    #                       )
+    if not is_empty(params.tez_hook_proto_base_directory):
+      params.HdfsResource(params.tez_hook_proto_base_directory,
+                          type = "directory",
+                          action = "create_on_execute",
+                          owner = params.hive_user,
+                          mode = 01755
+                          )
 
     if not is_empty(params.hive_hook_proto_base_directory):
         params.HdfsResource(params.hive_hook_proto_base_directory,
@@ -207,29 +239,29 @@ def setup_hiveserver2():
                             mode = 01777
                             )
 
-        # dag_meta = params.tez_hook_proto_base_directory + "dag_meta"
-        # params.HdfsResource(dag_meta,
-        #                     type = "directory",
-        #                     action = "create_on_execute",
-        #                     owner = params.hive_user,
-        #                     mode = 01777
-        #                     )
-        #
-        # dag_data = params.tez_hook_proto_base_directory + "dag_data"
-        # params.HdfsResource(dag_data,
-        #                     type = "directory",
-        #                     action = "create_on_execute",
-        #                     owner = params.hive_user,
-        #                     mode = 01777
-        #                     )
-        #
-        # app_data = params.tez_hook_proto_base_directory + "app_data"
-        # params.HdfsResource(app_data,
-        #                     type = "directory",
-        #                     action = "create_on_execute",
-        #                     owner = params.hive_user,
-        #                     mode = 01777
-        #                     )
+        dag_meta = params.tez_hook_proto_base_directory + "dag_meta"
+        params.HdfsResource(dag_meta,
+                            type = "directory",
+                            action = "create_on_execute",
+                            owner = params.hive_user,
+                            mode = 01777
+                            )
+
+        dag_data = params.tez_hook_proto_base_directory + "dag_data"
+        params.HdfsResource(dag_data,
+                            type = "directory",
+                            action = "create_on_execute",
+                            owner = params.hive_user,
+                            mode = 01777
+                            )
+
+        app_data = params.tez_hook_proto_base_directory + "app_data"
+        params.HdfsResource(app_data,
+                            type = "directory",
+                            action = "create_on_execute",
+                            owner = params.hive_user,
+                            mode = 01777
+                            )
 
   if not is_empty(params.hive_exec_scratchdir) and not urlparse(params.hive_exec_scratchdir).path.startswith("/tmp"):
     params.HdfsResource(params.hive_exec_scratchdir,

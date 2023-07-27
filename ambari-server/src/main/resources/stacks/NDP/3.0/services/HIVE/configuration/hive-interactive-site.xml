@@ -48,6 +48,39 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>hive.server2.tez.sessions.per.default.queue</name>
+    <value>1</value>
+    <description>
+      The maximum number of queries the Hive Interactive cluster will be able to handle concurrently.
+    </description>
+    <display-name>Maximum Total Concurrent Queries</display-name>
+    <value-attributes>
+      <type>int</type>
+      <minimum>1</minimum>
+      <maximum>10</maximum>
+      <increment-step>1</increment-step>
+    </value-attributes>
+    <depends-on>
+      <property>
+        <type>hive-interactive-env</type>
+        <name>enable_hive_interactive</name>
+      </property>
+      <property>
+        <type>hive-interactive-env</type>
+        <name>num_llap_nodes</name>
+      </property>
+      <property>
+        <type>hive-interactive-site</type>
+        <name>hive.llap.daemon.queue.name</name>
+      </property>
+      <property>
+        <type>capacity-scheduler</type>
+        <name>yarn.scheduler.capacity.root.queues</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>hive.server2.enable.doAs</name>
     <value>false</value>
     <description>
@@ -85,6 +118,51 @@ limitations under the License.
       query execution.
     </description>
     <display-name>Enable Reduce Vectorization</display-name>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.server2.tez.default.queues</name>
+    <display-name>Default query queues</display-name>
+    <value>default</value>
+    <description>
+      A list of comma separated values corresponding to YARN queues of the same name.
+      When HiveServer2 is launched in Tez mode, this configuration needs to be set
+      for multiple Tez sessions to run in parallel on the cluster.
+    </description>
+    <value-attributes>
+      <type>combo</type>
+      <entries>
+        <entry>
+          <value>default</value>
+          <label>Default</label>
+        </entry>
+      </entries>
+      <selection-cardinality>1+</selection-cardinality>
+    </value-attributes>
+    <depends-on>
+      <property>
+        <type>capacity-scheduler</type>
+        <name>yarn.scheduler.capacity.root.queues</name>
+      </property>
+      <property>
+        <type>hive-interactive-site</type>
+        <name>hive.llap.daemon.queue.name</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.server2.tez.initialize.default.sessions</name>
+    <value>true</value>
+    <description>
+      This flag is used in HiveServer2 to enable a user to use HiveServer2 without
+      turning on Tez for HiveServer2. The user could potentially want to run queries
+      over Tez without the pool of sessions.
+    </description>
+    <display-name>Start Tez session at Initialization</display-name>
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
@@ -228,6 +306,15 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>hive.tez.input.generate.consistent.splits</name>
+    <value>true</value>
+    <description>Whether to generate consistent split locations when generating splits in the AM</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>hive.llap.client.consistent.splits</name>
     <description>
       Whether to setup split locations to match nodes on which llap daemons are running,
@@ -291,6 +378,14 @@ limitations under the License.
         <type>capacity-scheduler</type>
         <name>yarn.scheduler.capacity.root.queues</name>
       </property>
+      <property>
+        <type>hive-interactive-site</type>
+        <name>hive.server2.tez.sessions.per.default.queue</name>
+      </property>
+      <property>
+        <type>tez-site</type>
+        <name>tez.am.resource.memory.mb</name>
+      </property>
     </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -321,6 +416,14 @@ limitations under the License.
       <property>
         <type>capacity-scheduler</type>
         <name>yarn.scheduler.capacity.root.queues</name>
+      </property>
+      <property>
+        <type>hive-interactive-site</type>
+        <name>hive.server2.tez.sessions.per.default.queue</name>
+      </property>
+      <property>
+        <type>tez-site</type>
+        <name>tez.am.resource.memory.mb</name>
       </property>
     </depends-on>
     <on-ambari-upgrade add="false"/>
@@ -409,6 +512,10 @@ limitations under the License.
       <property>
         <type>capacity-scheduler</type>
         <name>yarn.scheduler.capacity.root.queues</name>
+      </property>
+      <property>
+        <type>hive-interactive-site</type>
+        <name>hive.server2.tez.sessions.per.default.queue</name>
       </property>
     </depends-on>
     <on-ambari-upgrade add="false"/>
@@ -508,6 +615,15 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>hive.tez.exec.print.summary</name>
+    <value>true</value>
+    <description>Display breakdown of execution steps, for every query executed by the shell.</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>hive.vectorized.execution.mapjoin.native.enabled</name>
     <value>true</value>
     <description>
@@ -596,6 +712,33 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>hive.tez.container.size</name>
+    <value>682</value>
+    <depends-on>
+      <property>
+        <type>hive-interactive-env</type>
+        <name>enable_hive_interactive</name>
+      </property>
+      <property>
+        <type>hive-interactive-env</type>
+        <name>num_llap_nodes</name>
+      </property>
+      <property>
+        <type>hive-interactive-site</type>
+        <name>hive.llap.daemon.queue.name</name>
+      </property>
+      <property>
+        <type>capacity-scheduler</type>
+        <name>yarn.scheduler.capacity.root.queues</name>
+      </property>
+      <property>
+        <type>hive-interactive-site</type>
+        <name>hive.server2.tez.sessions.per.default.queue</name>
+      </property>
+    </depends-on>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>hive.auto.convert.join.noconditionaltask.size</name>
     <value>1000000000</value>
     <description>If hive.auto.convert.join.noconditionaltask is off, this parameter does not take affect. However, if it
@@ -618,6 +761,10 @@ limitations under the License.
       <property>
         <type>capacity-scheduler</type>
         <name>yarn.scheduler.capacity.root.queues</name>
+      </property>
+      <property>
+        <type>hive-interactive-site</type>
+        <name>hive.server2.tez.sessions.per.default.queue</name>
       </property>
     </depends-on>
     <on-ambari-upgrade add="false"/>
@@ -666,6 +813,16 @@ limitations under the License.
   </property>
 
   <property>
+    <name>hive.tez.cartesian-product.enabled</name>
+    <value>true</value>
+    <description>Use Tez cartesian product edge for Hive cartesian product</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+  <property>
     <name>hive.llap.daemon.logger</name>
     <value>query-routing</value>
     <description>Logger to be used by LLAP. (query-routing, RFA)</description>
@@ -674,9 +831,39 @@ limitations under the License.
   </property>
 
   <property>
+    <name>hive.server2.tez.sessions.custom.queue.allowed</name>
+    <value>ignore</value>
+    <description>Whether to allow the users of this HS2 to specify custom queues - yes, no (fail if specified), ignore (use the default queues even if a custom one is specified)</description>
+    <display-name>Allow custom queues</display-name>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+  <property>
+    <name>hive.server2.tez.sessions.restricted.configs</name>
+    <value>hive.execution.mode,hive.execution.engine</value>
+    <description>The list of configuration settings that the users of the session pool of this HS2 are not allowed to override</description>
+    <display-name>Restricted session configs</display-name>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+  <property>
+    <name>hive.tez.bucket.pruning</name>
+    <value>true</value>
+    <description>
+      When pruning is enabled, filters on bucket columns will be processed by
+      filtering the splits against a bitset of included buckets. This needs predicates
+      produced by hive.optimize.ppd and hive.optimize.index.filters.
+    </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+
+  <property>
     <name>hive.llap.daemon.am.liveness.heartbeat.interval.ms</name>
     <value>10000ms</value>
-    <description> AM-LLAP heartbeat interval. This should be below the task timeout</description>
+    <description>Tez AM-LLAP heartbeat interval. This should be below the task timeout</description>
     <on-ambari-upgrade add="false"/>
   </property>
 

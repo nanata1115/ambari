@@ -186,7 +186,7 @@ hive_server_conf_dir = status_params.hive_server_conf_dir
 # DON'T CHANGE THESE VARIABLE NAMES
 # Values don't change from those in copy_tarball.py
 hive_tar_source = "{0}/{1}/hive/hive.tar.gz".format(STACK_ROOT_PATTERN, STACK_VERSION_PATTERN)
-pig_tar_source = "{0}/{1}/pig/pig.tar.gz".format(STACK_ROOT_PATTERN, STACK_VERSION_PATTERN)
+#pig_tar_source = "{0}/{1}/pig/pig.tar.gz".format(STACK_ROOT_PATTERN, STACK_VERSION_PATTERN)
 hive_tar_dest_file = "/{0}/apps/{1}/hive/hive.tar.gz".format(STACK_NAME_PATTERN,STACK_VERSION_PATTERN)
 pig_tar_dest_file = "/{0}/apps/{1}/pig/pig.tar.gz".format(STACK_NAME_PATTERN, STACK_VERSION_PATTERN)
 
@@ -446,6 +446,9 @@ if 'parquet-logging' in config['configurations']:
 process_name = status_params.process_name
 hive_env_sh_template = config['configurations']['hive-env']['content']
 
+
+tez_env_sh_template = config['configurations']['tez-env']['content']
+
 hive_hdfs_user_dir = format("/user/{hive_user}")
 hive_hdfs_user_mode = 0755
 hive_metastore_warehouse_dir = config['configurations']['hive-site']["hive.metastore.warehouse.dir"]
@@ -455,7 +458,7 @@ hive_exec_scratchdir = config['configurations']['hive-site']["hive.exec.scratchd
 
 # Hive and Tez hook directories
 hive_hook_proto_base_directory = format(config['configurations']['hive-site']["hive.hook.proto.base-directory"])
-# tez_hook_proto_base_directory = format("{hive_metastore_warehouse_external_dir}/sys.db/")
+tez_hook_proto_base_directory = format("{hive_metastore_warehouse_external_dir}/sys.db/")
 
 
 #for create_hdfs_directory
@@ -463,7 +466,7 @@ hdfs_user_keytab = config['configurations']['hadoop-env']['hdfs_user_keytab']
 hdfs_principal_name = default('/configurations/hadoop-env/hdfs_principal_name', 'missing_principal').replace("_HOST", hostname)
 
 # Tez-related properties
-# tez_user = config['configurations']['tez-env']['tez_user']
+tez_user = config['configurations']['tez-env']['tez_user']
 
 # Tez jars
 # tez_local_api_jars = '/usr/lib/tez/tez*.jar'
@@ -485,9 +488,11 @@ hive_authorization_enabled = config['configurations']['hiveserver2-site']['hive.
 mysql_jdbc_driver_jar = "/usr/share/java/mysql-connector-java.jar"
 
 hive_site_config = dict(config['configurations']['hive-site'])
-hive_site_config["hive.execution.engine"] = "spark"
+hive_site_config["hive.execution.engine"] = "tez"
 hive_site_config["hive.metastore.db.type"] = hive_metastore_db_type.upper()
 hive_site_config["hive.hook.proto.base-directory"] = hive_hook_proto_base_directory
+
+tez_site_config = dict(config['configurations']['tez-site'])
 
 
 
@@ -625,8 +630,8 @@ if has_hive_interactive:
   else:
     hive_server_interactive_port = default('/configurations/hive-interactive-site/hive.server2.thrift.port',"10500")
   # Tez for Hive interactive related
-  # tez_interactive_conf_dir = status_params.tez_interactive_conf_dir
-  # tez_interactive_user = config['configurations']['tez-env']['tez_user']
+  tez_interactive_conf_dir = status_params.tez_interactive_conf_dir
+  tez_interactive_user = config['configurations']['tez-env']['tez_user']
   num_retries_for_checking_llap_status = config['configurations']['hive-interactive-env']['num_retries_for_checking_llap_status']
   # Used in LLAP YARN Service package creation
   yarn_nm_mem = config['configurations']['yarn-site']['yarn.nodemanager.resource.memory-mb']

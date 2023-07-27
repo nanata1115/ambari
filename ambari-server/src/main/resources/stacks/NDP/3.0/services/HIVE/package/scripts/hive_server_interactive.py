@@ -72,11 +72,11 @@ class HiveServerInteractive(Script):
           params.hdfs_user,
           skip=params.sysprep_skip_copy_tarballs_hdfs)
 
-        # resource_created = copy_to_hdfs(
-        #   "tez_hive2",
-        #   params.user_group,
-        #   params.hdfs_user,
-        #   skip=params.sysprep_skip_copy_tarballs_hdfs) or resource_created
+        resource_created = copy_to_hdfs(
+          "tez_hive2",
+          params.user_group,
+          params.hdfs_user,
+          skip=params.sysprep_skip_copy_tarballs_hdfs) or resource_created
 
         resource_created = copy_to_hdfs(
           "yarn",

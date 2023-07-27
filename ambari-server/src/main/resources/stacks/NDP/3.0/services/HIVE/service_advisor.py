@@ -290,23 +290,23 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
 
     yarnMaxAllocationSize = min(30 * int(configurations["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]), int(configurations["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
     #duplicate tez task resource calc logic, direct dependency doesn't look good here (in case of Hive without Tez)
-    # tez_container_size = min(containerSize, yarnMaxAllocationSize)
-    # putHiveSitePropertyAttribute("hive.tez.container.size", "minimum", int(configurations["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]))
-    # putHiveSitePropertyAttribute("hive.tez.container.size", "maximum", int(configurations["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
-    # if "yarn-site" in configurations:
-    #   if "yarn.scheduler.minimum-allocation-mb" in configurations["yarn-site"]["properties"]:
-        # putHiveSitePropertyAttribute("hive.tez.container.size", "minimum", int(configurations["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]))
-        # tez_container_size = max(tez_container_size, int(configurations["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]))
-      # if "yarn.scheduler.maximum-allocation-mb" in configurations["yarn-site"]["properties"]:
-      #   putHiveSitePropertyAttribute("hive.tez.container.size", "maximum", int(configurations["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
-      #   tez_container_size = min(tez_container_size, int(configurations["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
+    tez_container_size = min(containerSize, yarnMaxAllocationSize)
+    putHiveSitePropertyAttribute("hive.tez.container.size", "minimum", int(configurations["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]))
+    putHiveSitePropertyAttribute("hive.tez.container.size", "maximum", int(configurations["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
+    if "yarn-site" in configurations:
+      if "yarn.scheduler.minimum-allocation-mb" in configurations["yarn-site"]["properties"]:
+        putHiveSitePropertyAttribute("hive.tez.container.size", "minimum", int(configurations["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]))
+        tez_container_size = max(tez_container_size, int(configurations["yarn-site"]["properties"]["yarn.scheduler.minimum-allocation-mb"]))
+      if "yarn.scheduler.maximum-allocation-mb" in configurations["yarn-site"]["properties"]:
+        putHiveSitePropertyAttribute("hive.tez.container.size", "maximum", int(configurations["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
+        tez_container_size = min(tez_container_size, int(configurations["yarn-site"]["properties"]["yarn.scheduler.maximum-allocation-mb"]))
 
-    # putHiveSiteProperty("hive.tez.container.size", tez_container_size)
-    # tez_container_size_bytes = int(int(tez_container_size)*0.8*1024*1024) # Xmx == 80% of container
+    putHiveSiteProperty("hive.tez.container.size", tez_container_size)
+    tez_container_size_bytes = int(int(tez_container_size)*0.8*1024*1024) # Xmx == 80% of container
 
     # Memory
-    # putHiveSiteProperty("hive.auto.convert.join.noconditionaltask.size", int(round(tez_container_size_bytes/3)))
-    # putHiveSitePropertyAttribute("hive.auto.convert.join.noconditionaltask.size", "maximum", tez_container_size_bytes)
+    putHiveSiteProperty("hive.auto.convert.join.noconditionaltask.size", int(round(tez_container_size_bytes/3)))
+    putHiveSitePropertyAttribute("hive.auto.convert.join.noconditionaltask.size", "maximum", tez_container_size_bytes)
 
     # CBO
     if "hive-site" in services["configurations"] and "hive.cbo.enable" in services["configurations"]["hive-site"]["properties"]:
@@ -344,8 +344,8 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
         leafQueueNames.add(queueName)
     leafQueues = [{"label": str(queueName) + " queue", "value": queueName} for queueName in leafQueueNames]
     leafQueues = sorted(leafQueues, key=lambda q:q["value"])
-    # putHiveSitePropertyAttribute("hive.server2.tez.default.queues", "entries", leafQueues)
-    # putHiveSiteProperty("hive.server2.tez.default.queues", ",".join([leafQueue["value"] for leafQueue in leafQueues]))
+    putHiveSitePropertyAttribute("hive.server2.tez.default.queues", "entries", leafQueues)
+    putHiveSiteProperty("hive.server2.tez.default.queues", ",".join([leafQueue["value"] for leafQueue in leafQueues]))
 
     #HSI HA
     is_hsi_ha = len(hive_server_interactive_hosts) > 1
@@ -553,13 +553,13 @@ class HiveRecommender(service_advisor.ServiceAdvisor):
 
           hsi_conf_properties = self.getSiteProperties(configurations, self.HIVE_INTERACTIVE_SITE)
 
-          # hive_tez_default_queue = hsi_properties["hive.llap.daemon.queue.name"]
-          # if hsi_conf_properties and "hive.llap.daemon.queue.name" in hsi_conf_properties:
-          #   hive_tez_default_queue = hsi_conf_properties["hive.llap.daemon.queue.name"]
+          hive_tez_default_queue = hsi_properties["hive.llap.daemon.queue.name"]
+          if hsi_conf_properties and "hive.llap.daemon.queue.name" in hsi_conf_properties:
+            hive_tez_default_queue = hsi_conf_properties["hive.llap.daemon.queue.name"]
 
-          # if hive_tez_default_queue:
-          #   putHiveInteractiveSiteProperty("hive.server2.tez.default.queues", hive_tez_default_queue)
-          #   self.logger.debug("Updated 'hive.server2.tez.default.queues' config : '{0}'".format(hive_tez_default_queue))
+          if hive_tez_default_queue:
+            putHiveInteractiveSiteProperty("hive.server2.tez.default.queues", hive_tez_default_queue)
+            self.logger.debug("Updated 'hive.server2.tez.default.queues' config : '{0}'".format(hive_tez_default_queue))
     else:
       self.logger.info("DBG: Setting 'num_llap_nodes' config's  READ ONLY attribute as 'True'.")
       putHiveInteractiveEnvProperty("enable_hive_interactive", "false")
@@ -701,7 +701,8 @@ class HiveValidator(service_advisor.ServiceAdvisor):
 
 
   def validateHiveConfigurationsFromHDP30(self, properties, recommendedDefaults, configurations, services, hosts):
-    validationItems = [{"config-name": "hive.auto.convert.join.noconditionaltask.size", "item": self.validatorLessThenDefaultValue(properties, recommendedDefaults, "hive.auto.convert.join.noconditionaltask.size")} ]
+    validationItems = [ {"config-name": "hive.tez.container.size", "item": self.validatorLessThenDefaultValue(properties, recommendedDefaults, "hive.tez.container.size")},
+                        {"config-name": "hive.auto.convert.join.noconditionaltask.size", "item": self.validatorLessThenDefaultValue(properties, recommendedDefaults, "hive.auto.convert.join.noconditionaltask.size")} ]
     
     hive_site = properties
     hive_env = self.getSiteProperties(configurations, "hive-env")
@@ -709,9 +710,9 @@ class HiveValidator(service_advisor.ServiceAdvisor):
     
     if yarn_site:
       yarnSchedulerMaximumAllocationMb = self.to_number(yarn_site["yarn.scheduler.maximum-allocation-mb"])
-      # hiveTezContainerSize = self.to_number(properties["hive.tez.container.size"])
-      # if hiveTezContainerSize is not None and yarnSchedulerMaximumAllocationMb is not None and hiveTezContainerSize > yarnSchedulerMaximumAllocationMb:
-      #   validationItems.append({"config-name": "hive.tez.container.size", "item": self.getWarnItem("hive.tez.container.size is greater than the maximum container size specified in yarn.scheduler.maximum-allocation-mb")})
+      hiveTezContainerSize = self.to_number(properties["hive.tez.container.size"])
+      if hiveTezContainerSize is not None and yarnSchedulerMaximumAllocationMb is not None and hiveTezContainerSize > yarnSchedulerMaximumAllocationMb:
+        validationItems.append({"config-name": "hive.tez.container.size", "item": self.getWarnItem("hive.tez.container.size is greater than the maximum container size specified in yarn.scheduler.maximum-allocation-mb")})
     
     authentication_property = "hive.server2.authentication"
     ldap_baseDN_property = "hive.server2.authentication.ldap.baseDN"
@@ -1179,16 +1180,16 @@ class HiveValidator(service_advisor.ServiceAdvisor):
 
     return yarn_min_container_size
 
-  # def get_hive_tez_container_size(self, services):
+  def get_hive_tez_container_size(self, services):
     """
     Gets HIVE Tez container size (hive.tez.container.size).
     """
-    # hive_container_size = None
-    # hsi_site = self.getServicesSiteProperties(services, self.HIVE_INTERACTIVE_SITE)
-    # if hsi_site and "hive.tez.container.size" in hsi_site:
-    #   hive_container_size = hsi_site["hive.tez.container.size"]
-    #
-    # if not hive_container_size:
+    hive_container_size = None
+    hsi_site = self.getServicesSiteProperties(services, self.HIVE_INTERACTIVE_SITE)
+    if hsi_site and "hive.tez.container.size" in hsi_site:
+      hive_container_size = hsi_site["hive.tez.container.size"]
+
+    if not hive_container_size:
       # This can happen (1). If config is missing in hive-interactive-site or (2). its an
       # upgrade scenario from Ambari 2.4 to Ambari 2.5 with HDP 2.5 installed. Read it
       # from hive-site.
@@ -1196,41 +1197,41 @@ class HiveValidator(service_advisor.ServiceAdvisor):
       # If Ambari 2.5 after upgrade from 2.4 is managing HDP 2.6 here, this config would have
       # already been added in hive-interactive-site as part of HDP upgrade from 2.5 to 2.6,
       # and we wont end up in this block to look up in hive-site.
-      # hive_site = self.getServicesSiteProperties(services, "hive-site")
-      # if hive_site and "hive.tez.container.size" in hive_site:
-      #   hive_container_size = hive_site["hive.tez.container.size"]
-    # return hive_container_size
+      hive_site = self.getServicesSiteProperties(services, "hive-site")
+      if hive_site and "hive.tez.container.size" in hive_site:
+        hive_container_size = hive_site["hive.tez.container.size"]
+    return hive_container_size
 
-  # def calculate_tez_am_container_size(self, services, total_cluster_capacity, is_cluster_create_opr=False, enable_hive_interactive_1st_invocation=False):
-  #   """
-  #   Calculates Tez App Master container size (tez.am.resource.memory.mb) for tez_hive2/tez-site on initialization if values read is 0.
-  #   Else returns the read value.
-  #   """
-  #   tez_am_resource_memory_mb = self.get_tez_am_resource_memory_mb(services)
-  #   calculated_tez_am_resource_memory_mb = None
-  #   if is_cluster_create_opr or enable_hive_interactive_1st_invocation:
-  #     if total_cluster_capacity <= 4096:
-  #       calculated_tez_am_resource_memory_mb = 512
-  #     elif total_cluster_capacity > 4096 and total_cluster_capacity <= 98304:
-  #       calculated_tez_am_resource_memory_mb = 1024
-  #     elif total_cluster_capacity > 98304:
-  #       calculated_tez_am_resource_memory_mb = 4096
-  #
-  #     self.logger.info("DBG: Calculated and returning 'tez_am_resource_memory_mb' as : {0}".format(calculated_tez_am_resource_memory_mb))
-  #     return float(calculated_tez_am_resource_memory_mb)
-  #   else:
-  #     self.logger.info("DBG: Returning 'tez_am_resource_memory_mb' as : {0}".format(tez_am_resource_memory_mb))
-  #     return float(tez_am_resource_memory_mb)
-  #
-  # def get_tez_am_resource_memory_mb(self, services):
-  #   """
-  #   Gets Tez's AM resource memory (tez.am.resource.memory.mb) from services.
-  #   """
-  #   tez_am_resource_memory_mb = None
-  #   if "tez.am.resource.memory.mb" in services["configurations"]["tez-interactive-site"]["properties"]:
-  #     tez_am_resource_memory_mb = services["configurations"]["tez-interactive-site"]["properties"]["tez.am.resource.memory.mb"]
-  #
-  #   return tez_am_resource_memory_mb
+  def calculate_tez_am_container_size(self, services, total_cluster_capacity, is_cluster_create_opr=False, enable_hive_interactive_1st_invocation=False):
+    """
+    Calculates Tez App Master container size (tez.am.resource.memory.mb) for tez_hive2/tez-site on initialization if values read is 0.
+    Else returns the read value.
+    """
+    tez_am_resource_memory_mb = self.get_tez_am_resource_memory_mb(services)
+    calculated_tez_am_resource_memory_mb = None
+    if is_cluster_create_opr or enable_hive_interactive_1st_invocation:
+      if total_cluster_capacity <= 4096:
+        calculated_tez_am_resource_memory_mb = 512
+      elif total_cluster_capacity > 4096 and total_cluster_capacity <= 98304:
+        calculated_tez_am_resource_memory_mb = 1024
+      elif total_cluster_capacity > 98304:
+        calculated_tez_am_resource_memory_mb = 4096
+
+      self.logger.info("DBG: Calculated and returning 'tez_am_resource_memory_mb' as : {0}".format(calculated_tez_am_resource_memory_mb))
+      return float(calculated_tez_am_resource_memory_mb)
+    else:
+      self.logger.info("DBG: Returning 'tez_am_resource_memory_mb' as : {0}".format(tez_am_resource_memory_mb))
+      return float(tez_am_resource_memory_mb)
+
+  def get_tez_am_resource_memory_mb(self, services):
+    """
+    Gets Tez's AM resource memory (tez.am.resource.memory.mb) from services.
+    """
+    tez_am_resource_memory_mb = None
+    if "tez.am.resource.memory.mb" in services["configurations"]["tez-interactive-site"]["properties"]:
+      tez_am_resource_memory_mb = services["configurations"]["tez-interactive-site"]["properties"]["tez.am.resource.memory.mb"]
+
+    return tez_am_resource_memory_mb
 
   def _normalizeUp(self, val1, val2):
     """

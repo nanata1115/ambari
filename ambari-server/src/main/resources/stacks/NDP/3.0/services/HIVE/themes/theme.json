@@ -82,6 +82,14 @@
                   "section-rows": "2",
                   "subsections": [
                     {
+                      "name": "optimization-row1-col1",
+                      "display-name": "Tez",
+                      "row-index": "0",
+                      "column-index": "0",
+                      "row-span": "1",
+                      "column-span": "1"
+                    },
+                    {
                       "name": "optimization-row2-col2",
                       "display-name": "",
                       "row-index": "1",
@@ -159,6 +167,10 @@
         {
           "config": "hive-site/hive.exec.reducers.bytes.per.reducer",
           "subsection-name": "optimization-row2-col3"
+        },
+        {
+          "config": "hive-site/hive.tez.container.size",
+          "subsection-name": "optimization-row1-col1"
         },
         {
           "config": "hive-env/hive_security_authorization",
@@ -241,6 +253,28 @@
         },
         {
           "config": "hive-interactive-env/num_llap_nodes",
+          "subsection-name": "interactive-query-row1-col1",
+          "depends-on": [
+            {
+              "configs":[
+                "hive-interactive-env/enable_hive_interactive"
+              ],
+              "if": "${hive-interactive-env/enable_hive_interactive}",
+              "then": {
+                "property_value_attributes": {
+                  "visible": true
+                }
+              },
+              "else": {
+                "property_value_attributes": {
+                  "visible": false
+                }
+              }
+            }
+          ]
+        },
+        {
+          "config": "hive-interactive-site/hive.server2.tez.sessions.per.default.queue",
           "subsection-name": "interactive-query-row1-col1",
           "depends-on": [
             {
@@ -428,6 +462,17 @@
         }
       },
       {
+        "config": "hive-site/hive.tez.container.size",
+        "widget": {
+          "type": "slider",
+          "units": [
+            {
+              "unit-name": "MB"
+            }
+          ]
+        }
+      },
+      {
         "config": "hive-site/hive.server2.enable.doAs",
         "widget": {
           "type": "toggle"
@@ -587,6 +632,17 @@
         "config": "hive-interactive-site/hive.server2.active.passive.ha.registry.namespace",
         "widget": {
           "type": "text-field"
+        }
+      },
+      {
+        "config": "hive-interactive-site/hive.server2.tez.sessions.per.default.queue",
+        "widget": {
+          "type": "slider",
+          "units": [
+            {
+              "unit-name": "int"
+            }
+          ]
         }
       },
       {

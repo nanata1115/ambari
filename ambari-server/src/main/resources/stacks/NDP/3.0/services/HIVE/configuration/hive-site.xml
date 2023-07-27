@@ -83,16 +83,45 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
-    <name>hive.txn.timeout</name>
-    <value>300</value>
-    <description>Time after which transactions are declared aborted if the client has not sent a heartbeat, in seconds.</description>
+    <name>hive.tez.container.size</name>
+    <value>682</value>
+    <description>By default, Tez uses the java options from map tasks. Use this property to override that value.</description>
+    <display-name>Tez Container Size</display-name>
+    <value-attributes>
+      <type>int</type>
+      <minimum>682</minimum>
+      <maximum>6820</maximum>
+      <unit>MB</unit>
+      <increment-step>682</increment-step>
+    </value-attributes>
+    <depends-on>
+      <property>
+        <type>yarn-site</type>
+        <name>yarn.scheduler.minimum-allocation-mb</name>
+      </property>
+      <property>
+        <type>yarn-site</type>
+        <name>yarn.scheduler.maximum-allocation-mb</name>
+      </property>
+    </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
-    <name>hive.execution.engine</name>
-    <value>spark</value>
-    <description>hive.execution.engine set.</description>
-    <display-name>hive execute engine</display-name>
+    <name>hive.tez.input.format</name>
+    <value>org.apache.hadoop.hive.ql.io.HiveInputFormat</value>
+    <description>The default input format for Tez. Tez groups splits in the Application Master.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.tez.java.opts</name>
+    <value>-server -Djava.net.preferIPv4Stack=true --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED -XX:+IgnoreUnrecognizedVMOptions  -XX:NewRatio=8 -XX:+UseNUMA -XX:+UseG1GC -XX:+ResizeTLAB -XX:+PrintGCDetails -verbose:gc -XX:+PrintGCTimeStamps</value>
+    <description>Java command line options for Tez.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.txn.timeout</name>
+    <value>300</value>
+    <description>Time after which transactions are declared aborted if the client has not sent a heartbeat, in seconds.</description>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -729,6 +758,15 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>hive.merge.tezfiles</name>
+    <value>false</value>
+    <description>Merge small files at the end of a Tez DAG</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>hive.merge.size.per.task</name>
     <value>256000000</value>
     <description>Size of merged files at the end of the job</description>
@@ -814,6 +852,21 @@ limitations under the License.
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.tez.cpu.vcores</name>
+    <value>-1</value>
+    <description>By default Tez will ask for however many cpus map-reduce is configured to use per container. This can be used to overwrite.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.tez.log.level</name>
+    <value>INFO</value>
+    <description>
+      The log level to use for tasks executing as part of the DAG.
+      Used only if hive.tez.java.opts is used to configure Java options.
+    </description>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -1355,6 +1408,17 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>hive.user.install.directory</name>
+    <display-name>Hive User Install directory</display-name>
+    <value>/user/</value>
+    <description>
+      If hive (in tez mode only) cannot find a usable hive jar in "hive.jar.directory",
+      it will upload the hive jar to "hive.user.install.directory/user.name"
+      and use it to run queries.
+    </description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>hive.vectorized.groupby.maxentries</name>
     <value>100000</value>
     <description>
@@ -1374,6 +1438,75 @@ limitations under the License.
       <maximum>20</maximum>
       <increment-step>1</increment-step>
     </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.convert.join.bucket.mapjoin.tez</name>
+    <value>false</value>
+    <description>
+      Whether joins can be automatically converted to bucket map joins in hive
+      when tez is used as the execution engine.
+    </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.tez.auto.reducer.parallelism</name>
+    <value>true</value>
+    <description>
+      Turn on Tez' auto reducer parallelism feature. When enabled, Hive will still estimate data sizes
+      and set parallelism estimates. Tez will sample source vertices' output sizes and adjust the estimates at runtime as
+      necessary.
+    </description>
+    <display-name>Allow dynamic numbers of reducers</display-name>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.tez.max.partition.factor</name>
+    <value>2.0</value>
+    <description>When auto reducer parallelism is enabled this factor will be used to over-partition data in shuffle edges.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.tez.min.partition.factor</name>
+    <value>0.25</value>
+    <description>
+      When auto reducer parallelism is enabled this factor will be used to put a lower limit to the number
+      of reducers that tez specifies.
+    </description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.tez.dynamic.partition.pruning</name>
+    <value>true</value>
+    <description>When dynamic pruning is enabled, joins on partition keys will be processed by sending events from the processing vertices to the tez application master. These events will be used to prune unnecessary partitions.</description>
+    <display-name>Allow dynamic partition pruning</display-name>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.tez.dynamic.partition.pruning.max.event.size</name>
+    <value>1048576</value>
+    <description>Maximum size of events sent by processors in dynamic pruning. If this size is crossed no pruning will take place.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.tez.dynamic.partition.pruning.max.data.size</name>
+    <value>104857600</value>
+    <description>Maximum total data size of events in dynamic pruning.</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.tez.smb.number.waves</name>
+    <value>0.5</value>
+    <description>The number of waves in which to run the SMB join. Account for cluster being occupied. Ideally should be 1 wave.</description>
     <on-ambari-upgrade add="false"/>
   </property>
   <!-- missing from HiveConf -->
@@ -1429,6 +1562,12 @@ limitations under the License.
       <unit>B</unit>
       <increment-step/>
     </value-attributes>
+    <depends-on>
+      <property>
+        <type>hive-site</type>
+        <name>hive.tez.container.size</name>
+      </property>
+    </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -1480,6 +1619,23 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>hive.server2.tez.sessions.per.default.queue</name>
+    <value>1</value>
+    <description>
+      A positive integer that determines the number of Tez sessions that should be
+      launched on each of the queues specified by "hive.server2.tez.default.queues".
+      Determines the parallelism on each queue.
+    </description>
+    <display-name>Session per queue</display-name>
+    <value-attributes>
+      <type>int</type>
+      <minimum>1</minimum>
+      <maximum>10</maximum>
+      <increment-step>1</increment-step>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>hive.driver.parallel.compilation</name>
     <value>true</value>
     <description>
@@ -1489,6 +1645,47 @@ limitations under the License.
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.server2.tez.initialize.default.sessions</name>
+    <value>false</value>
+    <description>
+      This flag is used in HiveServer2 to enable a user to use HiveServer2 without
+      turning on Tez for HiveServer2. The user could potentially want to run queries
+      over Tez without the pool of sessions.
+    </description>
+    <display-name>Start Tez session at Initialization</display-name>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.server2.tez.default.queues</name>
+    <display-name>Default query queues</display-name>
+    <value>default</value>
+    <description>
+      A list of comma separated values corresponding to YARN queues of the same name.
+      When HiveServer2 is launched in Tez mode, this configuration needs to be set
+      for multiple Tez sessions to run in parallel on the cluster.
+    </description>
+    <value-attributes>
+      <type>combo</type>
+      <entries>
+        <entry>
+          <value>default</value>
+          <label>Default</label>
+        </entry>
+      </entries>
+      <selection-cardinality>1+</selection-cardinality>
+    </value-attributes>
+    <depends-on>
+      <property>
+        <type>capacity-scheduler</type>
+        <name>yarn.scheduler.capacity.root.queues</name>
+      </property>
+    </depends-on>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -1685,6 +1882,24 @@ limitations under the License.
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>hive.tez.input.generate.consistent.splits</name>
+    <value>true</value>
+    <description>Whether to generate consistent split locations when generating splits in the AM</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.tez.exec.print.summary</name>
+    <value>true</value>
+    <description>Display breakdown of execution steps, for every query executed by the shell.</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
     <name>hive.vectorized.execution.mapjoin.native.enabled</name>
     <value>true</value>
     <description>
@@ -1749,6 +1964,28 @@ limitations under the License.
     <description>Whether to use hybrid grace hash join as the join method for mapjoin.
       Applies to dynamically partitioned joins when running in LLAP, but not to regular
       broadcast(map) joins. hive.llap.enable.grace.join.in.llap is used for this.
+    </description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.tez.cartesian-product.enabled</name>
+    <value>true</value>
+    <description>Use Tez cartesian product edge for Hive cartesian product</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>hive.tez.bucket.pruning</name>
+    <value>true</value>
+    <description>
+      When pruning is enabled, filters on bucket columns will be processed by
+      filtering the splits against a bitset of included buckets. This needs predicates
+      produced by hive.optimize.ppd and hive.optimize.index.filters.
     </description>
     <value-attributes>
       <type>boolean</type>
