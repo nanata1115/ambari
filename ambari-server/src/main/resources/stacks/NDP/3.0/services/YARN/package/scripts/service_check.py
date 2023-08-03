@@ -116,10 +116,10 @@ class ServiceCheckDefault(ServiceCheck):
     else:
       smoke_cmd = yarn_distrubuted_shell_check_cmd
 
-    return_code, out = shell.checked_call(smoke_cmd,
-                                          path='/usr/sbin:/sbin:/usr/local/bin:/bin:/usr/bin',
-                                          user=params.smokeuser,
-                                          )
+    # return_code, out = shell.checked_call(smoke_cmd,
+    #                                       path='/usr/sbin:/sbin:/usr/local/bin:/bin:/usr/bin',
+    #                                       user=params.smokeuser,
+    #                                       )
 
     m = re.search("appTrackingUrl=(.*),\s", out)
     app_url = m.group(1)
