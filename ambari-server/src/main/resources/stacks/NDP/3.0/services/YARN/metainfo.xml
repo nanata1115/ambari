@@ -55,20 +55,20 @@
           </dependencies>
         </component>
 
-        <component>
-          <name>YARN_REGISTRY_DNS</name>
-          <displayName>YARN Registry DNS</displayName>
-          <category>MASTER</category>
-          <cardinality>0-1</cardinality>
-          <versionAdvertised>true</versionAdvertised>
-          <reassignAllowed>true</reassignAllowed>
+<!--        <component>-->
+<!--          <name>YARN_REGISTRY_DNS</name>-->
+<!--          <displayName>YARN Registry DNS</displayName>-->
+<!--          <category>MASTER</category>-->
+<!--          <cardinality>0-1</cardinality>-->
+<!--          <versionAdvertised>true</versionAdvertised>-->
+<!--          <reassignAllowed>true</reassignAllowed>-->
 
-          <commandScript>
-            <script>scripts/yarn_registry_dns.py</script>
-            <scriptType>PYTHON</scriptType>
-            <timeout>1200</timeout>
-          </commandScript>
-        </component>
+<!--          <commandScript>-->
+<!--            <script>scripts/yarn_registry_dns.py</script>-->
+<!--            <scriptType>PYTHON</scriptType>-->
+<!--            <timeout>1200</timeout>-->
+<!--          </commandScript>-->
+<!--        </component>-->
 
 <!--        <component>-->
 <!--          <name>APP_TIMELINE_SERVER</name>-->
