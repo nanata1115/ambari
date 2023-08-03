@@ -20,5 +20,5 @@
     <active>true</active>
   </versions>
   <minJdk>1.8</minJdk>
-  <maxJdk>1.8</maxJdk>
+  <maxJdk>21</maxJdk>
 </metainfo>
