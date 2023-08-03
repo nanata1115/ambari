@@ -129,12 +129,15 @@ else:
 dolphin_worker_map = config['configurations']['dolphin-worker']
 
 # registry.properties
+zk_quorum = ""
 dolphin_registry_map = {}
-registryHosts = default("/clusterHostInfo/registry_hosts", [])
-if len(registryHosts) > 0 and "clientPort" in config['configurations']['zoo.cfg']:
-    clientPort = config['configurations']['zoo.cfg']['clientPort']
-    registryPort = ":" + clientPort + ","
-    dolphin_registry_map['registry.quorum'] = registryPort.join(registryHosts) + ":" + clientPort
+zookeeper_port = default('/configurations/zoo.cfg/clientPort', None)
+if 'zookeeper_server_hosts' in config['clusterHostInfo']:
+  for host in config['clusterHostInfo']['zookeeper_server_hosts']:
+    if zk_quorum:
+      zk_quorum += ','
+    zk_quorum += host + ":" + str(zookeeper_port)
+    dolphin_registry_map['registry.servers'] = zk_quorum
 dolphin_registry_map.update(config['configurations']['dolphin-registry'])
 if 'spring.servlet.multipart.max-file-size' in dolphin_app_api_map:
     file_size = dolphin_app_api_map['spring.servlet.multipart.max-file-size']
