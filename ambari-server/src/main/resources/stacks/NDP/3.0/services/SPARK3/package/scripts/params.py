@@ -154,29 +154,6 @@ hive_server_host = default("/clusterHostInfo/hive_server_hosts", [])
 is_hive_installed = not len(hive_server_host) == 0
 security_enabled = config['configurations']['cluster-env']['security_enabled']
 
-sac_enabled = default("configurations/spark3-atlas-application-properties-override/atlas.spark.enabled", False)
-if type(sac_enabled) is str:
-  sac_enabled = str(sac_enabled).upper() == 'TRUE'
-
-if sac_enabled:
-  atlas_application_properties_to_include = ["atlas.cluster.name", "atlas.kafka.bootstrap.servers", "atlas.kafka.security.protocol",
-                                            "atlas.rest.address", "atlas.authentication.method.kerberos.principal", "atlas.authentication.method.kerberos",
-                                            "atlas.authentication.method.kerberos.keytab"]
-  application_properties = dict(config['configurations']['application-properties'])
-  spark_atlas_jar_dir = "/usr/ndp/current/spark-atlas-connector/"
-  if security_enabled:
-    atlas_kafka_keytab = default("/configurations/spark3-atlas-application-properties-override/atlas.jaas.KafkaClient.option.keyTab", None)
-    kafka_user = config['configurations']['kafka-env']['kafka_user']
-    secure_atlas_application_properties_to_include = {"atlas.jaas.KafkaClient.loginModuleControlFlag":"required", "atlas.jaas.KafkaClient.loginModuleName":"com.sun.security.auth.module.Krb5LoginModule",
-                                                      "atlas.jaas.KafkaClient.option.serviceName":"{{kafka_user}}", "atlas.jaas.KafkaClient.option.storeKey":"true",
-                                                      "atlas.jaas.KafkaClient.option.useKeyTab":"true"}
-
-application_properties_override = dict(default("/configurations/spark3-atlas-application-properties-override", []))
-application_properties_yarn = dict(default("/configurations/spark3-atlas-application-properties-yarn", []))
-atlas_properties_path = spark_conf + os.sep + "atlas-application.properties"
-atlas_properties_for_yarn_path = spark_conf + os.sep + "atlas-application.properties.yarn"
-
-
 kinit_path_local = get_kinit_path(default('/configurations/kerberos-env/executable_search_paths', None))
 spark_kerberos_keytab =  config['configurations']['spark3-defaults']['spark.history.kerberos.keytab']
 spark_kerberos_principal =  config['configurations']['spark3-defaults']['spark.history.kerberos.principal']

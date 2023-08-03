@@ -20,7 +20,9 @@ limitations under the License.
 
 import sys
 import os
+import time
 
+from resource_management import Execute
 from resource_management.libraries.script.script import Script
 from resource_management.libraries.functions import stack_select
 from resource_management.libraries.functions.stack_features import check_stack_feature
@@ -44,6 +46,10 @@ class SparkThriftServer(Script):
     import params
     env.set_params(params)
     setup_spark(env, 'server', upgrade_type = upgrade_type, action = 'config')
+    Execute(format(
+      'hadoop fs -put -f /etc/spark3/conf/spark-thrift-fairscheduler.xml /ndp/apps/3.0/spark3/'),
+            user=params.hdfs_user
+            )
 
   def start(self, env, upgrade_type=None):
     import params
@@ -60,6 +66,7 @@ class SparkThriftServer(Script):
   def status(self, env):
     import status_params
     env.set_params(status_params)
+    time.sleep(5)
     check_process_status(status_params.spark_thrift_server_pid_file)
 
   def pre_upgrade_restart(self, env, upgrade_type=None):

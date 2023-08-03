@@ -38,7 +38,7 @@ from resource_management.libraries.functions.show_logs import show_logs
 from resource_management.core.shell import as_sudo
 from resource_management.core.exceptions import ComponentIsNotRunning
 from resource_management.core.logger import Logger
-from common_setup_actions import check_sac_jar
+# from common_setup_actions import check_sac_jar
 
 CHECK_COMMAND_TIMEOUT_DEFAULT = 60.0
 
@@ -63,7 +63,7 @@ def spark_service(name, upgrade_type=None, action=None):
 
   if action == 'start':
 
-    check_sac_jar()
+    # check_sac_jar()
 
     effective_version = params.version if upgrade_type is not None else params.stack_version_formatted
     if effective_version:
@@ -73,22 +73,10 @@ def spark_service(name, upgrade_type=None, action=None):
       # create & copy spark3-ndp-yarn-archive.tar.gz to hdfs
       if not params.sysprep_skip_copy_tarballs_hdfs:
         source_dirs = [params.spark_home + "/jars"]
-
-        # include sac jar and spark-job keytab to archive
-        if params.sac_enabled:
-          if params.security_enabled:
-            shutil.copy(params.atlas_kafka_keytab, source_dirs[0])
-            os.chmod(os.path.join(source_dirs[0], os.path.basename(params.atlas_kafka_keytab)), 0440)
-
-          source_dirs.append(params.spark_atlas_jar_dir)
-
-
         tmp_archive_file=get_tarball_paths("spark3")[1]
         make_tarfile(tmp_archive_file, source_dirs)
         copy_to_hdfs("spark3", params.user_group, params.hdfs_user, skip=params.sysprep_skip_copy_tarballs_hdfs, replace_existing_files=True)
 
-        if params.sac_enabled and params.security_enabled:
-          os.remove(os.path.join(source_dirs[0], os.path.basename(params.atlas_kafka_keytab)))
 
       # # create & copy spark3-ndp-hive-archive.tar.gz to hdfs
       # if not params.sysprep_skip_copy_tarballs_hdfs:
@@ -148,7 +136,7 @@ def spark_service(name, upgrade_type=None, action=None):
       thriftserver_no_op_test= as_sudo(["test", "-f", params.spark_thrift_server_pid_file]) + " && " + as_sudo(["pgrep", "-F", params.spark_thrift_server_pid_file])
       try:
         Execute(format('{spark_thrift_server_start} --properties-file {spark_thrift_server_conf_file} {spark_thrift_cmd_opts_properties}'),
-                user=params.spark_user,
+                user=params.hive_user,
                 environment={'JAVA_HOME': params.java_home},
                 not_if=thriftserver_no_op_test
         )
@@ -213,7 +201,7 @@ def spark_service(name, upgrade_type=None, action=None):
     elif name == 'sparkthriftserver':
       try:
         Execute(format('{spark_thrift_server_stop}'),
-                user=params.spark_user,
+                user=params.hive_user,
                 environment={'JAVA_HOME': params.java_home}
         )
       except:

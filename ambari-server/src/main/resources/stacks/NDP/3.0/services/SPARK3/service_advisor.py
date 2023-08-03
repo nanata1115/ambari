@@ -224,55 +224,55 @@ class Spark2Recommender(service_advisor.ServiceAdvisor):
     self.__addZeppelinToLivy2SuperUsers(configurations, services)
 
 
-  def recommendSPARK3ConfigurationsFromHDP30(self, configurations, clusterData, services, hosts):
-
-    # SAC
-    if "spark3-atlas-application-properties-override" in services["configurations"]:
-      spark3_atlas_application_properties_override = self.getServicesSiteProperties(services, "spark3-atlas-application-properties-override")
-      spark3_defaults_properties = self.getServicesSiteProperties(services, "spark3-defaults")
-      spark3_thriftspark_conf_properties = self.getServicesSiteProperties(services, "spark3-thrift-sparkconf")
-      putSpark2DefautlsProperty = self.putProperty(configurations, "spark3-defaults", services)
-      putSpark2DefaultsPropertyAttribute = self.putPropertyAttribute(configurations,"spark3-defaults")
-      putSpark2ThriftSparkConfProperty = self.putProperty(configurations, "spark3-thrift-sparkconf", services)
-      putSpark2AtlasHookProperty = self.putProperty(configurations, "spark3-atlas-application-properties-override", services)
-      putSpark2AtlasHookPropertyAttribute = self.putPropertyAttribute(configurations,"spark3-atlas-application-properties-override")
-      spark3_sac_enabled = None
-      if self.checkSiteProperties(spark3_atlas_application_properties_override, "atlas.spark.enabled"):
-        spark3_sac_enabled = spark3_atlas_application_properties_override["atlas.spark.enabled"]
-        spark3_sac_enabled = str(spark3_sac_enabled).upper() == 'TRUE'
-
-      if spark3_sac_enabled:
-
-        self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.driver.extraClassPath", "/usr/ndp/current/spark-atlas-connector/*", ":")
-        self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.yarn.dist.files", "/etc/spark3/conf/atlas-application.properties.yarn#atlas-application.properties", ",")
-        self.setOrAddValueToProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.driver.extraClassPath", "/usr/ndp/current/spark-atlas-connector/*", ":")
-
-        self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.extraListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
-        self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.sql.queryExecutionListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
-        self.setOrAddValueToProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.extraListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
-        self.setOrAddValueToProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.sql.queryExecutionListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
-
-        self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.sql.streaming.streamingQueryListeners", "com.hortonworks.spark.atlas.SparkAtlasStreamingQueryEventTracker", ",")
-        self.setOrAddValueToProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.sql.streaming.streamingQueryListeners", "com.hortonworks.spark.atlas.SparkAtlasStreamingQueryEventTracker", ",")
-
-        putSpark2AtlasHookProperty("atlas.client.checkModelInStart", "false")
-
-      else:
-
-        self.removeValueFromProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.driver.extraClassPath", "/usr/ndp/current/spark-atlas-connector/*", ":")
-        self.removeValueFromProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.yarn.dist.files", "/etc/spark3/conf/atlas-application.properties.yarn#atlas-application.properties", ",")
-        self.removeValueFromProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.driver.extraClassPath", "/usr/ndp/current/spark-atlas-connector/*", ":")
-
-        self.removeValueFromProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.extraListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
-        self.removeValueFromProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.sql.queryExecutionListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
-        self.removeValueFromProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.extraListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
-        self.removeValueFromProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.sql.queryExecutionListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
-
-        self.removeValueFromProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.sql.streaming.streamingQueryListeners", "com.hortonworks.spark.atlas.SparkAtlasStreamingQueryEventTracker", ",")
-        self.removeValueFromProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.sql.streaming.streamingQueryListeners", "com.hortonworks.spark.atlas.SparkAtlasStreamingQueryEventTracker", ",")
-
-        putSpark2AtlasHookPropertyAttribute("atlas.client.checkModelInStart", "delete", "true")
-
+  # def recommendSPARK3ConfigurationsFromHDP30(self, configurations, clusterData, services, hosts):
+  #
+  #   # SAC
+  #   if "spark3-atlas-application-properties-override" in services["configurations"]:
+  #     spark3_atlas_application_properties_override = self.getServicesSiteProperties(services, "spark3-atlas-application-properties-override")
+  #     spark3_defaults_properties = self.getServicesSiteProperties(services, "spark3-defaults")
+  #     spark3_thriftspark_conf_properties = self.getServicesSiteProperties(services, "spark3-thrift-sparkconf")
+  #     putSpark2DefautlsProperty = self.putProperty(configurations, "spark3-defaults", services)
+  #     putSpark2DefaultsPropertyAttribute = self.putPropertyAttribute(configurations,"spark3-defaults")
+  #     putSpark2ThriftSparkConfProperty = self.putProperty(configurations, "spark3-thrift-sparkconf", services)
+  #     putSpark2AtlasHookProperty = self.putProperty(configurations, "spark3-atlas-application-properties-override", services)
+  #     putSpark2AtlasHookPropertyAttribute = self.putPropertyAttribute(configurations,"spark3-atlas-application-properties-override")
+  #     spark3_sac_enabled = None
+  #     if self.checkSiteProperties(spark3_atlas_application_properties_override, "atlas.spark.enabled"):
+  #       spark3_sac_enabled = spark3_atlas_application_properties_override["atlas.spark.enabled"]
+  #       spark3_sac_enabled = str(spark3_sac_enabled).upper() == 'TRUE'
+  #
+  #     if spark3_sac_enabled:
+  #
+  #       self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.driver.extraClassPath", "/usr/ndp/current/spark-atlas-connector/*", ":")
+  #       self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.yarn.dist.files", "/etc/spark3/conf/atlas-application.properties.yarn#atlas-application.properties", ",")
+  #       self.setOrAddValueToProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.driver.extraClassPath", "/usr/ndp/current/spark-atlas-connector/*", ":")
+  #
+  #       self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.extraListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
+  #       self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.sql.queryExecutionListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
+  #       self.setOrAddValueToProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.extraListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
+  #       self.setOrAddValueToProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.sql.queryExecutionListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
+  #
+  #       self.setOrAddValueToProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.sql.streaming.streamingQueryListeners", "com.hortonworks.spark.atlas.SparkAtlasStreamingQueryEventTracker", ",")
+  #       self.setOrAddValueToProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.sql.streaming.streamingQueryListeners", "com.hortonworks.spark.atlas.SparkAtlasStreamingQueryEventTracker", ",")
+  #
+  #       putSpark2AtlasHookProperty("atlas.client.checkModelInStart", "false")
+  #
+  #     else:
+  #
+  #       self.removeValueFromProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.driver.extraClassPath", "/usr/ndp/current/spark-atlas-connector/*", ":")
+  #       self.removeValueFromProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.yarn.dist.files", "/etc/spark3/conf/atlas-application.properties.yarn#atlas-application.properties", ",")
+  #       self.removeValueFromProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.driver.extraClassPath", "/usr/ndp/current/spark-atlas-connector/*", ":")
+  #
+  #       self.removeValueFromProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.extraListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
+  #       self.removeValueFromProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.sql.queryExecutionListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
+  #       self.removeValueFromProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.extraListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
+  #       self.removeValueFromProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.sql.queryExecutionListeners", "com.hortonworks.spark.atlas.SparkAtlasEventTracker", ",")
+  #
+  #       self.removeValueFromProperty(putSpark2DefautlsProperty, spark3_defaults_properties, "spark.sql.streaming.streamingQueryListeners", "com.hortonworks.spark.atlas.SparkAtlasStreamingQueryEventTracker", ",")
+  #       self.removeValueFromProperty(putSpark2ThriftSparkConfProperty, spark3_thriftspark_conf_properties, "spark.sql.streaming.streamingQueryListeners", "com.hortonworks.spark.atlas.SparkAtlasStreamingQueryEventTracker", ",")
+  #
+  #       putSpark2AtlasHookPropertyAttribute("atlas.client.checkModelInStart", "delete", "true")
+  #
 
 
   def setOrAddValueToProperty(self, putConfigProperty, config, propertyName, propertyValue, separator):
@@ -337,8 +337,7 @@ class Spark2Validator(service_advisor.ServiceAdvisor):
     self.as_super.__init__(*args, **kwargs)
 
     self.validators = [("spark3-defaults", self.validateSpark2DefaultsFromHDP25),
-                       ("spark3-thrift-sparkconf", self.validateSpark2ThriftSparkConfFromHDP25),
-                       ("spark3-atlas-application-properties-override", self.validateSpark2AtlasApplicationPropertiesFromHDP30)]
+                       ("spark3-thrift-sparkconf", self.validateSpark2ThriftSparkConfFromHDP25)]
 
 
   def validateSpark2DefaultsFromHDP25(self, properties, recommendedDefaults, configurations, services, hosts):
@@ -359,16 +358,6 @@ class Spark2Validator(service_advisor.ServiceAdvisor):
       }
     ]
     return self.toConfigurationValidationProblems(validationItems, "spark3-thrift-sparkconf")
-
-  def validateSpark2AtlasApplicationPropertiesFromHDP30(self, properties, recommendedDefaults, configurations, services, hosts):
-    validationItems = []
-    servicesList = [service["StackServices"]["service_name"] for service in services["services"]]
-    if not "ATLAS" in servicesList and 'atlas.spark.enabled' in services['configurations']['spark3-atlas-application-properties-override']['properties'] and \
-            str(services['configurations']['spark3-atlas-application-properties-override']['properties']['atlas.spark.enabled']).upper() == 'TRUE':
-      validationItems.append({"config-name": "spark3-atlas-application-properties-override",
-                                 +                              "item": self.getErrorItem("SAC could be enabled only if ATLAS service is available on cluster!")})
-    return self.toConfigurationValidationProblems(validationItems, "spark3-atlas-application-properties-override")
-
 
 
 

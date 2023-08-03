@@ -27,25 +27,6 @@
           }
         },
         {
-          "name": "atlas_kafka",
-          "principal": {
-            "value": "spark_atlas@${realm}",
-            "type" : "user",
-            "configuration": "spark3-atlas-application-properties-override/atlas.jaas.KafkaClient.option.principal"
-          },
-          "keytab": {
-            "file": "${keytab_dir}/spark-atlas.headless.keytab",
-            "owner": {
-              "name": "${spark3-env/spark_user}",
-              "access": "r"
-            },
-            "group": {
-              "name": "${cluster-env/user_group}",
-              "access": ""
-            }
-          }
-        },
-        {
           "name": "spark_service_keytab",
           "principal": {
             "value": "spark/_HOST@${realm}",
@@ -77,16 +58,6 @@
           "livy2-conf": {
             "livy.server.auth.type": "kerberos",
             "livy.impersonation.enabled": "true"
-          }
-        },
-        {
-          "spark3-atlas-application-properties-override": {
-            "atlas.jaas.KafkaClient.option.keyTab": "${keytab_dir}/spark-atlas.headless.keytab"
-          }
-        },
-        {
-          "spark3-atlas-application-properties-yarn": {
-            "atlas.jaas.KafkaClient.option.keyTab": "./__spark_libs__/spark-atlas.headless.keytab"
           }
         }
       ],

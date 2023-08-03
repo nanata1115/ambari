@@ -34,6 +34,33 @@
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
+    <name>spark.yarn.archive</name>
+    <display-name>Spark yarn tar</display-name>
+    <value>hdfs:///ndp/apps/3.0/spark3/spark3-ndp-yarn-archive.tar.gz</value>
+    <description>
+        increase start spead.
+    </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+   <property>
+    <name>spark.sql.hive.convertMetastoreParquet</name>
+    <value>false</value>
+    <description>
+      spark.sql.hive.convertMetastoreParquet default is true.When set to false, Spark
+SQL will use the Hive SerDe for parquet tables instead of the built in support
+    </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
+    <name>spark.sql.hive.convertMetastoreOrc</name>
+    <value>true</value>
+    <description>
+      spark.sql.hive.convertMetastoreOrc default is true.When set to false, Spark
+SQL will use the Hive SerDe for Orc tables instead of the built in support
+    </description>
+    <on-ambari-upgrade add="true"/>
+  </property>
+  <property>
     <name>spark.driver.extraLibraryPath</name>
     <value>{{spark_hadoop_lib_native}}</value>
     <description>
@@ -227,13 +254,13 @@
 
   <property>
     <name>spark.sql.hive.metastore.version</name>
-    <value>3.0</value>
+    <value>3.1</value>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>spark.sql.hive.metastore.jars</name>
-    <value>/usr/ndp/current/spark3-client/standalone-metastore/*</value>
+    <value>/usr/ndp/current/hive-client/lib/hive-exec-4.0.0-beta-1-SNAPSHOT.jar:/usr/ndp/current/hive-client/lib/commons-io-2.12.0.jar:/usr/ndp/3.0/spark3/jars/httpclient-4.5.14.jar:/usr/ndp/3.0/spark3/jars/httpcore-4.4.16.jar</value>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -248,12 +275,6 @@
   <property>
     <name>spark.extraListeners</name>
     <value> </value>
-    <depends-on>
-      <property>
-        <type>spark3-atlas-application-properties-override</type>
-        <name>atlas.spark.enabled</name>
-      </property>
-    </depends-on>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -261,25 +282,19 @@
   <property>
     <name>spark.sql.queryExecutionListeners</name>
     <value> </value>
-    <depends-on>
-      <property>
-        <type>spark3-atlas-application-properties-override</type>
-        <name>atlas.spark.enabled</name>
-      </property>
-    </depends-on>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
 
   <property>
     <name>spark.driver.extraClassPath</name>
-    <value> </value>
-    <depends-on>
-      <property>
-        <type>spark3-atlas-application-properties-override</type>
-        <name>atlas.spark.enabled</name>
-      </property>
-    </depends-on>
+    <value>/usr/ndp/3.0/spark3/examples/jars/orc-shims-1.8.3.jar:/usr/ndp/3.0/spark3/examples/jars/orc-core-1.8.3-shaded-protobuf.jar:/usr/ndp/3.0/spark3/examples/jars/orc-mapreduce-1.8.3-shaded-protobuf.jar:/usr/ndp/current/hive-client/lib/hive-exec-4.0.0-beta-1-SNAPSHOT.jar</value>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>spark.executor.extraClassPath</name>
+    <value>/usr/ndp/3.0/spark3/examples/jars/orc-shims-1.8.3.jar:/usr/ndp/3.0/spark3/examples/jars/orc-core-1.8.3-shaded-protobuf.jar:/usr/ndp/3.0/spark3/examples/jars/orc-mapreduce-1.8.3-shaded-protobuf.jar:/usr/ndp/current/hive-client/lib/hive-exec-4.0.0-beta-1-SNAPSHOT.jar</value>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -287,12 +302,6 @@
   <property>
     <name>spark.sql.streaming.streamingQueryListeners</name>
     <value> </value>
-    <depends-on>
-      <property>
-        <type>spark3-atlas-application-properties-override</type>
-        <name>atlas.spark.enabled</name>
-     </property>
-    </depends-on>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -300,12 +309,6 @@
   <property>
     <name>spark.yarn.dist.files</name>
     <value> </value>
-    <depends-on>
-      <property>
-        <type>spark3-atlas-application-properties-override</type>
-        <name>atlas.spark.enabled</name>
-      </property>
-    </depends-on>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>

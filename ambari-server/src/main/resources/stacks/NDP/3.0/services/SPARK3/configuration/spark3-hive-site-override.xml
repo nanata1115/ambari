@@ -41,16 +41,18 @@ limitations under the License.
   </property>
   <property>
     <name>hive.server2.thrift.port</name>
-    <value>10016</value>
+    <value>10010</value>
+    <display-name>spark3 thrift server tcp port</display-name>
     <description>
-      TCP port number to listen on, default 10015.
+      spark3 thrift server tcp port number to listen on, default 10010.
     </description>
     <on-ambari-upgrade add="true"/>
   </property>
   <property>
     <name>hive.server2.thrift.http.port</name>
-    <value>10002</value>
-    <description>Port number of HiveServer2 Thrift interface when hive.server2.transport.mode is 'http'.</description>
+    <value>10011</value>
+    <display-name>spark3 thrift server http port</display-name>
+    <description>Port number of spark3 Thrift interface when hive.server2.transport.mode is 'http'.</description>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>
@@ -64,7 +66,7 @@ limitations under the License.
   </property>
   <property>
     <name>metastore.catalog.default</name>
-    <value>spark</value>
+    <value>hive</value>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -72,6 +74,12 @@ limitations under the License.
     <name>hive.exec.scratchdir</name>
     <value>/tmp/spark</value>
     <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>mapreduce.input.fileinputformat.input.dir.recursive</name>
+    <value>true</value>
+    <description>dir recursive scan</description>
     <on-ambari-upgrade add="false"/>
   </property>
 </configuration>

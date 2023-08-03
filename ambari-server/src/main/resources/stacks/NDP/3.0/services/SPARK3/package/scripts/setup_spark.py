@@ -39,7 +39,6 @@ from resource_management.libraries.functions.default import default
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions import lzo_utils
 from resource_management.libraries.resources.xml_config import XmlConfig
-from common_setup_actions import create_atlas_configs, check_sac_jar
 
 def setup_spark(env, type, upgrade_type = None, action = None):
   import params
@@ -116,7 +115,7 @@ def setup_spark(env, type, upgrade_type = None, action = None):
   )
 
   #create log4j.properties in etc/conf dir
-  File(os.path.join(params.spark_conf, 'log4j.properties'),
+  File(os.path.join(params.spark_conf, 'log4j2.properties'),
        owner=params.spark_user,
        group=params.spark_group,
        content=params.spark_log4j_properties,
@@ -138,8 +137,6 @@ def setup_spark(env, type, upgrade_type = None, action = None):
           owner=params.spark_user,
           group=params.spark_group,
           mode=0644)
-
-  create_atlas_configs()
 
   if params.has_spark_thriftserver:
     spark3_thrift_sparkconf = dict(params.config['configurations']['spark3-thrift-sparkconf'])
@@ -168,5 +165,5 @@ def setup_spark(env, type, upgrade_type = None, action = None):
       content=InlineTemplate(params.spark_thrift_fairscheduler_content)
     )
 
-  if type == "client":
-    check_sac_jar()
+  # if type == "client":
+    # check_sac_jar()

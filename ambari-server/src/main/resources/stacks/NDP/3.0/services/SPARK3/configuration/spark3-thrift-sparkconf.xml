@@ -88,7 +88,7 @@
   </property>
   <property>
     <name>spark.scheduler.allocation.file</name>
-    <value>{{spark_conf}}/spark-thrift-fairscheduler.xml</value>
+    <value>/ndp/apps/3.0/spark3/spark-thrift-fairscheduler.xml</value>
     <description>
       Scheduler configuration file for thriftserver.
     </description>
@@ -261,7 +261,7 @@
   </property>
   <property>
     <name>spark.master</name>
-    <value>{{spark_thrift_master}}</value>
+    <value>yarn</value>
     <description>
       The deploying mode of spark application, by default it is yarn-client for thrift-server but local mode for there's
       only one nodemanager.
@@ -289,7 +289,7 @@
   </property>
   <property>
     <name>spark.sql.hive.metastore.jars</name>
-    <value>/usr/ndp/{{version}}/spark3/standalone-metastore/standalone-metastore-1.21.2.{{version}}-hive3.jar</value>
+    <value>/usr/ndp/current/hive-client/lib/hive-exec-4.0.0-beta-1-SNAPSHOT.jar:/usr/ndp/current/hive-client/lib/commons-io-2.12.0.jar:/usr/ndp/3.0/spark3/jars/httpclient-4.5.14.jar:/usr/ndp/3.0/spark3/jars/httpcore-4.4.16.jar</value>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -297,12 +297,6 @@
   <property>
     <name>spark.extraListeners</name>
     <value> </value>
-    <depends-on>
-      <property>
-        <type>spark3-atlas-application-properties-override</type>
-        <name>atlas.spark.enabled</name>
-      </property>
-    </depends-on>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -310,25 +304,19 @@
   <property>
     <name>spark.sql.queryExecutionListeners</name>
     <value> </value>
-    <depends-on>
-      <property>
-        <type>spark3-atlas-application-properties-override</type>
-        <name>atlas.spark.enabled</name>
-      </property>
-    </depends-on>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
 
   <property>
     <name>spark.driver.extraClassPath</name>
-    <value> </value>
-    <depends-on>
-      <property>
-        <type>spark3-atlas-application-properties-override</type>
-        <name>atlas.spark.enabled</name>
-      </property>
-    </depends-on>
+    <value>/usr/ndp/3.0/spark3/examples/jars/orc-shims-1.8.3.jar:/usr/ndp/3.0/spark3/examples/jars/orc-core-1.8.3-shaded-protobuf.jar:/usr/ndp/3.0/spark3/examples/jars/orc-mapreduce-1.8.3-shaded-protobuf.jar:/usr/ndp/current/hive-client/lib/hive-exec-4.0.0-beta-1-SNAPSHOT.jar:/usr/ndp/current/hive-client/lib/hive-cli-4.0.0-beta-1-SNAPSHOT.jar</value>
+    <description></description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>spark.executor.extraClassPath</name>
+    <value>/usr/ndp/3.0/spark3/examples/jars/orc-shims-1.8.3.jar:/usr/ndp/3.0/spark3/examples/jars/orc-core-1.8.3-shaded-protobuf.jar:/usr/ndp/3.0/spark3/examples/jars/orc-mapreduce-1.8.3-shaded-protobuf.jar:/usr/ndp/current/hive-client/lib/hive-exec-4.0.0-beta-1-SNAPSHOT.jar</value>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
@@ -337,12 +325,6 @@
   <property>
     <name>spark.sql.streaming.streamingQueryListeners</name>
     <value> </value>
-    <depends-on>
-      <property>
-        <type>spark3-atlas-application-properties-override</type>
-        <name>atlas.spark.enabled</name>
-      </property>
-    </depends-on>
     <description></description>
     <on-ambari-upgrade add="false"/>
   </property>
