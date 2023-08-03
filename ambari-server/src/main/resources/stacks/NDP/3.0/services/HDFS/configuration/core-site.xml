@@ -261,12 +261,12 @@ DEFAULT
 
   <property>
     <name>fs.azure.user.agent.prefix</name>
-    <value>User-Agent: APN/1.0 Hortonworks/1.0 HDP/{{version}}</value>
+    <value>User-Agent: APN/1.0 nanata/1.0 NDP/{{version}}</value>
     <on-ambari-upgrade add="false" />
   </property>
   <property>
     <name>fs.gs.application.name.suffix</name>
-    <value> (GPN:Hortonworks; version 1.0) HDP/{{version}}</value>
+    <value> (GPN:nanata; version 1.0) NDP/{{version}}</value>
     <on-ambari-upgrade add="false" />
   </property>
   <property>
@@ -282,7 +282,7 @@ DEFAULT
   </property>
   <property>
     <name>fs.s3a.user.agent.prefix</name>
-    <value>User-Agent: APN/1.0 Hortonworks/1.0 HDP/{{version}}</value>
+    <value>User-Agent: APN/1.0 nanata/1.0 NDP/{{version}}</value>
     <on-ambari-upgrade add="false" />
   </property>
   
