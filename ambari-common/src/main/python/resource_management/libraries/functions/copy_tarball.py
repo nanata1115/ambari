@@ -212,13 +212,13 @@ TARBALL_MAP = {
   },
 
   "tez": {
-    "dirs": ("{0}/{1}/{2}/tez/lib/tez.tar.gz".format(STACK_ROOT_PATTERN, STACK_VERSION_PATTERN, LIB_DIR),
+    "dirs": ("{0}/{1}/hive/tez.tar.gz".format(STACK_ROOT_PATTERN, STACK_VERSION_PATTERN),
            "/{0}/apps/{1}/tez/tez.tar.gz".format(STACK_NAME_PATTERN, STACK_VERSION_PATTERN)),
     "service": "TEZ"
   },
 
   "tez_hive2": {
-    "dirs": ("{0}/{1}/{2}/tez_hive2/lib/tez.tar.gz".format(STACK_ROOT_PATTERN, STACK_VERSION_PATTERN, LIB_DIR),
+    "dirs": ("{0}/{1}/hive/tez.tar.gz".format(STACK_ROOT_PATTERN, STACK_VERSION_PATTERN),
            "/{0}/apps/{1}/tez_hive2/tez.tar.gz".format(STACK_NAME_PATTERN, STACK_VERSION_PATTERN)),
     "service": "HIVE"
   },
@@ -251,7 +251,7 @@ TARBALL_MAP = {
   "spark3": {
     "dirs": ("/tmp/spark3/spark3-{0}-yarn-archive.tar.gz".format(STACK_NAME_PATTERN),
              "/{0}/apps/{1}/spark3/spark3-{0}-yarn-archive.tar.gz".format(STACK_NAME_PATTERN, STACK_VERSION_PATTERN)),
-    "service": "SPARK2"
+    "service": "SPARK3"
   }
   # ,
   #
