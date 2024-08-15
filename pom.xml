@@ -587,12 +587,12 @@
       <modules>
         <module>ambari-serviceadvisor</module>
         <module>ambari-utility</module>
+        <module>ambari-server</module>
+        <module>ambari-server-spi</module>
         <module>ambari-web</module>
         <module>ambari-project</module>
         <module>ambari-views</module>
         <module>ambari-admin</module>
-        <module>ambari-server</module>
-        <module>ambari-server-spi</module>
         <module>ambari-funtest</module>
         <module>ambari-agent</module>
       </modules>

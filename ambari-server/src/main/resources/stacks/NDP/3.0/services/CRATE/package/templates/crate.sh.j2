@@ -26,7 +26,7 @@ BIN_DIR=`cd "$BIN_DIR"; pwd`
 CRATE_HOME=`cd "$BIN_DIR/.."; pwd`
 
 export STOP_TIMEOUT=5
-
+ulimit -Hn 65537
 case $startStop in
   (start)
     # if server is already started, cancel this launch
