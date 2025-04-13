@@ -74,7 +74,7 @@ limitations under the License.
   </property>
   <property>
     <name>hive.server2.metrics.enabled</name>
-    <value>true</value>
+    <value>false</value>
     <value-attributes>
       <type>boolean</type>
     </value-attributes>
