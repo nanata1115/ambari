@@ -206,7 +206,7 @@ def _prepare_mapreduce_tarball():
 # complicated to change during a Rolling/Express upgrade.
 TARBALL_MAP = {
   "yarn": {
-    "dirs": ("{0}/{1}/{2}/hadoop-yarn/lib/service-dep.tar.gz".format(STACK_ROOT_PATTERN, STACK_VERSION_PATTERN, LIB_DIR),
+    "dirs": ("{0}/{1}/hadoop-yarn/lib/service-dep.tar.gz".format(STACK_ROOT_PATTERN, STACK_VERSION_PATTERN),
              "/{0}/apps/{1}/yarn/service-dep.tar.gz".format(STACK_NAME_PATTERN, STACK_VERSION_PATTERN)),
     "service": "YARN"
   },
@@ -224,7 +224,7 @@ TARBALL_MAP = {
   },
 
   "hive": {
-    "dirs": ("{0}/{1}/{2}/hive/hive.tar.gz".format(STACK_ROOT_PATTERN, STACK_VERSION_PATTERN, LIB_DIR),
+    "dirs": ("{0}/{1}/hive/hive.tar.gz".format(STACK_ROOT_PATTERN, STACK_VERSION_PATTERN),
             "/{0}/apps/{1}/hive/hive.tar.gz".format(STACK_NAME_PATTERN, STACK_VERSION_PATTERN)),
     "service": "HIVE"
   },
@@ -236,7 +236,7 @@ TARBALL_MAP = {
   },
 
   "mapreduce": {
-    "dirs": ("{0}/{1}/{2}/hadoop/mapreduce.tar.gz".format(STACK_ROOT_PATTERN, STACK_VERSION_PATTERN, LIB_DIR),
+    "dirs": ("{0}/{1}/hadoop-3.3.4/mapreduce.tar.gz".format(STACK_ROOT_PATTERN, STACK_VERSION_PATTERN),
                 "/{0}/apps/{1}/mapreduce/mapreduce.tar.gz".format(STACK_NAME_PATTERN, STACK_VERSION_PATTERN)),
     "service": "MAPREDUCE2",
     "prepare_function": _prepare_mapreduce_tarball
